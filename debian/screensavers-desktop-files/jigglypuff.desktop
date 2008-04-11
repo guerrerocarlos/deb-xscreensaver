@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=JigglyPuff
+Comment=This little gem does bad things with quasi-spherical objects. The gist of it is that you have what is, structurally, a tetrahedron with tesselated faces. the vertices on these faces have forces on them in the form of one proportional to their distance from the surface of a sphere, and one which is proportional to how far they differ from some ideal distance from their neighbors. They also have inertia. The forces and distance are parameters and there are also a couple of visual parameters. The resulting effect can range from a shape that does nothing, to a frenetic polygon storm. Somewhere in between there it usually manifests as a blob that jiggles in a kind of disturbing manner. woo. It doesn't matter, however. You should just pick 'random'. It overrides all the other options, except for fps, delay and complexity. By Keith Macleod
+TryExec=jigglypuff
+Exec=jigglypuff -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

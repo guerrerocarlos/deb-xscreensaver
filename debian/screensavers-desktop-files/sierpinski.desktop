@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Sierpinski
+Comment=This draws the two-dimensional variant of the recursive Sierpinski triangle fractal. Written by Desmond Daignault.
+TryExec=sierpinski
+Exec=sierpinski -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

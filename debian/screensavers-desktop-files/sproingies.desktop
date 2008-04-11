@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Sproingies
+Comment=Q-Bert meets Marble Madness! Written by Ed Mackey.
+TryExec=sproingies
+Exec=sproingies -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

@@ -1,0 +1,27 @@
+Index: xscreensaver-5.04/hacks/Makefile.in
+===================================================================
+--- xscreensaver-5.04.orig/hacks/Makefile.in	2007-12-18 00:25:41.000000000 +0100
++++ xscreensaver-5.04/hacks/Makefile.in	2007-12-18 00:25:51.000000000 +0100
+@@ -153,7 +153,7 @@
+ 		  interaggregate.o celtic.o cwaves.o webcollage-cocoa.o \
+ 		  webcollage-helper-cocoa.o m6502.0 asm6502.o abstractile.o \
+		  lcdscrub.c
+ 
+-NEXES		= attraction blitspin bouboule braid bubbles decayscreen deco \
++NEXES		= attraction ant blitspin bouboule braid bubbles decayscreen deco \
+ 		  drift flag flame forest vines galaxy grav greynetic halo \
+ 		  helix hopalong hypercube ifs imsmap julia kaleidescope \
+ 		  laser lightning lisa lmorph maze moire noseguy pedal \
+Index: xscreensaver-5.04/driver/XScreenSaver.ad.in
+===================================================================
+--- xscreensaver-5.04.orig/driver/XScreenSaver.ad.in	2007-12-18 00:26:05.000000000 +0100
++++ xscreensaver-5.04/driver/XScreenSaver.ad.in	2007-12-18 00:26:50.000000000 +0100
+@@ -305,6 +305,7 @@
+ 				cwaves -root				    \n\
+ 				m6502 -root				    \n\
+ 				abstractile -root			    \n\
++				ant -root				    \n\
+				lcdscrub -root 				    \n\
+ - default-n:			webcollage -root			    \n\
+ - default-n:  "WebCollage (whacked)"					      \
+ 				webcollage -root -filter		      \

@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=GlSnake
+Comment=Draws a simulation of the Rubik's Snake puzzle. Written by Jamie Wilkinson, Andrew Bennetts, and Peter Aylett.
+TryExec=glsnake
+Exec=glsnake -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

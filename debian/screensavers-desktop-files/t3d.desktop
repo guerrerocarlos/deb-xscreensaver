@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=T3D
+Comment=This draws a working analog clock composed of floating, throbbing bubbles. Written by Bernd Paysan.
+TryExec=t3d
+Exec=t3d -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

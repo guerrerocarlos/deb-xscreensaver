@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Moebius
+Comment=Another M. C. Escher hack by Marcelo Vianna, this one draws ``Moebius Strip II,'' a GL image of ants walking along the surface of a moebius strip.
+TryExec=moebius
+Exec=moebius -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

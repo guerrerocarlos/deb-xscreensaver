@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Blaster
+Comment=Draws a simulation of flying space-combat robots (cleverly disguised as colored circles) doing battle in front of a moving star field. Written by Jonathan Lin.
+TryExec=blaster
+Exec=blaster -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

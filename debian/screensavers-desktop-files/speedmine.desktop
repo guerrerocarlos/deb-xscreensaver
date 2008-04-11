@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=SpeedMine
+Comment=Simulates speeding down a rocky mineshaft, or a funky dancing worm. Written by Conrad Parker.
+TryExec=speedmine
+Exec=speedmine -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

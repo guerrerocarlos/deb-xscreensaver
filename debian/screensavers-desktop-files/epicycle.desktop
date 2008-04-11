@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Epicycle
+Comment=This program draws the path traced out by a point on the edge of a circle. That circle rotates around a point on the rim of another circle, and so on, several times. These were the basis for the pre-heliocentric model of planetary motion. Written by James Youngman.
+TryExec=epicycle
+Exec=epicycle -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

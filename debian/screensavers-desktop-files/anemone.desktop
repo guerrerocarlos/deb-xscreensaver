@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Anemone
+Comment=Wiggling tentacles. By Gabriel Finch.
+TryExec=anemone
+Exec=anemone -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

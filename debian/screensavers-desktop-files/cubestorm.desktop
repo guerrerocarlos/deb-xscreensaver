@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=CubeStorm
+Comment=Draws a series of rotating 3D boxes that intersect each other and eventually fill space. Written by Jamie Zawinski.
+TryExec=cubestorm
+Exec=cubestorm -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

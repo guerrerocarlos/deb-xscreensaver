@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=GLText
+Comment=Displays a few lines of text spinning around in a solid 3D font. Written by Jamie Zawinski.
+TryExec=gltext
+Exec=gltext -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

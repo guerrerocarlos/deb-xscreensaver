@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Gears
+Comment=This draws sets of turning, interlocking gears, rotating in three dimensions. Another GL hack, by Danny Sung, Brian Paul, Ed Mackey, and Jamie Zawinski.
+TryExec=gears
+Exec=gears -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

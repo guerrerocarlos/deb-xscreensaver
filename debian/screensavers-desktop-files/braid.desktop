@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Braid
+Comment=Draws random color-cycling inter-braided concentric circles. Written by John Neil.
+TryExec=braid
+Exec=braid -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

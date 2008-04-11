@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=StonerView
+Comment=Chains of colorful squares dance around each other in complex spiral patterns. Written by Andrew Plotkin, based on SGI's `electropaint' screensaver.
+TryExec=stonerview
+Exec=stonerview -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

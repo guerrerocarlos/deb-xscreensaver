@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Piecewise
+Comment=This draws a bunch of moving circles which switch from visibility to invisibility at intersection points. Written by Geoffrey Irving.
+TryExec=piecewise
+Exec=piecewise -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

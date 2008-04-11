@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Cynosure
+Comment=A hack similar to `greynetic', but less frenetic. The first implementation was by Stephen Linhart; then Ozymandias G. Desiderata wrote a Java applet clone. That clone was discovered by Jamie Zawinski, and ported to C for inclusion here.
+TryExec=cynosure
+Exec=cynosure -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

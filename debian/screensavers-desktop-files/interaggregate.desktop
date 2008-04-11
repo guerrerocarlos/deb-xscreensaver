@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Interaggregate
+Comment=Interaggregate
+TryExec=interaggregate
+Exec=interaggregate -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

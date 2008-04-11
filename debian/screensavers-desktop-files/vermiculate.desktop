@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Vermiculate
+Comment=Draws squiggly worm-like paths. Written by Tyler Pierce.
+TryExec=vermiculate
+Exec=vermiculate -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

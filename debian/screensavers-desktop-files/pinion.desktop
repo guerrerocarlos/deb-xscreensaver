@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Pinion
+Comment=Draws an interconnected set of gears moving across the screen. Written by Jamie Zawinski.
+TryExec=pinion
+Exec=pinion -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

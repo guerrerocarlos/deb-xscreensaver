@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Xmatrix
+Comment=Draws dropping characters similar to what is seen on the computer monitors in "The Matrix". See also "glmatrix" for a 3D rendering of the similar effect that appeared in the title sequence of the movie. Written by Jamie Zawinski.
+TryExec=xmatrix
+Exec=xmatrix -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

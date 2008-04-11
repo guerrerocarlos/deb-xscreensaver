@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Interference
+Comment=Another color-field hack, this one works by computing decaying sinusoidal waves, and allowing them to interfere with each other as their origins move. Written by Hannu Mallat.
+TryExec=interference
+Exec=interference -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

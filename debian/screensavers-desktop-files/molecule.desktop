@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Molecule
+Comment=Draws several different representations of molecules. Some common molecules are built in, and it can also read PDB (Protein Data Base) files as input. Written by Jamie Zawinski.
+TryExec=molecule
+Exec=molecule -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

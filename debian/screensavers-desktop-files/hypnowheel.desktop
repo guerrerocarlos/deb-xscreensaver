@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=hypnowheel
+Comment=
+TryExec=hypnowheel
+Exec=hypnowheel -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

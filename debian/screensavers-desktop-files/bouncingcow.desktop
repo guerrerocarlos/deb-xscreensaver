@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=BouncingCow
+Comment=A Cow. A Trampoline. Together, they fight crime. By Jamie Zawinski.
+TryExec=bouncingcow
+Exec=bouncingcow -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

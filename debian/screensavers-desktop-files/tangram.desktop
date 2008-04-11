@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Tangram
+Comment=Lets you watch the computer solve Tangram puzzles Written by Jeremy English.
+TryExec=tangram
+Exec=tangram -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

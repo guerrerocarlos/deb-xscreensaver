@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Crystal
+Comment=Moving polygons, similar to a kaleidescope (more like a kaleidescope than the hack called `kaleid,' actually.) This one by Jouk Jansen.
+TryExec=crystal
+Exec=crystal -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Spiral
+Comment=Moving circular patterns, by Peter Schmitzberger. Moving circular patterns means moire; interference patterns, of course.
+TryExec=spiral
+Exec=spiral -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

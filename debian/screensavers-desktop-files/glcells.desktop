@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=GLCells
+Comment=Cells growing, dividing and dying on your screen. Written by Matthias Toussaint; 2007.
+TryExec=glcells
+Exec=glcells -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Celtic
+Comment=Celtic
+TryExec=celtic
+Exec=celtic -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

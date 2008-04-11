@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Distort
+Comment=This hack grabs an image of the screen, and then lets a transparent lens wander around the screen, magnifying whatever is underneath. Written by Jonas Munsin.
+TryExec=distort
+Exec=distort -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

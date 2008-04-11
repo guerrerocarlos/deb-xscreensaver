@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Noof
+Comment=Draws some rotatey patterns, using OpenGL. Written by Mark Kilgard.
+TryExec=noof
+Exec=noof -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

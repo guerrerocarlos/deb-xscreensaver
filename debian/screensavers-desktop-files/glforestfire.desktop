@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=GLForestFire
+Comment=Draws an animation of sprinkling fire-like 3D triangles in a landscape filled with trees. Requires OpenGL, and a machine with fast hardware support for texture maps. Written by Eric Lassauge <lassauge@users.sourceforge.net>.
+TryExec=glforestfire
+Exec=glforestfire -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

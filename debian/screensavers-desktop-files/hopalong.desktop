@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Hopalong
+Comment=This draws lacy fractal patterns, based on iteration in the imaginary plane, from a 1986 Scientific American article. Mostly written by Patrick Naughton.
+TryExec=hopalong
+Exec=hopalong -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

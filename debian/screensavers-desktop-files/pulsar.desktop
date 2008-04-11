@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Pulsar
+Comment=Draws some intersecting planes, making use of alpha blending, fog, textures, and mipmaps, plus a ``frames per second'' meter so that you can tell how fast your graphics card is... Requires OpenGL. Written by David Konerding.
+TryExec=pulsar
+Exec=pulsar -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

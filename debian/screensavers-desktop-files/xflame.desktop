@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Xflame
+Comment=Draws a simulation of pulsing fire. It can also take an arbitrary image and set it on fire too. Written by Carsten Haitzler, hacked on by many others.
+TryExec=xflame
+Exec=xflame -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=LMorph
+Comment=This generates random spline-ish line drawings and morphs between them. Written by Sverre H. Huseby and Glenn T. Lines.
+TryExec=lmorph
+Exec=lmorph -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

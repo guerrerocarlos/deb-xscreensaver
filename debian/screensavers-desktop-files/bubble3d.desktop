@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Bubble3D
+Comment=Draws a stream of rising, undulating 3D bubbles, rising toward the top of the screen, with nice specular reflections. Written by Richard Jones.
+TryExec=bubble3d
+Exec=bubble3d -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

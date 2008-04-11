@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Cube 21
+Comment=Animates a Rubik-like puzzle known as Cube 21 or Square-1. The rotations are chosen randomly. Requires OpenGL. Written by Vasek Potocek.
+TryExec=cube21
+Exec=cube21 -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

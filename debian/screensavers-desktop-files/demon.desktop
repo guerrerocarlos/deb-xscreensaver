@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Demon
+Comment=A cellular automaton that starts with a random field, and organizes it into stripes and spirals. Written by David Bagley.
+TryExec=demon
+Exec=demon -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

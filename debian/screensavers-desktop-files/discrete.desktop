@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Discrete
+Comment=More ``discrete map'' systems, including new variants of Hopalong and Julia, and a few others. Written by Tim Auckland.
+TryExec=discrete
+Exec=discrete -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

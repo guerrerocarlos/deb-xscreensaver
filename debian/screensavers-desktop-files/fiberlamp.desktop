@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Fiberlamp
+Comment=Draws a groovy rotating fiber optic lamp. Written by Tim Auckland.
+TryExec=fiberlamp
+Exec=fiberlamp -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

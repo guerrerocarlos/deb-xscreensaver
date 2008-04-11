@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Qix
+Comment=This is the swiss army chainsaw of qix programs. It bounces a series of line segments around the screen, and uses variations on this basic motion pattern to produce all sorts of different presentations: line segments, filled polygons, overlapping translucent areas... Written by Jamie Zawinski.
+TryExec=qix
+Exec=qix -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

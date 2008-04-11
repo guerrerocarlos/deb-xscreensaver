@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Boxed
+Comment=Draws a box full of 3D bouncing balls that explode. Written by Sander van Grieken.
+TryExec=boxed
+Exec=boxed -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

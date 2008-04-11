@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Laser
+Comment=Moving radiating lines, that look vaguely like scanning laser beams. Written by Pascal Pensa. (Frankie say: relax.)
+TryExec=laser
+Exec=laser -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

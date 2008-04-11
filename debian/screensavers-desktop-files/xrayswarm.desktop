@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=XRaySwarm
+Comment=Draws a few swarms of critters flying around the screen, with nicely faded color trails behind them. Written by Chris Leger.
+TryExec=xrayswarm
+Exec=xrayswarm -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

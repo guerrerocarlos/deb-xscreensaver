@@ -1,0 +1,70 @@
+--- xscreensaver-5.05/driver/XScreenSaver.ad.in	2008-03-01 17:03:47.000000000 -0430
++++ XScreenSaver.ad.in	2008-03-11 21:31:21.000000000 -0430
+@@ -60,7 +60,7 @@
+ *textLiteral:		XScreenSaver
+ *textFile:		@DEFAULT_TEXT_FILE@
+ *textProgram:		fortune
+-*textURL:		http://www.livejournal.com/stats/latest-rss.bml
++*textURL:		http://planet.debian.org/rss20.xml
+ 
+ *overlayTextForeground:	#FFFF00
+ *overlayTextBackground:	#000000
+@@ -91,16 +91,20 @@
+ !
+ ! And there are so very many options to choose from!
+ !
++*loadURL: x-www-browser '%s'
++*manualCommand: x-terminal-emulator -title '%s manual' \
++		-e '/bin/sh -c "man %s; read foo"'
++!
+ !   Gnome 2.4, 2.6: (yelp can't display man pages, as of 2.6.3)
+ !
+-@GNOME24@*loadURL: @WITH_BROWSER@ '%s'
+-@GNOME24@*manualCommand: gnome-terminal --title '%s manual' \
++@GNOME24@*loadURL: x-www-browser '%s'
++@GNOME24@*manualCommand: x-terminal-emulator -title '%s manual' \
+ @GNOME24@		--command '/bin/sh -c "man %s; read foo"'
+ !
+ !   Gnome 2.2:
+ !
+-@GNOME22@*loadURL: gnome-url-show '%s'
+-@GNOME22@*manualCommand: gnome-terminal --title '%s manual' \
++@GNOME22@*loadURL: x-www-browser '%s'
++@GNOME22@*manualCommand: x-terminal-emulator -title '%s manual' \
+ @GNOME22@		--command '/bin/sh -c "man %s; read foo"'
+ !
+ !   Gnome 1.4:
+@@ -110,8 +114,8 @@
+ !
+ !   non-Gnome systems:
+ !
+-@NOGNOME@*loadURL: firefox '%s' || mozilla '%s' || netscape '%s'
+-@NOGNOME@*manualCommand: xterm -sb -fg black -bg gray75 -T '%s manual' \
++@NOGNOME@*loadURL: x-www-browser '%s'
++@NOGNOME@*manualCommand: x-terminal-emulator -title '%s manual' \
+ @NOGNOME@		    -e /bin/sh -c 'man "%s" ; read foo'
+ 
+ 
+@@ -127,7 +131,8 @@
+ ! This command is executed by the "New Login" button on the lock dialog.
+ ! (That button does not appear if this program does not exist.)
+ !
+-@NEW_LOGIN_COMMAND_P@*newLoginCommand:	@NEW_LOGIN_COMMAND@
++! @NEW_LOGIN_COMMAND_P@*newLoginCommand:	@NEW_LOGIN_COMMAND@
++*newLoginCommand:	gdmflexiserver -l -a -c FLEXI_XSERVER
+ 
+ 
+ ! Turning on "installColormap" on 8-bit systems interacts erratically with
+@@ -464,10 +469,11 @@
+ *Dialog.shadowThickness:	2
+ 
+ *passwd.heading.label:		XScreenSaver %s
+-*passwd.body.label:		This screen is locked.
++*passwd.body.label:		Please enter your password.
+ *passwd.unlock.label:		OK
+ *passwd.login.label:		New Login
+ *passwd.user.label:		Username:
++*passwd.passwd.label:		Password:
+ *passwd.thermometer.width:	8
+ *passwd.asterisks:              True
+ *passwd.uname:                  True

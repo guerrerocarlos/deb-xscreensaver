@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Engine
+Comment=Draws a simple model of an engine that floats around the screen. Written by Ben Buxton and Ed Beroset.
+TryExec=engine
+Exec=engine -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

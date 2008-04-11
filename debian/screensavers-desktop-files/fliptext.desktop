@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=FlipText
+Comment=Draws successive pages of text. The lines flip in and out in a soothing 3D pattern. The text can be the output of a program or the contents of a file or URL, as configured on the "Advanced" tab of the main Screensaver Preferences window. Written by Jamie Zawinski.
+TryExec=fliptext
+Exec=fliptext -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

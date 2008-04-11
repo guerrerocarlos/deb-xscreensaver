@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Bubbles
+Comment=This simulates the kind of bubble formation that happens when water boils:small bubbles appear, and as they get closer to each other, they combine to form larger bubbles, which eventually pop. Written by James Macnicol.
+TryExec=bubbles
+Exec=bubbles -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

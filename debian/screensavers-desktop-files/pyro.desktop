@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Pyro
+Comment=Pyro draws exploding fireworks. Blah blah blah. Written by Jamie Zawinski.
+TryExec=pyro
+Exec=pyro -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

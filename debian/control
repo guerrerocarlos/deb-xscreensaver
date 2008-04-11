@@ -1,0 +1,123 @@
+Source: xscreensaver
+Section: x11
+Priority: optional
+Maintainer: Jose Luis Rivas <ghostbar38@gmail.com>
+Uploaders: Tormod Volden <debian.tormod@gmail.com>
+Build-Depends: bc, debhelper (>= 4.0), fortune-mod, libgtk2.0-dev, libpam0g-dev (>= 0.72), xlibmesa-gl-dev | libgl-dev, libglu1-mesa-dev | xlibmesa-glu-dev | libglu-dev, xutils, libgnome2-dev, libxml2-dev, libglade2-dev, libjpeg62-dev, libgle-dev, intltool, autotools-dev, libx11-dev, libxext-dev, libxinerama-dev, libxmu-dev, libxpm-dev, libxrandr-dev, libxss-dev, libxt-dev, libxtst-dev, libxxf86misc-dev, libxxf86vm-dev, x-dev, xbitmaps, quilt, gdm, libxss-dev, libxtst-dev, libxxf86misc-dev
+Standards-Version: 3.7.3
+
+Package: xscreensaver
+Architecture: any
+Depends: ${shlibs:Depends}, xscreensaver-data
+Conflicts: funny-manpages (<< 1.3-1), suidmanager (<< 0.50), xscreensaver-gnome (<< 4.09-2), xscreensaver-nognome (<< 4.09-2), gnome-control-center (<< 1:2)
+Recommends: xli | xloadimage, libjpeg-progs, perl5, miscfiles | wordlist
+Suggests: xfishtank, xdaliclock, xscreensaver-gl, fortune, www-browser, qcam | streamer
+Description: Automatic screensaver for X
+ The purpose of xscreensaver is to display pretty pictures on your screen
+ when it is not in use, in keeping with the philosophy that unattended
+ monitors should always be doing something interesting, just like they do
+ in the movies.
+ .
+ The benefit that this program has over the combination of the xlock and
+ xautolock programs is the ease with which new graphics hacks can be
+ installed: you don't need to recompile this program to add a new display
+ mode, you just change some resource settings.  Any program which can be
+ invoked in such a way that it draws on the root window of the screen can
+ now be used as a screensaver without modification.  The programs that
+ are being run as screensavers don't need to have any special knowledge
+ about what it means to be a screensaver.
+ .
+ Note that if you have gnome-screensaver installed, you should most likely
+ not install this package, but only the -data, -data-extra, -gl and -gl-extra
+ packages!
+
+Package: xscreensaver-data
+Architecture: any
+Depends: ${shlibs:Depends}
+Conflicts: xscreensaver (<< 5.04-3), kscreensaver-xsavers (<< 4:3.5.9-1)
+Replaces: xscreensaver (<< 5.04-3), gnome-screensaver (<< 2.15.4-0ubuntu1)
+Description: data files to be shared among screensaver frontends
+ This package contains the so called "hacks" (the single screensavers 
+ that get displayed from a screensaver app). It is split out to be used
+ with programs like gnome-screensaver that bring no own hacks, but can 
+ display them. Additionally it contains the various tools to load text 
+ or images from external sources.
+ .
+ This is the selected set of non-GL screensavers shipped by default:
+ deco, distort, fiberlamp, fuzzyflakes, galaxy, metaballs, penrose, 
+ ripples, shadebobs, slidescreen, sonar, swirl.
+ More hacks can be found in the xscreensaver-data-extra package.
+
+Package: xscreensaver-data-extra
+Architecture: any
+Depends: ${shlibs:Depends}, xscreensaver-data (>= 5.04-3), dictionaries-common, libjpeg-progs, netpbm
+Conflicts: xscreensaver (<< 5.04-3), kscreensaver-xsavers (<< 4:3.5.9-1)
+Replaces: xscreensaver (<< 5.04-3)
+Description: data files to be shared among screensaver frontends
+ This package contains the so called "hacks" (the single screensavers 
+ that get displayed from a screensaver app) its split out to be used
+ with programs like gnome-screensaver that bring no own hacks, but can 
+ display them. Additionally it contains the various tools to load text 
+ or images from external sources.
+ .
+ This is the set of non-GL screensavers not shipped by default:
+ ant, anemone, anemotaxis, apollonian, apple2, attraction, barcode, blaster,
+ blitspin, bouboule, boxfit, braid, bsod, bubbles, bumps, ccurve, celtic,
+ cloudlife, compass, coral, critical, crystal, cynosure, decayscreen,
+ deluxe, demon, discrete, drift, epicycle, eruption, euler2d, fadeplot,
+ fireworkx, flag, flame, flow, fluidballs, fontglide, forest, goop, 
+ grav, greynetic, halftone, halo, helix, hopalong, hyperball,
+ hypercube, ifs, imsmap, interaggregate, interference, intermomentary, jigsqw, 
+ juggle, julia, memscroller, mismunch, moire, moire2, mountain, munch, 
+ nerverot, noseguy, pacman, pedal, penetrate, petry, phosphor, piecewise, 
+ polyominoes, pong, pyro, qiz, rd-bomb, rocks, rorschach, rotor, rotzoomer, 
+ sierpinski, slip, speedmine, sphere, spiral, spotlight, squiral, starfish, 
+ strange, substrate, t3d, thornbird, triangle, truchet, twang, vermiculate, 
+ vidwhacker, vines, wander, webcollage, whirlwindwarp, whirlygig, worm, 
+ wormhole, xanalogtv, xflame, xjack, xmatrix, xrayswarm, xspirograph, zoom.
+ .
+ WARNING: this package ships the hack webcollage that may download porn
+ from the internet without the appriate filters setted up.
+
+
+Package: xscreensaver-gl
+Architecture: any
+Depends: ${shlibs:Depends}
+Conflicts: xscreensaver (<< 5.04-3)
+Recommends: xscreensaver
+Description: GL(Mesa) screen hacks for xscreensaver
+ These are some extra hacks for xscreensaver that use the Mesa
+ OpenGL-compatible library. They are included as an extra package so
+ the base package doesn't require Mesa. In addition, these hacks function
+ nicely as GL demos for people who want to try out hardware accelerated 3D
+ with X.Org
+ .
+ This is the set of GL screensavers shipped by default:
+ antinspect, antspotlight, atunnel, blinkbox, bubble3d, circuit, cubestorm,
+ endgame, engine, flipflop, flipscreen3d, flurry, flyingtoasters, gears,
+ gflux, glblur, glcells, gleidescope, glknots, glmatrix, glschool,
+ glslideshow, glsnake, gltext, hypertorus, jigglypuff, lavalite, lockward,
+ mirrorblog, moebius, boebiusgears, molecule, morph3d, pipes, polyhedra,
+ polytopes, pulsar, queens, sierpinski3d, spheremonics, stonerview, 
+ superquadrics, topblock, voronoi.
+ More GL screensavers can be found in the xscreensaver-gl-extra package.
+
+Package: xscreensaver-gl-extra
+Architecture: any
+Depends: ${shlibs:Depends}, xscreensaver-gl (>= 5.04-3)
+Conflicts: xscreensaver (<< 5.04-3)
+Replaces: xscreensaver-gl (<< 5.04-3)
+Recommends: xscreensaver
+Description: GL(Mesa) screen hacks for xscreensaver
+ These are some extra hacks for xscreensaver that use the Mesa
+ OpenGL-compatible library. They are included as an extra package so
+ the base package doesn't require Mesa. In addition, these hacks function
+ nicely as GL demos for people who want to try out hardware accelerated 3D
+ with X.Org
+ .
+ This is the set of GL screensavers not shipped by default with
+ xscreensaver-gl: antmaze, atlantis, blocktube, boing, bouncingcow, boxed,
+ cage, carousel, crackberg, cube21, cubenetic, dangerball, extrusion,
+ fliptext, glforestfire, glhanoi, glplanet, juggler3d, klein, lament, menger,
+ noof, pinion, providence, rubik, sballs, sproingies, staris, starwars,
+ tangram, timetunnel.

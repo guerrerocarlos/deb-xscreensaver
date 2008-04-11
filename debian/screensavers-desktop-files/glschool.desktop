@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=glschool
+Comment=Uses Craig Reynolds' Boids algorithm to simulate a school of fish. Looks best with more fish, so raise the number of fish until the frame rate declines to 25-30 fps. Written by David C. Lambert; 2006.
+TryExec=glschool
+Exec=glschool -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=MoebiusGears
+Comment=Draws a closed, interlinked chain of rotating gears. The layout of the gears follows the path of a moebius strip. Written by Jamie Zawinski; 2007.
+TryExec=moebiusgears
+Exec=moebiusgears -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

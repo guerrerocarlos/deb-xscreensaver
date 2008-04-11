@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=GLHanoi
+Comment=Solves the Towers of Hanoi puzzle. Move N disks from one pole to another, one disk at a time, with no disk ever resting on a disk smaller than itself. Written by Dave Atkinson.
+TryExec=glhanoi
+Exec=glhanoi -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

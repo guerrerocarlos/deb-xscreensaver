@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Phosphor
+Comment=Draws a simulation of an old terminal, with large pixels and long-sustain phosphor. This program is also a fully-functional VT100 emulator! The text can be the output of a program or the contents of a file or URL, as configured on the "Advanced" tab of the main Screensaver Preferences window. Written by Jamie Zawinski.
+TryExec=phosphor
+Exec=phosphor -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

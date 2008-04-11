@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Circuit
+Comment=Animates a number of 3D electronic components. Written by Ben Buxton.
+TryExec=circuit
+Exec=circuit -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

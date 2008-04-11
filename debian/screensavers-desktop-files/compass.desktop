@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Compass
+Comment=This draws a compass, with all elements spinning about randomly, for that ``lost and nauseous'' feeling. Written by Jamie Zawinski.
+TryExec=compass
+Exec=compass -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

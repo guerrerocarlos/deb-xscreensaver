@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Flipscreen3d
+Comment=Grabs an image of the desktop, turns it into a GL texture map, and spins it around and deforms it in various ways. Written by Ben Buxton.
+TryExec=flipscreen3d
+Exec=flipscreen3d -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

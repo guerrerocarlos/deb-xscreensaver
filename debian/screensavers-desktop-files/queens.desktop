@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Queens
+Comment=Solves the N-Queens problem (where, in this program, N is between 5 and 10 queens.) The problem is: how may one place N queens on an NxN chessboard such that no queen can attack a sister? Written by Blair Tennessy.
+TryExec=queens
+Exec=queens -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

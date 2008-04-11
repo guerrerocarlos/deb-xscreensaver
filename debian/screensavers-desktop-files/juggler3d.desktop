@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Juggler3D
+Comment=3D simulation of a juggler performing with balls, clubs and rings. Written by Brian Apps and partially based on his Win32 Juggle Saver program.
+TryExec=juggler3d
+Exec=juggler3d -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

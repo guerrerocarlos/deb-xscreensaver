@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Wormhole
+Comment=Wormhole simulates flying through a colored wormhole in space. Written by Jon Rafkind.
+TryExec=wormhole
+Exec=wormhole -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

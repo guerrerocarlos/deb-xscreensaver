@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Bumps
+Comment=A bit like `Spotlight', except that instead of merely exposing part of your desktop, it creates a bump map from it. Basically, it 3D-izes a roaming section of your desktop, based on color intensity. Written by Shane Smit.
+TryExec=bumps
+Exec=bumps -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

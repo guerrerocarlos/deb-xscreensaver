@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=XSpiroGraph
+Comment=Simulates that pen-in-nested-plastic-gears toy from your childhood. By Rohit Singh.
+TryExec=xspirograph
+Exec=xspirograph -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

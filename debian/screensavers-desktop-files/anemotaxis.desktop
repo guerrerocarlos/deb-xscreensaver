@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Anemotaxis
+Comment=Anemotaxis demonstrates a search algorithm designed for locating a source of odor in turbulent atmosphere. The searcher is able to sense the odor and determine local instantaneous wind direction. The goal is to find the source in the shortest mean time. Written by Eugene Balkovsky.
+TryExec=anemotaxis
+Exec=anemotaxis -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

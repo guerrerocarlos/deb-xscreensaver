@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Thornbird
+Comment=Displays a view of the ``Bird in a Thornbush'' fractal. Written by Tim Auckland.
+TryExec=thornbird
+Exec=thornbird -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

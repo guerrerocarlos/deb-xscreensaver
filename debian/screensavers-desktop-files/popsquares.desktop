@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=popsquares
+Comment=This draws a pop-art-ish looking grid of pulsing colors. By Levi Burton.
+TryExec=popsquares
+Exec=popsquares -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

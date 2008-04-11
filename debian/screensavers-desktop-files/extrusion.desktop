@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Extrusion
+Comment=Draws various rotating extruded shapes that twist around, lengthen, and turn inside out. Created by David Konerding from the samples that come with the GL Extrusion library by Linas Vepstas.
+TryExec=extrusion
+Exec=extrusion -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

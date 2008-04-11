@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Kumppa
+Comment=Spiraling, spinning, and very, very fast splashes of color rush toward the screen. Written by Teemu Suutari.
+TryExec=kumppa
+Exec=kumppa -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

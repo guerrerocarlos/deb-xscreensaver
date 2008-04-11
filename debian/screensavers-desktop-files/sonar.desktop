@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Sonar
+Comment=This program draws a simulation of a sonar screen. By default, it displays a random assortment of ``bogies'' on the screen, but if installed as "setuid root", it can ping (pun intended) your local network, and actually plot the proximity of the other hosts on your network to you. Written by Stephen Martin and Jamie Zawinski.
+TryExec=sonar
+Exec=sonar -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

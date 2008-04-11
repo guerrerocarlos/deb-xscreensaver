@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Wander
+Comment=Draws a colorful random-walk, in various forms. Written by Rick Campbell.
+TryExec=wander
+Exec=wander -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver
