@@ -11,6 +11,7 @@ xscreensaver (5.05-2) unstable; urgency=low
    + Created.
   * debian/control:
    + libpam0g fixed to >= 0.72 instead of >=0.72-1, no need of that.
+   + Added Vcs fields.
   * debian/xscreensaver.pam:
    + Added common-account for handling account service type. (Closes: #475861)
 
