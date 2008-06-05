@@ -21,7 +21,7 @@ Index: xscreensaver-5.04/driver/XScreenSaver.ad.in
  				m6502 -root				    \n\
  				abstractile -root			    \n\
 +				ant -root				    \n\
-				lcdscrub -root 				    \n\
+ -				lcdscrub -root 				    \n\
  - default-n:			webcollage -root			    \n\
  - default-n:  "WebCollage (whacked)"					      \
  				webcollage -root -filter		      \
