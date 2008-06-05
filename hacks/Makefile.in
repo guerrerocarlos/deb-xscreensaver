@@ -151,8 +151,8 @@ OBJS		= attraction.o blitspin.o bouboule.o braid.o bubbles.o \
 		  fuzzyflakes.o anemotaxis.o memscroller.o substrate.o \
 		  intermomentary.o fireworkx.o fiberlamp.o boxfit.o \
 		  interaggregate.o celtic.o cwaves.o webcollage-cocoa.o \
-		  webcollage-helper-cocoa.o m6502.0 asm6502.o abstractile.o \
-		  lcdscrub.c 
+		  webcollage-helper-cocoa.o m6502.o asm6502.o abstractile.o \
+		  lcdscrub.c
 
 NEXES		= attraction blitspin bouboule braid bubbles decayscreen deco \
 		  drift flag flame forest vines galaxy grav greynetic halo \
