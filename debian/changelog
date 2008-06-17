@@ -1,6 +1,6 @@
-xscreensaver (5.05-3~2.gbpd72811) UNRELEASED; urgency=low
+xscreensaver (5.05-3~3.gbp33d435) UNRELEASED; urgency=low
 
-  ** SNAPSHOT build @d728116827c0d66f17e4628374e1d40b74cccbeb **
+  ** SNAPSHOT build @33d4351f9edf8d57d18c480d39c0f79e027d598c **
 
   [ Jose Luis Rivas ]
   * UNRELEASED
@@ -17,6 +17,7 @@ xscreensaver (5.05-3~2.gbpd72811) UNRELEASED; urgency=low
   * Updated Vcs URI and added Homepage field
   * Added Vcs fields
   * Activated xinerama_disappears patch
+  * Fixed patch/68 formatting
 
  -- Jose Luis Rivas <ghostbar38@gmail.com>  Tue, 17 Jun 2008 06:37:27 -0430
 

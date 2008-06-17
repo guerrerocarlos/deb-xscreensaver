@@ -28,4 +28,3 @@
 
 # Fix for XineRama issues since 5.05
 67_XineRama-mode_bug473681.patch
-68_xinerama_disappears-482385.patch
