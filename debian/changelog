@@ -1,3 +1,24 @@
+xscreensaver (5.05-3~1.gbpccaefd) UNRELEASED; urgency=low
+
+  ** SNAPSHOT build @ccaefd433d869df50ea58a9df830e0c752f29478 **
+
+  [ Jose Luis Rivas ]
+  * UNRELEASED
+  * Added patch form Bas Zoetekouw for #482385
+  * Arranging to Standards-Version 3.8.0
+  * Changed xutils for xutils-dev since xutils
+
+  [ Tormod Volden ]
+  * fix m6502.o typo in hacks/Makefile.in
+  * refresh (disabled) 60_add-ant-hack.patch
+
+  [ Jose Luis Rivas ]
+  * Fixed debian/changelog
+  * Updated Vcs URI and added Homepage field
+  * Added Vcs fields
+
+ -- Jose Luis Rivas <ghostbar38@gmail.com>  Tue, 17 Jun 2008 06:37:27 -0430
+
 xscreensaver (5.05-2) unstable; urgency=low
 
   * debian/rules:
