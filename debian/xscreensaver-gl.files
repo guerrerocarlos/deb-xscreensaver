@@ -10,7 +10,6 @@ usr/lib/xscreensaver/endgame
 usr/lib/xscreensaver/engine
 usr/lib/xscreensaver/flipflop
 usr/lib/xscreensaver/flipscreen3d
-usr/lib/xscreensaver/flurry
 usr/lib/xscreensaver/flyingtoasters
 usr/lib/xscreensaver/gears
 usr/lib/xscreensaver/gflux
@@ -55,7 +54,6 @@ usr/share/man/man6/endgame.6x
 usr/share/man/man6/engine.6x
 usr/share/man/man6/flipflop.6x
 usr/share/man/man6/flipscreen3d.6x
-usr/share/man/man6/flurry.6x
 usr/share/man/man6/flyingtoasters.6x
 usr/share/man/man6/gears.6x
 usr/share/man/man6/gflux.6x
@@ -99,7 +97,6 @@ usr/share/xscreensaver/config/endgame.xml
 usr/share/xscreensaver/config/engine.xml
 usr/share/xscreensaver/config/flipflop.xml
 usr/share/xscreensaver/config/flipscreen3d.xml
-usr/share/xscreensaver/config/flurry.xml
 usr/share/xscreensaver/config/flyingtoasters.xml
 usr/share/xscreensaver/config/gears.xml
 usr/share/xscreensaver/config/gflux.xml
@@ -143,7 +140,6 @@ usr/share/applications/screensavers/endgame.desktop
 usr/share/applications/screensavers/engine.desktop
 usr/share/applications/screensavers/flipflop.desktop
 usr/share/applications/screensavers/flipscreen3d.desktop
-usr/share/applications/screensavers/flurry.desktop
 usr/share/applications/screensavers/flyingtoasters.desktop
 usr/share/applications/screensavers/gears.desktop
 usr/share/applications/screensavers/gflux.desktop
