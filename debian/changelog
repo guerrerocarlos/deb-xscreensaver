@@ -1,6 +1,6 @@
-xscreensaver (5.05-3~3.gbp33d435) UNRELEASED; urgency=low
+xscreensaver (5.05-3~4.gbp691ae4) UNRELEASED; urgency=low
 
-  ** SNAPSHOT build @33d4351f9edf8d57d18c480d39c0f79e027d598c **
+  ** SNAPSHOT build @691ae437857e4d92085fd46a69cd9cb49e69cefc **
 
   [ Jose Luis Rivas ]
   * UNRELEASED
@@ -18,6 +18,9 @@ xscreensaver (5.05-3~3.gbp33d435) UNRELEASED; urgency=low
   * Added Vcs fields
   * Activated xinerama_disappears patch
   * Fixed patch/68 formatting
+  * Patch for the XineRama crash when changing
+  * Moved flurry to xscreensaver-gl-extra
+  * Deleted the patch since the format doesn't works
 
  -- Jose Luis Rivas <ghostbar38@gmail.com>  Tue, 17 Jun 2008 06:37:27 -0430
 
