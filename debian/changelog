@@ -1,6 +1,6 @@
-xscreensaver (5.05-3~4.gbp691ae4) UNRELEASED; urgency=low
+xscreensaver (5.05-3~5.gbp07798b) UNRELEASED; urgency=low
 
-  ** SNAPSHOT build @691ae437857e4d92085fd46a69cd9cb49e69cefc **
+  ** SNAPSHOT build @07798bba006bb7a44c9f6f7ab2843f35830953e3 **
 
   [ Jose Luis Rivas ]
   * UNRELEASED
@@ -21,6 +21,9 @@ xscreensaver (5.05-3~4.gbp691ae4) UNRELEASED; urgency=low
   * Patch for the XineRama crash when changing
   * Moved flurry to xscreensaver-gl-extra
   * Deleted the patch since the format doesn't works
+  * Changed from xlibmesa-gl-dev to libgl1-mesa-dev
+  * Fixing categories in xscreensaver.menu
+  * Changed x-dev for x11proto-core-dev
 
  -- Jose Luis Rivas <ghostbar38@gmail.com>  Tue, 17 Jun 2008 06:37:27 -0430
 
