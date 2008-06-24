@@ -1,2 +1,2 @@
 debian/xscreensaver.svg /usr/share/pixmaps
-debian/XScreenSaver.desktop /usr/share/applications
+debian/xscreensaver.desktop /usr/share/applications
