@@ -37,3 +37,4 @@ usr/share/xscreensaver/glade/screensaver-locking.png
 usr/share/xscreensaver/glade/screensaver-power.png
 usr/share/xscreensaver/glade/screensaver-snap.png
 usr/share/xscreensaver/glade/xscreensaver-demo.glade2
+debian/XScreenSaver.desktop	usr/share/applications/xscreensaver.desktop
