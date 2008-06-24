@@ -16,6 +16,7 @@ xscreensaver (5.05-3) unstable; urgency=low
   * Adding desktop file of flurry to xss-gl-extra.files
   * Now Standards-Version is 3.8.0.1
   * Added Vcs fields.
+  * Added Desktop file, thanks to Daniel Dickinson (Closes: #480592)
 
  -- Jose Luis Rivas <ghostbar38@gmail.com>  Mon, 23 Jun 2008 23:52:52 -0430
 
