@@ -5,4 +5,4 @@ Icon=xscreensaver
 Terminal=false
 StartupNotify=true
 Type=Application
-Categories=Settings;
+Categories=System;
