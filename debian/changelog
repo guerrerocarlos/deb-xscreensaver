@@ -1,31 +1,23 @@
-xscreensaver (5.05-3~5.gbp07798b) UNRELEASED; urgency=low
-
-  ** SNAPSHOT build @07798bba006bb7a44c9f6f7ab2843f35830953e3 **
-
-  [ Jose Luis Rivas ]
-  * UNRELEASED
-  * Added patch form Bas Zoetekouw for #482385
-  * Arranging to Standards-Version 3.8.0
-  * Changed xutils for xutils-dev since xutils
+xscreensaver (5.05-3) unstable; urgency=low
 
   [ Tormod Volden ]
   * fix m6502.o typo in hacks/Makefile.in
   * refresh (disabled) 60_add-ant-hack.patch
 
   [ Jose Luis Rivas ]
-  * Fixed debian/changelog
-  * Updated Vcs URI and added Homepage field
-  * Added Vcs fields
-  * Activated xinerama_disappears patch
-  * Fixed patch/68 formatting
-  * Patch for the XineRama crash when changing
+  * Patch for the XineRama crash when changing thanks to Bas Zoetekouw
+  (Closes: #482385)
   * Moved flurry to xscreensaver-gl-extra
   * Deleted the patch since the format doesn't works
-  * Changed from xlibmesa-gl-dev to libgl1-mesa-dev
+  * Changed from xlibmesa-gl-dev to libgl1-mesa-dev, xutils to xutils-dev,
+    x-dev to x11proto-core-dev.
   * Fixing categories in xscreensaver.menu
   * Changed x-dev for x11proto-core-dev
+  * Adding desktop file of flurry to xss-gl-extra.files
+  * Now Standards-Version is 3.8.0.1
+  * Added Vcs fields.
 
- -- Jose Luis Rivas <ghostbar38@gmail.com>  Tue, 17 Jun 2008 06:37:27 -0430
+ -- Jose Luis Rivas <ghostbar38@gmail.com>  Mon, 23 Jun 2008 23:52:52 -0430
 
 xscreensaver (5.05-2) unstable; urgency=low
 
