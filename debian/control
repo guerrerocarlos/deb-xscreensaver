@@ -77,8 +77,11 @@ Description: data files to be shared among screensaver frontends
  vidwhacker, vines, wander, webcollage, whirlwindwarp, whirlygig, worm, 
  wormhole, xanalogtv, xflame, xjack, xmatrix, xrayswarm, xspirograph, zoom.
  .
- WARNING: this package ships the hack webcollage that may download porn
- from the internet without the appriate filters setted up.
+ WARNING: This package includes the 'webcollage' screen saver, which
+ displays images that are the result of random web searches. The
+ Internet being what it is, absolutely anything might show up in the
+ collage of search results including -- quite possibly -- pornography, or
+ even nodity. Please act accordingly.
  .
  More display modes can be found in the xscreensaver-data, xscreensaver-gl
  and xscreensaver-gl-extra packages.
