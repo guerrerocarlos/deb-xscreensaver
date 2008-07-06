@@ -1,0 +1,3916 @@
+This patch should improve xscreensaver's behavior with RANDR 1.2.
+Please try it out and let me know how it works.  Things to test are:
+
+    - Systems with multiple monitors.  Do all monitors go
+      black when xscreensaver activates?
+
+    - Adding and removing monitors while the screen is not
+      blanked.  Does it look right once the screen blanks?
+
+    - Adding and removing monitors while the screen is
+      already blanked.  Does everything reconfigure properly?
+
+    - Changing the resolution of the monitor(s) using the
+      "xrandr" command.
+
+    - Does it correctly realize which monitors are actually
+      attached to the system and in use?
+
+    - Does it work with multiple X screens (the :0.1 style)?
+
+    - Does it work when using the old Xinerama extension
+      instead of RANDR.
+
+    - Does it work using the VidMode extension to zoom and pan
+      around (that is, "monitor" and "desktop" are different
+      resolutions, via Ctrl-Alt-KP_Plus and KP_Minus.)
+
+There is a bug if:
+
+    - It ever crashes (obviously!)
+
+    - There is ever a situation where a screen is not
+      completely covered by the xscreensaver windows.
+      (Unless two screens are configured to overlap).
+
+Apply this patch with:
+
+    cd xscreensaver-5.05
+    patch -p1 < ../xscreensaver-randr-patch.txt
+
+Thanks!
+
+    Jamie Zawinski <jwz@jwz.org>
+
+
+
+
+diff -ur --unidirectional-new-file xscreensaver-5.05/config.h.in xscreensaver-5.06/config.h.in
+--- xscreensaver-5.05/config.h.in	2008-02-28 19:56:36.000000000 -0800
++++ xscreensaver-5.06/config.h.in	2008-07-01 10:26:31.000000000 -0700
+@@ -234,6 +234,9 @@
+    available if the file /usr/include/X11/extensions/Xrandr.h exists.) */
+ #undef HAVE_RANDR
+ 
++/* Define this if the RANDR library is version 1.2 or newer. */
++#undef HAVE_RANDR_12
++
+ /* Define this if you have the XReadDisplay extension (I think this is an
+    SGI-only thing; it's in <X11/extensions/readdisplay.h>.) A few of the
+    screenhacks will take advantage of this if it's available. */
+diff -ur --unidirectional-new-file xscreensaver-5.05/configure xscreensaver-5.06/configure
+--- xscreensaver-5.05/configure	2008-03-01 21:34:45.000000000 -0800
++++ xscreensaver-5.06/configure	2008-07-05 19:26:55.000000000 -0700
+@@ -2060,6 +2060,9 @@
+ 
+ 
+ 
++
++
++
+ # After checking to see that --srcdir is correct (which AC_INIT does)
+ # check for some random other files that come later in the tar file,
+ # to make sure everything is here.
+@@ -2096,6 +2099,10 @@
+ 
+ 
+ 
++# Need to disable Objective C extensions in ANSI C on MacOS X to work
++# around an Apple-specific gcc bug.
++#
++
+ 
+ ###############################################################################
+ #
+@@ -2124,18 +2131,6 @@
+ 
+ ###############################################################################
+ #
+-#       Function to figure out how to turn off Objective C on MacOS X.
+-#       (We have to do this to work around an Apple-specific gcc bug.)
+-#
+-###############################################################################
+-
+-
+-
+-
+-
+-
+-###############################################################################
+-#
+ #       Function to figure out how to create directory trees.
+ #
+ ###############################################################################
+@@ -3455,6 +3450,7 @@
+        ac_cv_gcc_accepts_no_overlength=no
+      else
+        ac_cv_gcc_accepts_no_overlength=yes
++       CC="$CC -Wno-overlength-strings"
+      fi
+ fi
+ { echo "$as_me:$LINENO: result: $ac_cv_gcc_accepts_no_overlength" >&5
+@@ -3475,6 +3471,7 @@
+        ac_cv_gcc_accepts_no_decl_after=no
+      else
+        ac_cv_gcc_accepts_no_decl_after=yes
++       CC="$CC -Wdeclaration-after-statement"
+      fi
+ fi
+ { echo "$as_me:$LINENO: result: $ac_cv_gcc_accepts_no_decl_after" >&5
+@@ -3483,7 +3480,6 @@
+   fi
+ 
+ if test -n "$GCC"; then
+-   if test -n "$GCC"; then
+    { echo "$as_me:$LINENO: checking whether gcc accepts -no-cpp-precomp" >&5
+ echo $ECHO_N "checking whether gcc accepts -no-cpp-precomp... $ECHO_C" >&6; }
+ if test "${ac_cv_gcc_accepts_no_cpp_precomp+set}" = set; then
+@@ -3496,6 +3492,7 @@
+        ac_cv_gcc_accepts_no_cpp_precomp=no
+      else
+        ac_cv_gcc_accepts_no_cpp_precomp=yes
++       CC="$CC -no-cpp-precomp"
+      fi
+ fi
+ { echo "$as_me:$LINENO: result: $ac_cv_gcc_accepts_no_cpp_precomp" >&5
+@@ -3503,13 +3500,6 @@
+    ac_gcc_accepts_no_cpp_precomp="$ac_cv_gcc_accepts_no_cpp_precomp"
+   fi
+ 
+-   if test "$ac_gcc_accepts_no_cpp_precomp" = yes ; then
+-     { echo "$as_me:$LINENO: result: Disabling Objective C extensions in ANSI C code." >&5
+-echo "${ECHO_T}Disabling Objective C extensions in ANSI C code." >&6; }
+-     CC="$CC -no-cpp-precomp"
+-   fi
+-  fi
+-
+ if test -n "$GCC"; then
+    if test -n "$GCC"; then
+    { echo "$as_me:$LINENO: checking whether gcc accepts -std=c89" >&5
+@@ -3524,6 +3514,7 @@
+        ac_cv_gcc_accepts_std=no
+      else
+        ac_cv_gcc_accepts_std=yes
++       CC="$CC -std=c89"
+      fi
+ fi
+ { echo "$as_me:$LINENO: result: $ac_cv_gcc_accepts_std" >&5
+@@ -3552,7 +3543,8 @@
+      # before they were in the ANSI C 99 spec...  (gcc 2.96 permits //
+      # with -std=gnu89 but not with -std=c89.)
+      #
+-     CC="$CC -std=c89 -U__STRICT_ANSI__"
++     # $CC already contains "-std=c89" via AC_GCC_ACCEPTS_STD
++     CC="$CC -U__STRICT_ANSI__"
+    else
+      # The old way:
+      CC="$CC -Wp,-lang-c89"
+@@ -12140,7 +12132,7 @@
+ 
+ if test "$with_randr" = yes; then
+ 
+-  # first check for Randr.h
++  # first check for Xrandr.h
+ 
+   ac_save_CPPFLAGS="$CPPFLAGS"
+   if test \! -z "$includedir" ; then
+@@ -12489,7 +12481,103 @@
+ #define HAVE_RANDR 1
+ _ACEOF
+ 
++
++    # Now check for version 1.2 in the same libs.
++
++  ac_save_CPPFLAGS="$CPPFLAGS"
++  ac_save_LDFLAGS="$LDFLAGS"
++#  ac_save_LIBS="$LIBS"
++
++  if test \! -z "$includedir" ; then
++    CPPFLAGS="$CPPFLAGS -I$includedir"
++  fi
++  # note: $X_CFLAGS includes $x_includes
++  CPPFLAGS="$CPPFLAGS $X_CFLAGS"
++
++  if test \! -z "$libdir" ; then
++    LDFLAGS="$LDFLAGS -L$libdir"
+   fi
++  # note: $X_LIBS includes $x_libraries
++  LDFLAGS="$LDFLAGS $X_LIBS $X_EXTRA_LIBS"
++
++  CPPFLAGS=`eval eval eval eval eval eval eval eval eval echo $CPPFLAGS`
++  LDFLAGS=`eval eval eval eval eval eval eval eval eval echo $LDFLAGS`
++  { echo "$as_me:$LINENO: checking for XRRGetOutputInfo in -lc" >&5
++echo $ECHO_N "checking for XRRGetOutputInfo in -lc... $ECHO_C" >&6; }
++if test "${ac_cv_lib_c_XRRGetOutputInfo+set}" = set; then
++  echo $ECHO_N "(cached) $ECHO_C" >&6
++else
++  ac_check_lib_save_LIBS=$LIBS
++LIBS="-lc $SAVER_LIBS $LIBS"
++cat >conftest.$ac_ext <<_ACEOF
++/* confdefs.h.  */
++_ACEOF
++cat confdefs.h >>conftest.$ac_ext
++cat >>conftest.$ac_ext <<_ACEOF
++/* end confdefs.h.  */
++
++/* Override any GCC internal prototype to avoid an error.
++   Use char because int might match the return type of a GCC
++   builtin and then its argument prototype would still apply.  */
++#ifdef __cplusplus
++extern "C"
++#endif
++char XRRGetOutputInfo ();
++int
++main ()
++{
++return XRRGetOutputInfo ();
++  ;
++  return 0;
++}
++_ACEOF
++rm -rf conftest.$ac_objext conftest$ac_exeext
++if { (ac_try="$ac_link"
++case "(($ac_try" in
++  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
++  *) ac_try_echo=$ac_try;;
++esac
++eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
++  (eval "$ac_link") 2>conftest.er1
++  ac_status=$?
++  grep -v '^ *+' conftest.er1 >conftest.err
++  rm -rf conftest.er1
++  cat conftest.err >&5
++  echo "$as_me:$LINENO: \$? = $ac_status" >&5
++  (exit $ac_status); } && {
++	 test -z "$ac_c_werror_flag" ||
++	 test ! -s conftest.err
++       } && test -s conftest$ac_exeext &&
++       $as_test_x conftest$ac_exeext; then
++  ac_cv_lib_c_XRRGetOutputInfo=yes
++else
++  echo "$as_me: failed program was:" >&5
++sed 's/^/| /' conftest.$ac_ext >&5
++
++	ac_cv_lib_c_XRRGetOutputInfo=no
++fi
++
++rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
++      conftest$ac_exeext conftest.$ac_ext
++LIBS=$ac_check_lib_save_LIBS
++fi
++{ echo "$as_me:$LINENO: result: $ac_cv_lib_c_XRRGetOutputInfo" >&5
++echo "${ECHO_T}$ac_cv_lib_c_XRRGetOutputInfo" >&6; }
++if test $ac_cv_lib_c_XRRGetOutputInfo = yes; then
++  cat >>confdefs.h <<\_ACEOF
++#define HAVE_RANDR_12 1
++_ACEOF
++
++else
++  true
++fi
++
++  CPPFLAGS="$ac_save_CPPFLAGS"
++  LDFLAGS="$ac_save_LDFLAGS"
++#  LIBS="$ac_save_LIBS"
++
++  fi
++
+ 
+ elif test "$with_randr" != no; then
+   echo "error: must be yes or no: --with-randr-ext=$with_randr"
+@@ -16673,7 +16761,7 @@
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
+   cat > conftest.$ac_ext <<EOF
+-#line 16680 "configure"
++#line 16768 "configure"
+ #include "confdefs.h"
+ #include <GL/gl.h>
+ #ifndef MESA_MAJOR_VERSION
+@@ -19890,9 +19978,11 @@
+ 
+     #### Could use some more defaults here...
+     for f in \
+-      "/usr/X11R6/lib/X11/doc/README"		\
+-      "/usr/share/doc/xserver-common/copyright"	\
+-      "/usr/X11R6/README"			\
++      "/usr/X11R6/lib/X11/doc/README"		   \
++      "/usr/share/doc/xserver-common/copyright"	   \
++      "/usr/share/doc/xserver-xorg-core/copyright" \
++      "/usr/X11R6/README"			   \
++      "/usr/share/doc/debian/debian-manifesto"     \
+     ; do
+       if test -z "$with_textfile"; then
+         { echo "$as_me:$LINENO: checking for text file $f" >&5
+@@ -21883,8 +21973,9 @@
+   pgl="$preferred_mesagl"
+ 
+   if test "$ac_mesagl_version" = unknown; then
+-    warnL "Unable to determine the MesaGL version number!"
+-    warn2 "Make sure you are using version $preferred_mesagl or newer."
++    true
++    # warnL "Unable to determine the MesaGL version number!"
++    # warn2 "Make sure you are using version $preferred_mesagl or newer."
+ 
+   elif test \! "$ac_mesagl_version" -gt 2006; then
+     warnL "MesaGL version number is $mgv --"
+@@ -22035,7 +22126,7 @@
+ 
+   if test \! -z "$rpmv" ; then
+     rpmbdir=`rpm -ql $rpmnames | sed -n 's@^\(.*\)/xscreensaver-demo$@\1@p'`
+-    rpmhdir=`rpm -ql $rpmnames | sed -n 's@^\(.*\)/attraction$@\1@p'`
++    rpmhdir=`rpm -ql $rpmnames | sed -n 's@^\(.*\)/popsquares$@\1@p'`
+ 
+     warning=no
+     warnL "There is already an installed RPM of xscreensaver $rpmv"
+@@ -22058,6 +22149,31 @@
+   fi
+ fi
+ 
++# Also warn if there's a Debian package installed.
++#
++debnames="xscreensaver xscreensaver-data xscreensaver-data-extra"
++debv=''
++for dpkg in $debnames ; do
++  if test -z "$debv"; then
++    debv=`dpkg -s $dpkg 2>/dev/null | sed -n 's/^Version: \(.*\)$/\1/p'`
++  fi
++done
++
++if test \! -z "$debv" ; then
++  debbdir=`dpkg -L $debnames 2>/dev/null | \
++            sed -n 's@^\(.*/bin\)/xscreensaver$@\1@p'`
++  debhdir=`dpkg -L $debnames 2>/dev/null | \
++            sed -n 's@^\(.*\)/popsquares$@\1@p'`
++
++  warning=no
++  warnL "There is already an installed dpkg of xscreensaver"
++  warn2 "version \"$debv\" on this system."
++  echo ""
++  warn2 "The dpkg was installed in $debbdir/,"
++  warn2 "with demos in $debhdir/."
++fi
++
++
+ if test "${bindir}" = "${HACKDIR}" ; then
+   do_dir_warning=yes
+ fi
+diff -ur --unidirectional-new-file xscreensaver-5.05/configure.in xscreensaver-5.06/configure.in
+--- xscreensaver-5.05/configure.in	2008-03-01 14:14:30.000000000 -0800
++++ xscreensaver-5.06/configure.in	2008-07-05 16:46:23.000000000 -0700
+@@ -106,6 +106,9 @@
+ 	    possibly elsewhere.  (It's available if the file
+ 	    /usr/include/X11/extensions/Xrandr.h exists.)])
+ 
++AH_TEMPLATE([HAVE_RANDR_12],
++	    [Define this if the RANDR library is version 1.2 or newer.])
++
+ AH_TEMPLATE([HAVE_PROC_INTERRUPTS],
+ 	    [Define this if you have a Linux-like /proc/interrupts file which
+ 	    can be examined to determine when keyboard activity has
+@@ -389,6 +392,7 @@
+        ac_cv_gcc_accepts_[$1]=no
+      else
+        ac_cv_gcc_accepts_[$1]=yes
++       CC="$CC [$2]"
+      fi])
+    ac_gcc_accepts_[$1]="$ac_cv_gcc_accepts_[$1]"
+   fi
+@@ -400,6 +404,11 @@
+ AC_DEFUN(AC_NO_MISPLACED_DECLARATIONS,
+          [AC_CHECK_GCC_ARG(no_decl_after, -Wdeclaration-after-statement)])
+ 
++# Need to disable Objective C extensions in ANSI C on MacOS X to work
++# around an Apple-specific gcc bug.
++#
++AC_DEFUN(AC_NO_OBJECTIVE_C,
++         [AC_CHECK_GCC_ARG(no_cpp_precomp, -no-cpp-precomp)])
+ 
+ ###############################################################################
+ #
+@@ -447,7 +456,8 @@
+      # before they were in the ANSI C 99 spec...  (gcc 2.96 permits //
+      # with -std=gnu89 but not with -std=c89.)
+      #
+-     CC="$CC -std=c89 -U__STRICT_ANSI__"
++     # $CC already contains "-std=c89" via AC_GCC_ACCEPTS_STD
++     CC="$CC -U__STRICT_ANSI__"
+    else
+      # The old way:
+      CC="$CC -Wp,-lang-c89"
+@@ -458,27 +468,6 @@
+ 
+ ###############################################################################
+ #
+-#       Function to figure out how to turn off Objective C on MacOS X.
+-#       (We have to do this to work around an Apple-specific gcc bug.)
+-#
+-###############################################################################
+-
+-AC_DEFUN(AC_GCC_ACCEPTS_NO_CPP_PRECOMP,
+-         [AC_CHECK_GCC_ARG(no_cpp_precomp, -no-cpp-precomp)])
+-
+-AC_DEFUN(AC_NO_OBJECTIVE_C,
+- [if test -n "$GCC"; then
+-   AC_GCC_ACCEPTS_NO_CPP_PRECOMP
+-   if test "$ac_gcc_accepts_no_cpp_precomp" = yes ; then
+-     AC_MSG_RESULT(Disabling Objective C extensions in ANSI C code.)
+-     CC="$CC -no-cpp-precomp"
+-   fi
+-  fi
+-])
+-
+-
+-###############################################################################
+-#
+ #       Function to figure out how to create directory trees.
+ #
+ ###############################################################################
+@@ -1667,7 +1656,7 @@
+ 
+ if test "$with_randr" = yes; then
+ 
+-  # first check for Randr.h
++  # first check for Xrandr.h
+   AC_CHECK_X_HEADER(X11/extensions/Xrandr.h, [have_randr=yes],,
+                     [#include <X11/Xlib.h>])
+ 
+@@ -1696,8 +1685,13 @@
+   # if that succeeded, then we've really got it.
+   if test "$have_randr" = yes; then
+     AC_DEFINE(HAVE_RANDR)
++
++    # Now check for version 1.2 in the same libs.
++    AC_CHECK_X_LIB(c, XRRGetOutputInfo, [AC_DEFINE(HAVE_RANDR_12)],
++                   [true], $SAVER_LIBS)
+   fi
+ 
++
+ elif test "$with_randr" != no; then
+   echo "error: must be yes or no: --with-randr-ext=$with_randr"
+   exit 1
+@@ -3414,9 +3408,11 @@
+ 
+     #### Could use some more defaults here...
+     for f in \
+-      "/usr/X11R6/lib/X11/doc/README"		\
+-      "/usr/share/doc/xserver-common/copyright"	\
+-      "/usr/X11R6/README"			\
++      "/usr/X11R6/lib/X11/doc/README"		   \
++      "/usr/share/doc/xserver-common/copyright"	   \
++      "/usr/share/doc/xserver-xorg-core/copyright" \
++      "/usr/X11R6/README"			   \
++      "/usr/share/doc/debian/debian-manifesto"     \
+     ; do
+       if test -z "$with_textfile"; then
+         AC_MSG_CHECKING([for text file $f])
+@@ -4035,8 +4031,9 @@
+   pgl="$preferred_mesagl"
+ 
+   if test "$ac_mesagl_version" = unknown; then
+-    warnL "Unable to determine the MesaGL version number!"
+-    warn2 "Make sure you are using version $preferred_mesagl or newer."
++    true
++    # warnL "Unable to determine the MesaGL version number!"
++    # warn2 "Make sure you are using version $preferred_mesagl or newer."
+ 
+   elif test \! "$ac_mesagl_version" -gt 2006; then
+     warnL "MesaGL version number is $mgv --"
+@@ -4182,7 +4179,7 @@
+ 
+   if test \! -z "$rpmv" ; then
+     rpmbdir=`rpm -ql $rpmnames | sed -n 's@^\(.*\)/xscreensaver-demo$@\1@p'`
+-    rpmhdir=`rpm -ql $rpmnames | sed -n 's@^\(.*\)/attraction$@\1@p'`
++    rpmhdir=`rpm -ql $rpmnames | sed -n 's@^\(.*\)/popsquares$@\1@p'`
+ 
+     warning=no
+     warnL "There is already an installed RPM of xscreensaver $rpmv"
+@@ -4205,6 +4202,31 @@
+   fi
+ fi
+ 
++# Also warn if there's a Debian package installed.
++#
++debnames="xscreensaver xscreensaver-data xscreensaver-data-extra"
++debv=''
++for dpkg in $debnames ; do
++  if test -z "$debv"; then
++    debv=`dpkg -s $dpkg 2>/dev/null | sed -n 's/^Version: \(.*\)$/\1/p'`
++  fi
++done
++
++if test \! -z "$debv" ; then
++  debbdir=`dpkg -L $debnames 2>/dev/null | \
++            sed -n 's@^\(.*/bin\)/xscreensaver$@\1@p'`
++  debhdir=`dpkg -L $debnames 2>/dev/null | \
++            sed -n 's@^\(.*\)/popsquares$@\1@p'`
++
++  warning=no
++  warnL "There is already an installed dpkg of xscreensaver"
++  warn2 "version \"$debv\" on this system."
++  echo ""
++  warn2 "The dpkg was installed in $debbdir/,"
++  warn2 "with demos in $debhdir/."
++fi
++
++
+ if test "${bindir}" = "${HACKDIR}" ; then
+   do_dir_warning=yes
+ fi
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/Makefile.in xscreensaver-5.06/driver/Makefile.in
+--- xscreensaver-5.05/driver/Makefile.in	2008-03-01 21:34:46.000000000 -0800
++++ xscreensaver-5.06/driver/Makefile.in	2008-07-05 19:26:58.000000000 -0700
+@@ -116,10 +116,10 @@
+ 
+ TEST_SRCS	= test-passwd.c test-uid.c  test-xdpms.c    test-grab.c \
+ 		  test-apm.c    test-fade.c test-xinerama.c test-vp.c   \
+-	          test-randr.c  xdpyinfo.c  test-mlstring.c
++	          test-randr.c  xdpyinfo.c  test-mlstring.c test-screens.c
+ TEST_EXES	= test-passwd   test-uid    test-xdpms      test-grab   \
+ 		  test-apm      test-fade   test-xinerama   test-vp     \
+-		  test-randr    xdpyinfo    test-mlstring
++		  test-randr    xdpyinfo    test-mlstring   test-screens
+ 
+ MOTIF_LIBS	= @MOTIF_LIBS@ @XPM_LIBS@ $(XMU_LIBS)
+ GTK_LIBS	= @GTK_LIBS@ $(XMU_LIBS)
+@@ -147,9 +147,9 @@
+ GTK_ICONS	= $(ICON_SRC)/screensaver-*.png
+ 
+ DEMO_UTIL_SRCS	= $(UTILS_SRC)/resources.c $(UTILS_SRC)/usleep.c \
+-		  $(UTILS_SRC)/visual.c
++		  $(UTILS_SRC)/visual.c $(XMU_SRCS)
+ DEMO_UTIL_OBJS	= $(UTILS_BIN)/resources.o $(UTILS_BIN)/usleep.o \
+-		  $(UTILS_BIN)/visual.o
++		  $(UTILS_BIN)/visual.o $(XMU_OBJS)
+ 
+ SAVER_UTIL_SRCS	= $(UTILS_SRC)/fade.c $(UTILS_SRC)/overlay.c \
+ 		  $(UTILS_SRC)/logo.c $(UTILS_SRC)/yarandom.c \
+@@ -179,24 +179,24 @@
+ 		  $(UTILS_BIN)/logo.o $(UTILS_BIN)/minixpm.o prefs.o \
+ 		  $(XMU_OBJS)
+ 
+-SAVER_SRCS_1	= xscreensaver.c windows.c timers.c subprocs.c exec.c \
+-		  xset.c splash.c setuid.c stderr.c mlstring.c
+-SAVER_OBJS_1	= xscreensaver.o windows.o timers.o subprocs.o exec.o \
+-		  xset.o splash.o setuid.o stderr.o mlstring.o
++SAVER_SRCS_1	= xscreensaver.c windows.c screens.c timers.c subprocs.c \
++		  exec.c xset.c splash.c setuid.c stderr.c mlstring.c
++SAVER_OBJS_1	= xscreensaver.o windows.o screens.o timers.o subprocs.o \
++		  exec.o xset.o splash.o setuid.o stderr.o mlstring.o
+ 
+ SAVER_SRCS	= $(SAVER_SRCS_1) prefs.c dpms.c $(LOCK_SRCS) \
+-		  $(SAVER_UTIL_SRCS) $(GL_SRCS) $(XMU_SRCS)
++		  $(SAVER_UTIL_SRCS) $(GL_SRCS)
+ SAVER_OBJS	= $(SAVER_OBJS_1) prefs.o dpms.o $(LOCK_OBJS) \
+-		  $(SAVER_UTIL_OBJS) $(GL_OBJS) $(XMU_OBJS)
++		  $(SAVER_UTIL_OBJS) $(GL_OBJS)
+ 
+ CMD_SRCS	= remote.c xscreensaver-command.c
+ CMD_OBJS	= remote.o xscreensaver-command.o
+ 
+-DEMO_SRCS_1	= prefs.c dpms.c $(XMU_SRCS)
+-DEMO_OBJS_1	= prefs.o dpms.o $(XMU_OBJS)
++DEMO_SRCS_1	= prefs.c dpms.c
++DEMO_OBJS_1	= prefs.o dpms.o
+ 
+-DEMO_SRCS	= prefs.c dpms.c remote.c exec.c $(DEMO_UTIL_SRCS)
+-DEMO_OBJS	= prefs.o dpms.o remote.o exec.o $(DEMO_UTIL_OBJS)
++DEMO_SRCS	= $(DEMO_SRCS_1) remote.c exec.c $(DEMO_UTIL_SRCS)
++DEMO_OBJS	= $(DEMO_OBJS_1) remote.o exec.o $(DEMO_UTIL_OBJS)
+ 
+ PDF2JPEG_SRCS	= pdf2jpeg.m
+ PDF2JPEG_OBJS	= pdf2jpeg.o
+@@ -453,7 +453,7 @@
+  $$e "  ####################################################################";\
+  $$e ""									     ;\
+ 	  fi ;								\
+-	elif [ -f $$conf ]; then					\
++	elif [ -f $$conf -a "x$$dest" != "x" ]; then			\
+ 	  if ( grep $$dest $$conf >/dev/null ); then			\
+ 	   echo "$$conf unchanged: already has an entry for $$dest" ;   \
+ 	  else								\
+@@ -498,7 +498,7 @@
+ 	     echo $(INSTALL_DIRS) "$(install_prefix)$(GTK_APPDIR)"	     ;\
+ 		  $(INSTALL_DIRS) "$(install_prefix)$(GTK_APPDIR)"	     ;\
+ 	   fi								     ;\
+-	   name2=gnome-screensaver-properties.desktop			     ;\
++	   name2=xscreensaver-properties.desktop			     ;\
+ 	   echo $(INSTALL_DATA) screensaver-properties.desktop		      \
+ 		  $(install_prefix)$(GTK_APPDIR)/$$name2		     ;\
+ 		$(INSTALL_DATA) screensaver-properties.desktop		      \
+@@ -571,7 +571,7 @@
+ # into /usr/share/applications/
+ uninstall-gnome::
+ 	@if [ "$(GTK_DATADIR)" != "" ]; then				      \
+-          f=gnome-screensaver-properties.desktop                             ;\
++          f=xscreensaver-properties.desktop                                  ;\
+           echo rm -f $(install_prefix)$(GTK_APPDIR)/$$f                      ;\
+                rm -f $(install_prefix)$(GTK_APPDIR)/$$f                      ;\
+         fi
+@@ -846,6 +846,11 @@
+ test-fade: test-fade.o $(UTILS_BIN)/fade.o
+ 	$(CC) $(LDFLAGS) -o $@ $(TEST_FADE_OBJS) $(SAVER_LIBS)
+ 
++TEST_SCREENS_OBJS = test-screens.o $(DEMO_UTIL_OBJS)
++test-screens.o: screens.c
++test-screens: test-screens.o
++	$(CC) $(LDFLAGS) -o $@ $(TEST_SCREENS_OBJS) $(SAVER_LIBS)
++
+ 
+ xdpyinfo.o: xdpyinfo.c
+ 	$(CC) -c $(INCLUDES) -DHAVE_GLX $(CFLAGS) $(X_CFLAGS) \
+@@ -913,6 +918,11 @@
+ prefs.o: $(UTILS_SRC)/resources.h
+ remote.o: ../config.h
+ remote.o: $(srcdir)/remote.h
++screens.o: ../config.h
++screens.o: $(srcdir)/prefs.h
++screens.o: $(srcdir)/types.h
++screens.o: $(UTILS_SRC)/visual.h
++screens.o: $(srcdir)/xscreensaver.h
+ setuid.o: ../config.h
+ setuid.o: $(srcdir)/prefs.h
+ setuid.o: $(srcdir)/types.h
+@@ -954,6 +964,12 @@
+ test-passwd.o: $(UTILS_SRC)/visual.h
+ test-passwd.o: $(srcdir)/xscreensaver.h
+ test-randr.o: ../config.h
++test-screens.o: ../config.h
++test-screens.o: $(srcdir)/prefs.h
++test-screens.o: $(srcdir)/screens.c
++test-screens.o: $(srcdir)/types.h
++test-screens.o: $(UTILS_SRC)/visual.h
++test-screens.o: $(srcdir)/xscreensaver.h
+ test-uid.o: ../config.h
+ test-vp.o: ../config.h
+ test-xdpms.o: ../config.h
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/XScreenSaver.ad.in xscreensaver-5.06/driver/XScreenSaver.ad.in
+--- xscreensaver-5.05/driver/XScreenSaver.ad.in	2008-03-01 13:33:47.000000000 -0800
++++ xscreensaver-5.06/driver/XScreenSaver.ad.in	2008-07-05 19:26:57.000000000 -0700
+@@ -4,8 +4,8 @@
+ !            a screen saver and locker for the X window system
+ !                            by Jamie Zawinski
+ !
+-!                              version 5.05
+-!                              01-Mar-2008
++!                              version 5.06
++!                              05-Jul-2008
+ !
+ ! See "man xscreensaver" for more info.  The latest version is always
+ ! available at http://www.jwz.org/xscreensaver/
+@@ -125,7 +125,8 @@
+ 
+ 
+ ! This command is executed by the "New Login" button on the lock dialog.
+-! (That button does not appear if this program does not exist.)
++! (That button does not appear on the dialog if this program does not exist.)
++! For Gnome: probably "gdmflexiserver -ls".  KDE, probably "kdmctl reserve".
+ !
+ @NEW_LOGIN_COMMAND_P@*newLoginCommand:	@NEW_LOGIN_COMMAND@
+ 
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/demo-Gtk.c xscreensaver-5.06/driver/demo-Gtk.c
+--- xscreensaver-5.05/driver/demo-Gtk.c	2008-02-09 18:54:43.000000000 -0800
++++ xscreensaver-5.06/driver/demo-Gtk.c	2008-06-27 13:40:21.000000000 -0700
+@@ -582,13 +582,13 @@
+   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
+   gtk_container_set_border_width (GTK_CONTAINER (dialog), 10);
+   gtk_window_set_title (GTK_WINDOW (dialog), progclass);
+-  STFU GTK_WIDGET_SET_FLAGS (ok, GTK_CAN_DEFAULT);
++  GTK_WIDGET_SET_FLAGS (ok, GTK_CAN_DEFAULT);
+   gtk_widget_show (ok);
+   gtk_widget_grab_focus (ok);
+ 
+   if (cancel)
+     {
+-      STFU GTK_WIDGET_SET_FLAGS (cancel, GTK_CAN_DEFAULT); 
++      GTK_WIDGET_SET_FLAGS (cancel, GTK_CAN_DEFAULT); 
+       gtk_widget_show (cancel);
+     }
+   gtk_widget_show (label);
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/exec.c xscreensaver-5.06/driver/exec.c
+--- xscreensaver-5.05/driver/exec.c	2006-02-03 23:36:33.000000000 -0800
++++ xscreensaver-5.06/driver/exec.c	2008-07-05 04:31:59.000000000 -0700
+@@ -1,5 +1,5 @@
+ /* exec.c --- executes a program in *this* pid, without an intervening process.
+- * xscreensaver, Copyright (c) 1991-2006 Jamie Zawinski <jwz@jwz.org>
++ * xscreensaver, Copyright (c) 1991-2008 Jamie Zawinski <jwz@jwz.org>
+  *
+  * Permission to use, copy, modify, distribute, and sell this software and its
+  * documentation for any purpose is hereby granted without fee, provided that
+@@ -181,8 +181,7 @@
+   int hairy_p;
+ 
+ #ifndef VMS
+-  if (nice != 0)
+-    nice_process (nice_level);
++  nice_process (nice_level);
+ 
+   hairy_p = !!strpbrk (command, "*?$&!<>[];`'\\\"=");
+   /* note: = is in the above because of the sh syntax "FOO=bar cmd". */
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/lock.c xscreensaver-5.06/driver/lock.c
+--- xscreensaver-5.05/driver/lock.c	2008-03-01 21:04:35.000000000 -0800
++++ xscreensaver-5.06/driver/lock.c	2008-07-01 20:13:26.000000000 -0700
+@@ -1,5 +1,5 @@
+ /* lock.c --- handling the password dialog for locking-mode.
+- * xscreensaver, Copyright (c) 1993-2007 Jamie Zawinski <jwz@jwz.org>
++ * xscreensaver, Copyright (c) 1993-2008 Jamie Zawinski <jwz@jwz.org>
+  *
+  * Permission to use, copy, modify, distribute, and sell this software and its
+  * documentation for any purpose is hereby granted without fee, provided that
+@@ -179,7 +179,7 @@
+ 
+ extern void xss_authenticate(saver_info *si, Bool verbose_p);
+ 
+-static void
++static int
+ new_passwd_window (saver_info *si)
+ {
+   passwd_dialog_data *pw;
+@@ -190,7 +190,7 @@
+ 
+   pw = (passwd_dialog_data *) calloc (1, sizeof(*pw));
+   if (!pw)
+-    return;
++    return -1;
+ 
+   /* Display the button only if the "newLoginCommand" pref is non-null.
+    */
+@@ -406,13 +406,14 @@
+   }
+ 
+   si->pw_data = pw;
++  return 0;
+ }
+ 
+ 
+ /**
+  * info_msg and prompt may be NULL.
+  */
+-static void
++static int
+ make_passwd_window (saver_info *si,
+ 		    const char *info_msg,
+ 		    const char *prompt,
+@@ -428,11 +429,15 @@
+ 
+   cleanup_passwd_window (si);
+ 
++  if (! ssi)   /* WTF?  Trying to prompt while no screens connected? */
++    return -1;
++
+   if (!si->pw_data)
+-    new_passwd_window (si);
++    if (new_passwd_window (si) < 0)
++      return -1;
+ 
+   if (!(pw = si->pw_data))
+-    return;
++    return -1;
+ 
+   pw->ratio = 1.0;
+ 
+@@ -614,10 +619,11 @@
+      actually be visible; this takes into account virtual viewports as
+      well as Xinerama. */
+   {
+-    int x, y, w, h;
+-    get_screen_viewport (pw->prompt_screen, &x, &y, &w, &h,
+-                         pw->previous_mouse_x, pw->previous_mouse_y,
+-                         si->prefs.verbose_p);
++    saver_screen_info *ssi = &si->screens [mouse_screen (si)];
++    int x = ssi->x;
++    int y = ssi->y;
++    int w = ssi->width;
++    int h = ssi->height;
+     if (si->prefs.debug_p) w /= 2;
+     pw->x = x + ((w + pw->width) / 2) - pw->width;
+     pw->y = y + ((h + pw->height) / 2) - pw->height;
+@@ -678,6 +684,8 @@
+   if (cmap)
+     XInstallColormap (si->dpy, cmap);
+   draw_passwd_window (si);
++
++  return 0;
+ }
+ 
+ 
+@@ -1463,6 +1471,7 @@
+   static Bool any_mode_locked_p = False;
+   saver_preferences *p = &si->prefs;
+   int screen;
++  int real_nscreens = ScreenCount (si->dpy);
+   int event, error;
+   Bool status;
+   XErrorHandler old_handler;
+@@ -1472,7 +1481,7 @@
+   if (!XF86VidModeQueryExtension (si->dpy, &event, &error))
+     return;
+ 
+-  for (screen = 0; screen < (si->xinerama_p ? 1 : si->nscreens); screen++)
++  for (screen = 0; real_nscreens; screen++)
+     {
+       XSync (si->dpy, False);
+       old_handler = XSetErrorHandler (ignore_all_errors_ehandler);
+@@ -1509,12 +1518,13 @@
+ #ifdef HAVE_XF86VMODE
+   saver_preferences *p = &si->prefs;
+   int screen;
++  int real_nscreens = ScreenCount (si->dpy);
+   int event, error;
+ 
+   if (!XF86VidModeQueryExtension (si->dpy, &event, &error))
+     return;
+ 
+-  for (screen = 0; screen < si->nscreens; screen++)
++  for (screen = 0; real_nscreens; screen++)
+     {
+       saver_screen_info *ssi = &si->screens[screen];
+       int x, y;
+@@ -1932,9 +1942,11 @@
+ 	info_msg_trimmed = remove_trailing_whitespace(info_msg);
+ 	prompt_trimmed = remove_trailing_whitespace(prompt);
+ 
+-	make_passwd_window(si, info_msg_trimmed, prompt_trimmed,
+-			   auth_msgs[i].type == AUTH_MSGTYPE_PROMPT_ECHO
+-			   ? True : False);
++	if (make_passwd_window(si, info_msg_trimmed, prompt_trimmed,
++                               auth_msgs[i].type == AUTH_MSGTYPE_PROMPT_ECHO
++                               ? True : False)
++            < 0)
++          goto fail;
+ 
+ 	if (info_msg_trimmed)
+ 	  free(info_msg_trimmed);
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/passwd-kerberos.c xscreensaver-5.06/driver/passwd-kerberos.c
+--- xscreensaver-5.05/driver/passwd-kerberos.c	2005-06-21 20:20:11.000000000 -0700
++++ xscreensaver-5.06/driver/passwd-kerberos.c	2008-07-01 13:28:28.000000000 -0700
+@@ -78,6 +78,10 @@
+  static const char *tk_file;
+ #endif /* !HAVE_DARWIN */
+ 
++/* warning suppression: duplicated in passwd.c */
++extern Bool kerberos_lock_init (int argc, char **argv, Bool verbose_p);
++extern Bool kerberos_passwd_valid_p (const char *typed_passwd, Bool verbose_p);
++
+ 
+ /* Called at startup to grab user, instance, and realm information
+    from the user's ticketfile (remember, name.inst@realm). Since we're
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/passwd-pam.c xscreensaver-5.06/driver/passwd-pam.c
+--- xscreensaver-5.05/driver/passwd-pam.c	2008-02-29 18:49:44.000000000 -0800
++++ xscreensaver-5.06/driver/passwd-pam.c	2008-06-30 17:59:47.000000000 -0700
+@@ -452,6 +452,14 @@
+ 
+   ret = si->unlock_cb(nmsgs, messages, &authresp, si);
+ 
++  /* #### If the user times out, or hits ESC or Cancel, we return PAM_CONV_ERR,
++          and PAM logs this as an authentication failure.  It would be nice if
++          there was some way to indicate that this was a "cancel" rather than
++          a "fail", so that it wouldn't show up in syslog, but I think the
++          only options are PAM_SUCCESS and PAM_CONV_ERR.  (I think that
++          PAM_ABORT means "internal error", not "cancel".)  Bleh.
++   */
++
+   if (ret == 0)
+     {
+       for (i = 0; i < nmsgs; ++i)
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/prefs.c xscreensaver-5.06/driver/prefs.c
+--- xscreensaver-5.05/driver/prefs.c	2006-05-23 15:03:47.000000000 -0700
++++ xscreensaver-5.06/driver/prefs.c	2008-07-02 17:21:22.000000000 -0700
+@@ -1,5 +1,5 @@
+ /* dotfile.c --- management of the ~/.xscreensaver file.
+- * xscreensaver, Copyright (c) 1998-2006 Jamie Zawinski <jwz@jwz.org>
++ * xscreensaver, Copyright (c) 1998-2008 Jamie Zawinski <jwz@jwz.org>
+  *
+  * Permission to use, copy, modify, distribute, and sell this software and its
+  * documentation for any purpose is hereby granted without fee, provided that
+@@ -272,6 +272,7 @@
+   "fadeTicks",
+   "captureStderr",
+   "captureStdout",		/* not saved -- obsolete */
++  "logFile",			/* not saved */
+   "ignoreUninstalledPrograms",
+   "font",
+   "dpmsEnabled",
+@@ -808,6 +809,7 @@
+       CHECK("fadeTicks")	type = pref_int,  i = p->fade_ticks;
+       CHECK("captureStderr")	type = pref_bool, b = p->capture_stderr_p;
+       CHECK("captureStdout")	continue;  /* don't save */
++      CHECK("logFile")		continue;  /* don't save */
+       CHECK("ignoreUninstalledPrograms")
+                                 type = pref_bool, b = p->ignore_uninstalled_p;
+ 
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/screens.c xscreensaver-5.06/driver/screens.c
+--- xscreensaver-5.05/driver/screens.c	1969-12-31 16:00:00.000000000 -0800
++++ xscreensaver-5.06/driver/screens.c	2008-07-05 05:24:51.000000000 -0700
+@@ -0,0 +1,873 @@
++/* screens.c --- dealing with RANDR, Xinerama, and VidMode Viewports.
++ * xscreensaver, Copyright (c) 1991-2008 Jamie Zawinski <jwz@jwz.org>
++ *
++ * Permission to use, copy, modify, distribute, and sell this software and its
++ * documentation for any purpose is hereby granted without fee, provided that
++ * the above copyright notice appear in all copies and that both that
++ * copyright notice and this permission notice appear in supporting
++ * documentation.  No representations are made about the suitability of this
++ * software for any purpose.  It is provided "as is" without express or 
++ * implied warranty.
++ */
++
++/*   There are a bunch of different mechanisms for multiple monitors
++ *   available in X.  XScreenSaver needs to care about this for two
++ *   reasons: first, to ensure that all visible areas go black; and
++ *   second, so that the windows of screen savers exactly fill the
++ *   glass of each monitor (instead of one saver spanning multiple
++ *   monitors, or a monitor displaying only a sub-rectangle of the
++ *   screen saver.)
++ *
++ *   1) Multi-screen:
++ *
++ *      This is the original way.  Each monitor gets its own display
++ *      number.  :0.0 is the first one, :0.1 is the next, etc.  The
++ *      value of $DISPLAY determines which screen windows open on by
++ *      default.  A single app can open windows on multiple screens
++ *      with the same display connection, but windows cannot be moved
++ *      from one screen to another.  The mouse can be moved from one
++ *      screen to another, though.  Screens may be different depths
++ *      (e.g., one can be TrueColor and one can be PseudoColor.)
++ *      Screens cannot be resized or moved without restarting X.
++ *
++ *      Everyone hates this way of doing things because of the
++ *      inability to move a window from one screen to another without
++ *      restarting the application.
++ *
++ *   2) Xinerama:
++ *
++ *      There is a single giant root window that spans all the
++ *      monitors.  All monitors are the same depth, and windows can be
++ *      moved around.  Applications can learn which rectangles are
++ *      actually visible on monitors by querying the Xinerama server
++ *      extension.  (If you don't do that, you end up with dialog
++ *      boxes that try to appear in the middle of the screen actually
++ *      spanning the gap between two monitors.)
++ *
++ *      Xinerama doesn't work with DRI, which means that if you use
++ *      it, you lose hardware acceleration on OpenGL programs.  Also,
++ *      screens can't be resized or moved without restarting X.
++ *
++ *   3) Vidmode Viewports:
++ *
++ *      With this extension, the root window can be bigger than the
++ *      monitor.  Moving the mouse near the edges of the screen
++ *      scrolls around, like a pan-and-scan movie.  There can also be
++ *      a hot key for changing the monitor's resolution (zooming
++ *      in/out).
++ *
++ *      Trying to combine this with Xinerama crashes the server, so
++ *      you can only use this if you have only a single screen, or are
++ *      in old-multi-screen mode.
++ *
++ *      Also, half the time it doesn't work at all: it tends to lie
++ *      about the size of the rectangle in use.
++ *
++ *   4) RANDR 1.0:
++ *
++ *      The first version of the "Resize and Rotate" extension let you
++ *      change the resolution of a screen on the fly.  The root window
++ *      would actually resize.  However, it was also incompatible with
++ *      Xinerama (did it crash, or just do nothing? I can't remember)
++ *      so you needed to be in single-screen or old multi-screen mode.
++ *      I believe RANDR could co-exist with Vidmode Viewports, but I'm
++ *      not sure.
++ *
++ *   5) RANDR 1.2:
++ *
++ *      Finally, RANDR added the functionality of Xinerama, plus some.
++ *      Each X screen (in the sense of #1, "multi-screen") can have a
++ *      number of sub-rectangles that are displayed on monitors, and
++ *      each of those sub-rectangles can be displayed on more than one
++ *      monitor.  So it's possible (I think) to have a hybrid of
++ *      multi-screen and Xinerama (e.g., to have two monitors running
++ *      in one depth, and three monitors running in another?)
++ *      Typically though, there will be a single X screen, with
++ *      Xinerama-like division of that large root window onto multiple
++ *      monitors.  Also everything's dynamic: monitors can be added,
++ *      removed, and resized at runtime.
++ *
++ *      I believe that as of RANDR 1.2, the Xinerama extension still
++ *      exists but only as a compatiblity layer: it's actually
++ *      returning data from the RANDR extension.
++ *
++ *      Though RANDR 1.2 allows the same image to be cloned onto more
++ *      than one monitor, and also allows one monitor to show a
++ *      subsection of something on another monitor (e.g., the
++ *      rectangles can be enclosed or overlap).  Since there's no way
++ *      to put seperate savers on those duplicated-or-overlapping
++ *      monitors, xscreensaver just ignores them (which allows them to
++ *      display duplicates or overlaps).
++ */
++
++#ifdef HAVE_CONFIG_H
++# include "config.h"
++#endif
++
++#include <X11/Xlib.h>
++
++#ifdef HAVE_RANDR
++# include <X11/extensions/Xrandr.h>
++#endif /* HAVE_RANDR */
++
++#ifdef HAVE_XINERAMA
++# include <X11/extensions/Xinerama.h>
++#endif /* HAVE_XINERAMA */
++
++#ifdef HAVE_XF86VMODE
++# include <X11/extensions/xf86vmode.h>
++#endif /* HAVE_XF86VMODE */
++
++/* This file doesn't need the Xt headers, so stub these types out... */
++#undef XtPointer
++#define XtAppContext void*
++#define XrmDatabase  void*
++#define XtIntervalId void*
++#define XtPointer    void*
++#define Widget       void*
++
++#include "xscreensaver.h"
++#include "visual.h"
++
++
++typedef enum { S_SANE, S_ENCLOSED, S_DUPLICATE, S_OVERLAP, 
++               S_OFFSCREEN, S_DISABLED } monitor_sanity;
++
++/* 'typedef monitor' is in types.h */
++struct _monitor {
++  int id;
++  char *desc;
++  Screen *screen;
++  int x, y, width, height;
++  monitor_sanity sanity;	/* I'm not crazy you're the one who's crazy */
++  int enemy;			/* which monitor it overlaps or duplicates */
++};
++
++static void
++free_monitors (monitor **monitors)
++{
++  monitor **m2 = monitors;
++  if (! monitors) return;
++  while (*m2) 
++    {
++      if ((*m2)->desc) free ((*m2)->desc);
++      free (*m2);
++      m2++;
++    }
++  free (monitors);
++}
++
++
++#ifdef HAVE_XINERAMA
++
++static monitor **
++xinerama_scan_monitors (Display *dpy)
++{
++  Screen *screen = DefaultScreenOfDisplay (dpy);
++  int event, error, nscreens, i;
++  XineramaScreenInfo *xsi;
++  monitor **monitors;
++
++  if (! XineramaQueryExtension (dpy, &event, &error))
++    return 0;
++
++  if (! XineramaIsActive (dpy)) 
++    return 0;
++
++  xsi = XineramaQueryScreens (dpy, &nscreens);
++  if (!xsi) return 0;
++
++  monitors = (monitor **) calloc (nscreens + 1, sizeof(*monitors));
++  if (!monitors) return 0;
++
++  for (i = 0; i < nscreens; i++)
++    {
++      monitor *m = (monitor *) calloc (1, sizeof (monitor));
++      monitors[i] = m;
++      m->id       = i;
++      m->screen   = screen;
++      m->x        = xsi[i].x_org;
++      m->y        = xsi[i].y_org;
++      m->width    = xsi[i].width;
++      m->height   = xsi[i].height;
++    }
++  return monitors;
++}
++
++#endif /* HAVE_XINERAMA */
++
++
++#ifdef HAVE_XF86VMODE
++
++static monitor **
++vidmode_scan_monitors (Display *dpy)
++{
++  int event, error, nscreens, i;
++  monitor **monitors;
++
++  /* Note that XF86VidModeGetViewPort() tends to be full of lies on laptops
++     that have a docking station or external monitor that runs in a different
++     resolution than the laptop's screen:
++
++         http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=81593
++         http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=208417
++         http://bugs.xfree86.org/show_bug.cgi?id=421
++
++     Presumably this is fixed by using RANDR instead of VidMode.
++   */
++
++# ifdef HAVE_XINERAMA
++  /* Attempts to use the VidMode extension when the Xinerama extension is
++     active can result in a server crash! Yay! */
++  if (XQueryExtension (dpy, "XINERAMA", &error, &event, &error))
++    return 0;
++#  endif /* !HAVE_XINERAMA */
++
++  if (! XF86VidModeQueryExtension (dpy, &event, &error))
++    return 0;
++
++  nscreens = ScreenCount (dpy);
++  monitors = (monitor **) calloc (nscreens + 1, sizeof(*monitors));
++  if (!monitors) return 0;
++
++  for (i = 0; i < nscreens; i++)
++    {
++      monitor *m = (monitor *) calloc (1, sizeof (monitor));
++      XF86VidModeModeLine ml;
++      int dot;
++      Screen *screen = ScreenOfDisplay (dpy, i);
++
++      monitors[i] = m;
++      m->id       = i;
++      m->screen   = screen;
++
++      if (! safe_XF86VidModeGetViewPort (dpy, i, &m->x, &m->y))
++        m->x = m->y = -1;
++
++      if (XF86VidModeGetModeLine (dpy, i, &dot, &ml))
++        {
++          m->width  = ml.hdisplay;
++          m->height = ml.vdisplay;
++        }
++
++      /* Apparently, though the server stores the X position in increments of
++         1 pixel, it will only make changes to the *display* in some other
++         increment.  With XF86_SVGA on a Thinkpad, the display only updates
++         in multiples of 8 pixels when in 8-bit mode, and in multiples of 4
++         pixels in 16-bit mode.  I don't know what it does in 24- and 32-bit
++         mode, because I don't have enough video memory to find out.
++
++         I consider it a bug that XF86VidModeGetViewPort() is telling me the
++         server's *target* scroll position rather than the server's *actual*
++         scroll position.  David Dawes agrees, and says they may fix this in
++         XFree86 4.0, but it's notrivial.
++
++         He also confirms that this behavior is server-dependent, so the
++         actual scroll position cannot be reliably determined by the client.
++         So... that means the only solution is to provide a ``sandbox''
++         around the blackout window -- we make the window be up to N pixels
++         larger than the viewport on both the left and right sides.  That
++         means some part of the outer edges of each hack might not be
++         visible, but screw it.
++
++         I'm going to guess that 16 pixels is enough, and that the Y dimension
++         doesn't have this problem.
++
++         The drawback of doing this, of course, is that some of the screenhacks
++         will still look pretty stupid -- for example, "slidescreen" will cut
++         off the left and right edges of the grid, etc.
++      */
++#  define FUDGE 16
++      if (m->x > 0 && m->x < m->width - ml.hdisplay)
++        {
++          /* Not at left edge or right edge:
++             Round X position down to next lower multiple of FUDGE.
++             Increase width by 2*FUDGE in case some server rounds up.
++           */
++          m->x = ((m->x - 1) / FUDGE) * FUDGE;
++          m->width += (FUDGE * 2);
++        }
++#  undef FUDGE
++    }
++
++  return monitors;
++}
++
++#endif /* HAVE_XF86VMODE */
++
++
++#ifdef HAVE_RANDR
++
++static monitor **
++randr_scan_monitors (Display *dpy)
++{
++  int event, error, major, minor, nscreens, i, j;
++  monitor **monitors;
++  Bool new_randr_p = False;
++
++  if (! XRRQueryExtension (dpy, &event, &error))
++    return 0;
++
++  if (! XRRQueryVersion (dpy, &major, &minor))
++    return 0;
++
++  if (major <= 0)    /* Protocol was still in flux back then -- fuck it. */
++    return 0;
++
++# ifdef HAVE_RANDR_12
++  new_randr_p = (major > 1 || (major == 1 && minor >= 2));
++# endif
++
++  if (! new_randr_p)
++    /* RANDR 1.0 -- no Xinerama-like virtual screens. */
++    nscreens = ScreenCount (dpy);
++  else  /* RANDR 1.2 or newer -- built-in Xinerama */
++    {
++# ifdef HAVE_RANDR_12
++      int xsc = ScreenCount (dpy);
++      nscreens = 0;
++      /* Add up the virtual screens on each X screen. */
++      for (i = 0; i < xsc; i++)
++        {
++          XRRScreenResources *res = 
++            XRRGetScreenResources (dpy, RootWindow (dpy, i));
++          nscreens += res->noutput;
++          XRRFreeScreenResources (res);
++        }
++# endif /* HAVE_RANDR_12 */
++    }
++
++  monitors = (monitor **) calloc (nscreens + 1, sizeof(*monitors));
++  if (!monitors) return 0;
++
++  for (i = 0, j = 0; i < ScreenCount (dpy); i++)
++    {
++      Screen *screen = ScreenOfDisplay (dpy, j);
++
++      if (! new_randr_p)  /* RANDR 1.0 */
++        {
++          XRRScreenConfiguration *rrc;
++          monitor *m = (monitor *) calloc (1, sizeof (monitor));
++          monitors[i] = m;
++          m->screen   = screen;
++          m->id       = i;
++
++          rrc = XRRGetScreenInfo (dpy, RootWindowOfScreen (screen));
++          if (rrc)
++            {
++              SizeID size = -1;
++              Rotation rot = ~0;
++              XRRScreenSize *rrsizes;
++              int nsizes;
++
++              size = XRRConfigCurrentConfiguration (rrc, &rot);
++              rrsizes = XRRConfigSizes (rrc, &nsizes);
++              m->width  = rrsizes[i].width;
++              m->height = rrsizes[i].height;
++
++              /* don't free 'rrsizes' */
++              XRRFreeScreenConfigInfo (rrc);
++            }
++        }
++      else   /* RANDR 1.2 or newer */
++        {
++# ifdef HAVE_RANDR_12
++          int k;
++          XRRScreenResources *res = 
++            XRRGetScreenResources (dpy, RootWindowOfScreen (screen));
++          for (k = 0; k < res->noutput; k++)
++            {
++              monitor *m = (monitor *) calloc (1, sizeof (monitor));
++              XRROutputInfo *rroi = XRRGetOutputInfo (dpy, res, 
++                                                      res->outputs[k]);
++              RRCrtc crtc = (rroi->crtc ? rroi->crtc : rroi->crtcs[0]);
++              XRRCrtcInfo *crtci = XRRGetCrtcInfo (dpy, res, crtc);
++
++              monitors[j] = m;
++              m->screen   = screen;
++              m->id       = (i * 1000) + j;
++              m->desc     = (rroi->name ? strdup (rroi->name) : 0);
++              m->x        = crtci->x;
++              m->y        = crtci->y;
++              m->width    = crtci->width;
++              m->height   = crtci->height;
++              j++;
++
++              if (rroi->connection == RR_Disconnected)
++                m->sanity = S_DISABLED;
++              /* #### do the same for RR_UnknownConnection? */
++
++              XRRFreeCrtcInfo (crtci);
++              XRRFreeOutputInfo (rroi);
++            }
++          XRRFreeScreenResources (res);
++# endif /* HAVE_RANDR_12 */
++        }
++    }
++
++  return monitors;
++}
++
++#endif /* HAVE_RANDR */
++
++
++static monitor **
++basic_scan_monitors (Display *dpy)
++{
++  int nscreens = ScreenCount (dpy);
++  int i;
++  monitor **monitors = (monitor **) calloc (nscreens + 1, sizeof(*monitors));
++  if (!monitors) return 0;
++
++  for (i = 0; i < nscreens; i++)
++    {
++      Screen *screen = ScreenOfDisplay (dpy, i);
++      monitor *m = (monitor *) calloc (1, sizeof (monitor));
++      monitors[i] = m;
++      m->id       = i;
++      m->screen   = screen;
++      m->x        = 0;
++      m->y        = 0;
++      m->width    = WidthOfScreen (screen);
++      m->height   = HeightOfScreen (screen);
++    }
++  return monitors;
++}
++
++
++#ifdef DEBUG_MULTISCREEN
++
++/* If DEBUG_MULTISCREEN is defined, then in "-debug" mode, xscreensaver
++   will pretend that it is changing the number of connected monitors
++   every few seconds, using the geometries in the following list,
++   for stress-testing purposes.
++ */
++static monitor **
++debug_scan_monitors (Display *dpy)
++{
++  static const char * const geoms[] = {
++    "1600x1028+0+22",
++    "1024x768+0+22",
++    "800x600+0+22",
++    "800x600+0+22,800x600+800+22",
++    "800x600+0+22,800x600+800+22,800x600+300+622",
++    "800x600+0+22,800x600+800+22,800x600+0+622,800x600+800+622",
++    "640x480+0+22,640x480+640+22,640x480+0+502,640x480+640+502",
++    "640x480+240+22,640x480+0+502,640x480+640+502",
++    "640x480+0+200,640x480+640+200",
++    "800x600+400+22",
++    "320x200+0+22,320x200+320+22,320x200+640+22,320x200+960+22,320x200+0+222,320x200+320+222,320x200+640+222,320x200+960+222,320x200+0+422,320x200+320+422,320x200+640+422,320x200+960+422,320x200+0+622,320x200+320+622,320x200+640+622,320x200+960+622,320x200+0+822,320x200+320+822,320x200+640+822,320x200+960+822"
++  };
++  static int index = 0;
++  monitor **monitors = (monitor **) calloc (100, sizeof(*monitors));
++  int nscreens = 0;
++  Screen *screen = DefaultScreenOfDisplay (dpy);
++
++  char *s = strdup (geoms[index]);
++  char *token = strtok (s, ",");
++  while (token)
++    {
++      monitor *m = calloc (1, sizeof (monitor));
++      char c;
++      m->id = nscreens;
++      m->screen = screen;
++      if (4 != sscanf (token, "%dx%d+%d+%d%c", 
++                       &m->width, &m->height, &m->x, &m->y, &c))
++        abort();
++      m->width -= 2;
++      m->height -= 2;
++      monitors[nscreens++] = m;
++      token = strtok (0, ",");
++    }
++  free (s);
++  
++  index = (index+1) % countof(geoms);
++  return monitors;
++}
++
++#endif /* DEBUG_MULTISCREEN */
++
++
++#ifdef QUAD_MODE
++static monitor **
++quadruple (monitor **monitors, Bool debug_p)
++{
++  int i, j, count = 0;
++  monitor **monitors2;
++  while (monitors[count])
++    count++;
++  monitors2 = (monitor **) calloc (count * 4 + 1, sizeof(*monitors));
++  if (!monitors2) abort();
++
++  for (i = 0, j = 0; i < count; i++)
++    {
++      int k;
++      for (k = 0; k < 4; k++)
++        {
++          monitors2[j+k] = (monitor *) calloc (1, sizeof (monitor));
++          *monitors2[j+k] = *monitors[i];
++          monitors2[j+k]->width  /= (debug_p ? 4 : 2);
++          monitors2[j+k]->height /= 2;
++          monitors2[j+k]->id = (monitors[i]->id * 4) + k;
++        }
++      monitors2[j+1]->x += monitors2[j]->width;
++      monitors2[j+2]->y += monitors2[j]->height;
++      monitors2[j+3]->x += monitors2[j]->width;
++      monitors2[j+3]->y += monitors2[j]->height;
++      j += 4;
++    }
++
++  free_monitors (monitors);
++  return monitors2;
++}
++#endif /* QUAD_MODE */
++
++
++static monitor **
++scan_monitors (saver_info *si)
++{
++  saver_preferences *p = &si->prefs;
++  monitor **monitors = 0;
++
++# ifdef DEBUG_MULTISCREEN
++    if (! monitors) monitors = debug_scan_monitors (si->dpy);
++# endif
++
++# ifdef HAVE_RANDR
++  if (! p->getviewport_full_of_lies_p)
++    if (! monitors) monitors = randr_scan_monitors (si->dpy);
++# endif
++
++# ifdef HAVE_XF86VMODE
++  if (! monitors) monitors = vidmode_scan_monitors (si->dpy);
++# endif
++
++# ifdef HAVE_XF86VMODE
++  if (! monitors) monitors = xinerama_scan_monitors (si->dpy);
++# endif
++
++  if (! monitors) monitors = basic_scan_monitors (si->dpy);
++
++# ifdef QUAD_MODE
++  if (p->quad_p)
++    monitors = quadruple (monitors, p->debug_p);
++# endif
++
++  return monitors;
++}
++
++
++static Bool
++monitors_overlap_p (monitor *a, monitor *b)
++{
++  /* Two rectangles overlap if the max of the tops is less than the
++     min of the bottoms and the max of the lefts is less than the min
++     of the rights.
++   */
++# undef MAX
++# undef MIN
++# define MAX(A,B) ((A)>(B)?(A):(B))
++# define MIN(A,B) ((A)<(B)?(A):(B))
++
++  int maxleft  = MAX(a->x, b->x);
++  int maxtop   = MAX(a->y, b->y);
++  int minright = MIN(a->x + a->width  - 1, b->x + b->width);
++  int minbot   = MIN(a->y + a->height - 1, b->y + b->height);
++  return (maxtop < minbot && maxleft < minright);
++}
++
++
++/* Mark the ones that overlap, etc.
++ */
++static void
++check_monitor_sanity (monitor **monitors)
++{
++  int i, j, count = 0;
++
++  while (monitors[count])
++    count++;
++
++#  define X1 monitors[i]->x
++#  define X2 monitors[j]->x
++#  define Y1 monitors[i]->y
++#  define Y2 monitors[j]->y
++#  define W1 monitors[i]->width
++#  define W2 monitors[j]->width
++#  define H1 monitors[i]->height
++#  define H2 monitors[j]->height
++
++  /* If a monitor is enclosed by any other monitor, that's insane.
++   */
++  for (i = 0; i < count; i++)
++    for (j = 0; j < count; j++)
++      if (i != j &&
++          monitors[i]->sanity == S_SANE &&
++          monitors[j]->sanity == S_SANE &&
++          X2 >= X1 &&
++          Y2 >= Y1 &&
++          (X2+W2) <= (X1+W1) &&
++          (Y2+H2) <= (Y1+H1))
++        {
++          if (X1 == X2 &&
++              Y1 == Y2 &&
++              W1 == W2 &&
++              H1 == H2)
++            monitors[j]->sanity = S_DUPLICATE;
++          else 
++            monitors[j]->sanity = S_ENCLOSED;
++          monitors[j]->enemy = i;
++        }
++
++  /* After checking for enclosure, check for other lossage against earlier
++     monitors.  We do enclosure first so that we make sure to pick the
++     larger one.
++   */
++  for (i = 0; i < count; i++)
++    for (j = 0; j < i; j++)
++      {
++        if (monitors[i]->sanity != S_SANE) continue; /* already marked */
++        if (monitors[j]->sanity != S_SANE) continue;
++
++        if (monitors_overlap_p (monitors[i], monitors[j]))
++          {
++            monitors[i]->sanity = S_OVERLAP;
++            monitors[i]->enemy = j;
++          }
++      }
++
++  /* Finally, make sure all monitors are enclosed by their X screen.
++     Xinerama sometimes reports 1024x768 VPs at -1936862040, -1953705044.
++   */
++  for (i = 0; i < count; i++)
++    {
++      int sw = WidthOfScreen (monitors[i]->screen)  * 2;
++      int sh = HeightOfScreen (monitors[i]->screen) * 2;
++      if (monitors[i]->sanity != S_SANE) continue; /* already marked */
++      if (X1    <  0 || Y1    <  0 || 
++          W1    <= 0 || H1    <= 0 || 
++          X1+W1 > sw || Y1+H1 > sh)
++        {
++          monitors[i]->sanity = S_OFFSCREEN;
++          monitors[i]->enemy = 0;
++        }
++    }
++
++#  undef X1
++#  undef X2
++#  undef Y1
++#  undef Y2
++#  undef W1
++#  undef W2
++#  undef H1
++#  undef H2
++}
++
++
++static Bool
++layouts_differ_p (monitor **a, monitor **b)
++{
++  if (!a || !b) return True;
++  while (1)
++    {
++      if (!*a) break;
++      if (!*b) break;
++      if ((*a)->screen != (*b)->screen ||
++          (*a)->x      != (*b)->x      ||
++          (*a)->y      != (*b)->y      ||
++          (*a)->width  != (*b)->width  ||
++          (*a)->height != (*b)->height)
++        return True;
++      a++;
++      b++;
++    }
++  if (*a) return True;
++  if (*b) return True;
++
++  return False;
++}
++
++
++void
++describe_monitor_layout (saver_info *si)
++{
++  monitor **monitors = si->monitor_layout;
++  int count = 0;
++  int good_count = 0;
++  int bad_count = 0;
++  while (monitors[count])
++    {
++      if (monitors[count]->sanity == S_SANE)
++        good_count++;
++      else
++        bad_count++;
++      count++;
++    }
++
++  if (count == 0)
++    fprintf (stderr, "%s: no screens!\n", blurb());
++  else
++    {
++      int i;
++      fprintf (stderr, "%s: screens in use: %d\n", blurb(), good_count);
++      for (i = 0; i < count; i++)
++        {
++          monitor *m = monitors[i];
++          if (m->sanity != S_SANE) continue;
++          fprintf (stderr, "%s:  %3d/%d: %dx%d+%d+%d",
++                   blurb(), m->id, screen_number (m->screen),
++                   m->width, m->height, m->x, m->y);
++          if (m->desc && *m->desc) fprintf (stderr, " (%s)", m->desc);
++          fprintf (stderr, "\n");
++        }
++      if (bad_count > 0)
++        {
++          fprintf (stderr, "%s: rejected screens: %d\n", blurb(), bad_count);
++          for (i = 0; i < count; i++)
++            {
++              monitor *m = monitors[i];
++              monitor *e = monitors[m->enemy];
++              if (m->sanity == S_SANE) continue;
++              fprintf (stderr, "%s:  %3d/%d: %dx%d+%d+%d",
++                       blurb(), m->id, screen_number (m->screen),
++                       m->width, m->height, m->x, m->y);
++              if (m->desc && *m->desc) fprintf (stderr, " (%s)", m->desc);
++              fprintf (stderr, " -- ");
++              switch (m->sanity)
++                {
++                case S_SANE: abort(); break;
++                case S_ENCLOSED:
++                  fprintf (stderr, "enclosed by %d (%dx%d+%d+%d)\n",
++                           e->id, e->width, e->height, e->x, e->y);
++                  break;
++                case S_DUPLICATE:
++                  fprintf (stderr, "duplicate of %d\n", e->id);
++                  break;
++                case S_OVERLAP:
++                  fprintf (stderr, "overlaps %d (%dx%d+%d+%d)\n",
++                           e->id, e->width, e->height, e->x, e->y);
++                  break;
++                case S_OFFSCREEN:
++                  fprintf (stderr, "off screen (%dx%d)\n",
++                           WidthOfScreen (e->screen), 
++                           HeightOfScreen (e->screen));
++                  break;
++                case S_DISABLED:
++                  fprintf (stderr, "output disabled\n");
++                  break;
++                }
++            }
++        }
++    }
++}
++
++
++/* Synchronize the contents of si->ssi to the current state of the monitors.
++   Doesn't change anything if nothing has changed; otherwise, alters and
++   reuses existing saver_screen_info structs as much as possible.
++   Returns True if anything changed.
++ */
++Bool
++update_screen_layout (saver_info *si)
++{
++  monitor **monitors = scan_monitors (si);
++  int count = 0;
++  int good_count = 0;
++  int i, j;
++  int seen_screens[100] = { 0, };
++
++  if (! layouts_differ_p (monitors, si->monitor_layout))
++    {
++      free_monitors (monitors);
++      return False;
++    }
++
++  free_monitors (si->monitor_layout);
++  si->monitor_layout = monitors;
++  check_monitor_sanity (si->monitor_layout);
++
++  while (monitors[count])
++    {
++      if (monitors[count]->sanity == S_SANE)
++        good_count++;
++      count++;
++    }
++
++  if (si->ssi_count == 0)
++    {
++      si->ssi_count = 10;
++      si->screens = (saver_screen_info *)
++        calloc (sizeof(*si->screens), si->ssi_count);
++    }
++
++  if (si->ssi_count <= good_count)
++    {
++      si->ssi_count = good_count + 10;
++      si->screens = (saver_screen_info *)
++        realloc (si->screens, sizeof(*si->screens) * si->ssi_count);
++      memset (si->screens + si->nscreens, 0, 
++              sizeof(*si->screens) * (si->ssi_count - si->nscreens));
++    }
++
++  if (! si->screens) abort();
++
++  si->nscreens = good_count;
++
++  /* Regenerate the list of GL visuals as needed. */
++  if (si->best_gl_visuals)
++    free (si->best_gl_visuals);
++  si->best_gl_visuals = 0;
++
++  for (i = 0, j = 0; i < count; i++)
++    {
++      monitor *m = monitors[i];
++      saver_screen_info *ssi = &si->screens[j];
++      Screen *old_screen = ssi->screen;
++      int sn;
++      if (monitors[i]->sanity != S_SANE) continue;
++
++      ssi->global = si;
++      ssi->number = j;
++
++      sn = screen_number (m->screen);
++      ssi->screen = m->screen;
++      ssi->real_screen_number = sn;
++      ssi->real_screen_p = (seen_screens[sn] == 0);
++      seen_screens[sn]++;
++
++      ssi->default_visual =
++	get_visual_resource (ssi->screen, "visualID", "VisualID", False);
++      ssi->current_visual = ssi->default_visual;
++      ssi->current_depth = visual_depth (ssi->screen, ssi->current_visual);
++
++      /* If the screen changed (or if this is the first time) we need
++         a new toplevel shell for this screen's depth.
++       */
++      if (ssi->screen != old_screen)
++        initialize_screen_root_widget (ssi);
++
++      ssi->poll_mouse_last_root_x = -1;
++      ssi->poll_mouse_last_root_y = -1;
++
++      ssi->x      = m->x;
++      ssi->y      = m->y;
++      ssi->width  = m->width;
++      ssi->height = m->height;
++
++# ifndef DEBUG_MULTISCREEN
++      {
++        saver_preferences *p = &si->prefs;
++        if (p->debug_p
++#  ifdef QUAD_MODE
++            && !p->quad_p
++#  endif
++            )
++          ssi->width /= 2;
++      }
++# endif
++
++      j++;
++    }
++
++  si->default_screen = &si->screens[0];
++  return True;
++}
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/splash.c xscreensaver-5.06/driver/splash.c
+--- xscreensaver-5.05/driver/splash.c	2007-11-05 14:26:36.000000000 -0800
++++ xscreensaver-5.06/driver/splash.c	2008-07-01 13:16:49.000000000 -0700
+@@ -1,4 +1,4 @@
+-/* xscreensaver, Copyright (c) 1991-2006 Jamie Zawinski <jwz@netscape.com>
++/* xscreensaver, Copyright (c) 1991-2008 Jamie Zawinski <jwz@netscape.com>
+  *
+  * Permission to use, copy, modify, distribute, and sell this software and its
+  * documentation for any purpose is hereby granted without fee, provided that
+@@ -170,6 +170,10 @@
+     return;
+ 
+   ssi = &si->screens[mouse_screen (si)];
++
++  if (!ssi || !ssi->screen)
++    return;    /* WTF?  Trying to splash while no screens connected? */
++
+   cmap = DefaultColormapOfScreen (ssi->screen);
+ 
+   sp = (splash_dialog_data *) calloc (1, sizeof(*sp));
+@@ -393,7 +397,10 @@
+         }
+     }
+ 
+-    get_screen_viewport (ssi, &sx, &sy, &w, &h, mouse_x, mouse_y, False);
++    x = ssi->x;
++    y = ssi->y;
++    w = ssi->width;
++    h = ssi->height;
+     if (si->prefs.debug_p) w /= 2;
+     x = sx + (((w + sp->width)  / 2) - sp->width);
+     y = sy + (((h + sp->height) / 2) - sp->height);
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/stderr.c xscreensaver-5.06/driver/stderr.c
+--- xscreensaver-5.05/driver/stderr.c	2006-02-02 18:56:21.000000000 -0800
++++ xscreensaver-5.06/driver/stderr.c	2008-07-05 04:32:49.000000000 -0700
+@@ -1,5 +1,5 @@
+ /* stderr.c --- capturing stdout/stderr output onto the screensaver window.
+- * xscreensaver, Copyright (c) 1991-2006 Jamie Zawinski <jwz@jwz.org>
++ * xscreensaver, Copyright (c) 1991-2008 Jamie Zawinski <jwz@jwz.org>
+  *
+  * Permission to use, copy, modify, distribute, and sell this software and its
+  * documentation for any purpose is hereby granted without fee, provided that
+@@ -472,6 +472,47 @@
+ }
+ 
+ 
++/* If the "-log file" command-line option has been specified,
++   open the file for append, and redirect stdout/stderr there.
++   This is called very early, before initialize_stderr().
++ */
++void
++stderr_log_file (saver_info *si)
++{
++  int stdout_fd = 1;
++  int stderr_fd = 2;
++  const char *filename = get_string_resource (si->dpy, "logFile", "LogFile");
++  int fd;
++
++  if (!filename || !*filename) return;
++
++  fd = open (filename, O_WRONLY | O_APPEND | O_CREAT, 0666);
++
++  if (fd < 0)
++    {
++      char buf[255];
++    FAIL:
++      sprintf (buf, "%.100s: %.100s", blurb(), filename);
++      perror (buf);
++      fflush (stderr);
++      fflush (stdout);
++      exit (1);
++    }
++
++  fprintf (stderr, "%s: logging to file %s\n", blurb(), filename);
++
++  if (dup2 (fd, stdout_fd) < 0) goto FAIL;
++  if (dup2 (fd, stderr_fd) < 0) goto FAIL;
++
++  fprintf (stderr, "\n\n"
++ "##########################################################################\n"
++           "%s: logging to \"%s\" at %s\n"
++ "##########################################################################\n"
++           "\n",
++           blurb(), filename, timestring());
++}
++
++
+ /* If there is anything in the stderr buffer, flush it to the real stderr.
+    This does no X operations.  Call this when exiting to make sure any
+    last words actually show up.
+@@ -487,8 +528,7 @@
+ 
+   stderr_callback ((XtPointer) si, &stderr_stdout_read_fd, 0);
+ 
+-  if (stderr_buffer &&
+-      stderr_tail &&
++  if (stderr_tail &&
+       stderr_buffer < stderr_tail)
+     {
+       *stderr_tail = 0;
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/subprocs.c xscreensaver-5.06/driver/subprocs.c
+--- xscreensaver-5.05/driver/subprocs.c	2008-01-26 14:14:26.000000000 -0800
++++ xscreensaver-5.06/driver/subprocs.c	2008-07-02 21:04:41.000000000 -0700
+@@ -851,7 +851,7 @@
+     case 0:
+       close (ConnectionNumber (si->dpy));	/* close display fd */
+       limit_subproc_memory (p->inferior_memory_limit, p->verbose_p);
+-      hack_subproc_environment (ssi);		/* set $DISPLAY */
++      hack_subproc_environment (ssi->screen, ssi->screensaver_window);
+ 
+       if (p->verbose_p)
+         fprintf (stderr, "%s: %d: spawning \"%s\" in pid %lu.\n",
+@@ -878,14 +878,22 @@
+ }
+ 
+ 
+-static void
+-spawn_screenhack_1 (saver_screen_info *ssi, Bool first_time_p)
++void
++spawn_screenhack (saver_screen_info *ssi)
+ {
+   saver_info *si = ssi->global;
+   saver_preferences *p = &si->prefs;
+-  raise_window (si, first_time_p, True, False);
+   XFlush (si->dpy);
+ 
++  if (!monitor_powered_on_p (si))
++    {
++      if (si->prefs.verbose_p)
++        fprintf (stderr,
++                 "%s: %d: X says monitor has powered down; "
++                 "not launching a hack.\n", blurb(), ssi->number);
++      return;
++    }
++
+   if (p->screenhacks_count)
+     {
+       screenhack *hack;
+@@ -1017,55 +1025,28 @@
+ 	  break;
+ 	}
+     }
+-}
+-
+-
+-void
+-spawn_screenhack (saver_info *si, Bool first_time_p)
+-{
+-  if (monitor_powered_on_p (si))
+-    {
+-      int i;
+-      for (i = 0; i < si->nscreens; i++)
+-        {
+-          saver_screen_info *ssi = &si->screens[i];
+-          spawn_screenhack_1 (ssi, first_time_p);
+-        }
+-    }
+-  else if (si->prefs.verbose_p)
+-    fprintf (stderr,
+-             "%s: X says monitor has powered down; "
+-             "not launching a hack.\n", blurb());
+ 
+-  store_saver_status (si);  /* store current hack numbers */
++  store_saver_status (si);  /* store current hack number */
+ }
+ 
+ 
+ void
+-kill_screenhack (saver_info *si)
++kill_screenhack (saver_screen_info *ssi)
+ {
+-  int i;
+-  for (i = 0; i < si->nscreens; i++)
+-    {
+-      saver_screen_info *ssi = &si->screens[i];
+-      if (ssi->pid)
+-	kill_job (si, ssi->pid, SIGTERM);
+-      ssi->pid = 0;
+-    }
++  saver_info *si = ssi->global;
++  if (ssi->pid)
++    kill_job (si, ssi->pid, SIGTERM);
++  ssi->pid = 0;
+ }
+ 
+ 
+ void
+-suspend_screenhack (saver_info *si, Bool suspend_p)
++suspend_screenhack (saver_screen_info *ssi, Bool suspend_p)
+ {
+ #ifdef SIGSTOP	/* older VMS doesn't have it... */
+-  int i;
+-  for (i = 0; i < si->nscreens; i++)
+-    {
+-      saver_screen_info *ssi = &si->screens[i];
+-      if (ssi->pid)
+-	kill_job (si, ssi->pid, (suspend_p ? SIGSTOP : SIGCONT));
+-    }
++  saver_info *si = ssi->global;
++  if (ssi->pid)
++    kill_job (si, ssi->pid, (suspend_p ? SIGSTOP : SIGCONT));
+ #endif /* SIGSTOP */
+ }
+ 
+@@ -1137,7 +1118,7 @@
+ 
+ 
+ void
+-hack_subproc_environment (saver_screen_info *ssi)
++hack_subproc_environment (Screen *screen, Window saver_window)
+ {
+   /* Store $DISPLAY into the environment, so that the $DISPLAY variable that
+      the spawned processes inherit is correct.  First, it must be on the same
+@@ -1152,8 +1133,8 @@
+      us to (eventually) run multiple hacks in Xinerama mode, where each hack
+      has the same $DISPLAY but a different piece of glass.
+    */
+-  saver_info *si = ssi->global;
+-  const char *odpy = DisplayString (si->dpy);
++  Display *dpy = DisplayOfScreen (screen);
++  const char *odpy = DisplayString (dpy);
+   char *ndpy = (char *) malloc (strlen(odpy) + 20);
+   char *nssw = (char *) malloc (40);
+   char *s, *c;
+@@ -1170,10 +1151,9 @@
+   while (isdigit(*s)) s++;			/* skip over dpy number */
+   while (*s == '.') s++;			/* skip over dot */
+   if (s[-1] != '.') *s++ = '.';			/* put on a dot */
+-  sprintf(s, "%d", ssi->real_screen_number);	/* put on screen number */
++  sprintf(s, "%d", screen_number (screen));	/* put on screen number */
+ 
+-  sprintf (nssw, "XSCREENSAVER_WINDOW=0x%lX",
+-           (unsigned long) ssi->screensaver_window);
++  sprintf (nssw, "XSCREENSAVER_WINDOW=0x%lX", (unsigned long) saver_window);
+ 
+   /* Allegedly, BSD 4.3 didn't have putenv(), but nobody runs such systems
+      any more, right?  It's not Posix, but everyone seems to have it. */
+@@ -1194,9 +1174,8 @@
+ /* GL crap */
+ 
+ Visual *
+-get_best_gl_visual (saver_screen_info *ssi)
++get_best_gl_visual (saver_info *si, Screen *screen)
+ {
+-  saver_info *si = ssi->global;
+   pid_t forked;
+   int fds [2];
+   int in, out;
+@@ -1217,6 +1196,11 @@
+   in = fds [0];
+   out = fds [1];
+ 
++  block_sigchld();   /* This blocks it in the parent and child, to avoid
++                        racing.  It is never unblocked in the child before
++                        the child exits, but that doesn't matter.
++                      */
++
+   switch ((int) (forked = fork ()))
+     {
+     case -1:
+@@ -1237,7 +1221,7 @@
+             perror ("could not dup() a new stdout:");
+             return 0;
+           }
+-        hack_subproc_environment (ssi);		/* set $DISPLAY */
++        hack_subproc_environment (screen, 0);	/* set $DISPLAY */
+ 
+         execvp (av[0], av);			/* shouldn't return. */
+ 
+@@ -1270,6 +1254,8 @@
+         /* Wait for the child to die. */
+         waitpid (-1, &wait_status, 0);
+ 
++        unblock_sigchld();   /* child is dead and waited, unblock now. */
++
+         if (1 == sscanf (buf, "0x%lx %c", &v, &c))
+           result = (int) v;
+ 
+@@ -1291,12 +1277,13 @@
+           }
+         else
+           {
+-            Visual *v = id_to_visual (ssi->screen, result);
++            Visual *v = id_to_visual (screen, result);
+             if (si->prefs.verbose_p)
+               fprintf (stderr, "%s: %d: %s: GL visual is 0x%X%s.\n",
+-                       blurb(), ssi->number,
++                       blurb(), screen_number (screen),
+                        av[0], result,
+-                       (v == ssi->default_visual ? " (default)" : ""));
++                       (v == DefaultVisualOfScreen (screen)
++                        ? " (default)" : ""));
+             return v;
+           }
+       }
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/test-passwd.c xscreensaver-5.06/driver/test-passwd.c
+--- xscreensaver-5.05/driver/test-passwd.c	2008-02-29 19:08:44.000000000 -0800
++++ xscreensaver-5.06/driver/test-passwd.c	2008-07-01 13:16:59.000000000 -0700
+@@ -1,4 +1,4 @@
+-/* xscreensaver, Copyright (c) 1998-2007 Jamie Zawinski <jwz@jwz.org>
++/* xscreensaver, Copyright (c) 1998-2008 Jamie Zawinski <jwz@jwz.org>
+  *
+  * Permission to use, copy, modify, distribute, and sell this software and its
+  * documentation for any purpose is hereby granted without fee, provided that
+@@ -65,21 +65,6 @@
+ Atom XA_SCREENSAVER, XA_DEMO, XA_PREFS;
+ 
+ void
+-get_screen_viewport (saver_screen_info *ssi,
+-                     int *x_ret, int *y_ret,
+-                     int *w_ret, int *h_ret,
+-                     int tx, int ty,
+-                     Bool verbose_p)
+-{
+-  *x_ret = 0;
+-  *y_ret = 0;
+-  *w_ret = WidthOfScreen (ssi->screen);
+-  *h_ret = HeightOfScreen (ssi->screen);
+-
+-  if (*w_ret > *h_ret * 2) *w_ret /= 2;  /* xinerama kludge */
+-}
+-
+-void
+ idle_timer (XtPointer closure, XtIntervalId *id)
+ {
+   saver_info *si = (saver_info *) closure;
+@@ -230,8 +215,6 @@
+         visual_depth(si->default_screen->screen,
+                      si->default_screen->current_visual);
+ 
+-      /* I could call get_screen_viewport(), but it is not worthwhile.
+-       * These are used by the save_under pixmap. */
+       ssip.width = WidthOfScreen(ssip.screen);
+       ssip.height = HeightOfScreen(ssip.screen);
+ 
+@@ -246,6 +229,9 @@
+   pw = getpwuid (getuid ());
+   si->user = strdup (pw->pw_name);
+ 
++/*  si->nscreens = 0;
++  si->screens = si->default_screen = 0; */
++
+   while (1)
+     {
+ #ifndef NO_LOCKING
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/test-randr.c xscreensaver-5.06/driver/test-randr.c
+--- xscreensaver-5.05/driver/test-randr.c	2005-01-22 19:16:29.000000000 -0800
++++ xscreensaver-5.06/driver/test-randr.c	2008-07-05 05:08:32.000000000 -0700
+@@ -1,5 +1,5 @@
+ /* test-randr.c --- playing with the Resize And Rotate extension.
+- * xscreensaver, Copyright (c) 2004, 2005 Jamie Zawinski <jwz@jwz.org>
++ * xscreensaver, Copyright (c) 2004-2008 Jamie Zawinski <jwz@jwz.org>
+  *
+  * Permission to use, copy, modify, distribute, and sell this software and its
+  * documentation for any purpose is hereby granted without fee, provided that
+@@ -233,6 +233,43 @@
+           fprintf(stderr, "%s:   XRRGetScreenInfo(dpy, %d) ==> NULL\n",
+                   blurb(), i);
+         }
++
++
++# ifdef HAVE_RANDR_12
++      if (major > 1 || (major == 1 && minor >= 2))
++        {
++          int j;
++          XRRScreenResources *res = 
++            XRRGetScreenResources (dpy, RootWindow (dpy, i));
++          fprintf (stderr, "\n");
++          for (j = 0; j < res->noutput; j++)
++            {
++              int k;
++              XRROutputInfo *rroi = 
++                XRRGetOutputInfo (dpy, res, res->outputs[j]);
++              fprintf (stderr, "%s:   Output %d: %s: %s (%d)\n", blurb(), j,
++                       rroi->name,
++                       (rroi->connection == RR_Disconnected ? "disconnected" :
++                        rroi->connection == RR_UnknownConnection ? "unknown" :
++                        "connected"),
++                       (int) rroi->crtc);
++              for (k = 0; k < rroi->ncrtc; k++)
++                {
++                  XRRCrtcInfo *crtci = XRRGetCrtcInfo (dpy, res, 
++                                                       rroi->crtcs[k]);
++                  fprintf(stderr, "%s:   %c CRTC %d (%d): %dx%d+%d+%d\n", 
++                          blurb(),
++                          (rroi->crtc == rroi->crtcs[k] ? '+' : ' '),
++                          k, (int) rroi->crtcs[k],
++                          crtci->width, crtci->height, crtci->x, crtci->y);
++                  XRRFreeCrtcInfo (crtci);
++                }
++              XRRFreeOutputInfo (rroi);
++              fprintf (stderr, "\n");
++            }
++          XRRFreeScreenResources (res);
++        }
++# endif /* HAVE_RANDR_12 */
+     }
+ 
+   if (major > 0)
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/test-screens.c xscreensaver-5.06/driver/test-screens.c
+--- xscreensaver-5.05/driver/test-screens.c	1969-12-31 16:00:00.000000000 -0800
++++ xscreensaver-5.06/driver/test-screens.c	2008-07-02 21:04:07.000000000 -0700
+@@ -0,0 +1,196 @@
++/* test-screens.c --- some test cases for the "monitor sanity" checks.
++ * xscreensaver, Copyright (c) 2008 Jamie Zawinski <jwz@jwz.org>
++ *
++ * Permission to use, copy, modify, distribute, and sell this software and its
++ * documentation for any purpose is hereby granted without fee, provided that
++ * the above copyright notice appear in all copies and that both that
++ * copyright notice and this permission notice appear in supporting
++ * documentation.  No representations are made about the suitability of this
++ * software for any purpose.  It is provided "as is" without express or 
++ * implied warranty.
++ */
++
++#ifdef HAVE_CONFIG_H
++# include "config.h"
++#endif
++
++#include <X11/Xlib.h>
++
++/* This file doesn't need the Xt headers, so stub these types out... */
++#undef XtPointer
++#define XtAppContext void*
++#define XrmDatabase  void*
++#define XtIntervalId void*
++#define XtPointer    void*
++#define Widget       void*
++
++#include "xscreensaver.h"
++#include "visual.h"
++
++#undef WidthOfScreen
++#undef HeightOfScreen
++#define WidthOfScreen(s) 10240
++#define HeightOfScreen(s) 10240
++
++#undef screen_number
++#define screen_number(s) (0)
++
++#include "screens.c"   /* to get at static void check_monitor_sanity() */
++
++char *progname = 0;
++char *progclass = "XScreenSaver";
++
++const char *blurb(void) { return progname; }
++
++Bool safe_XF86VidModeGetViewPort(Display *d, int i, int *x, int *y) { abort(); }
++void initialize_screen_root_widget(saver_screen_info *ssi) { abort(); }
++Visual *get_best_gl_visual (saver_info *si, Screen *sc) { abort(); }
++
++
++static const char *
++failstr (monitor_sanity san)
++{
++  switch (san) {
++  case S_SANE:      return "OK";
++  case S_ENCLOSED:  return "ENC";
++  case S_DUPLICATE: return "DUP";
++  case S_OVERLAP:   return "OVR";
++  case S_OFFSCREEN: return "OFF";
++  case S_DISABLED:  return "DIS";
++  }
++}
++
++
++static void
++test (int testnum, const char *screens, const char *desired)
++{
++  monitor *monitors[100];
++  char result[2048];
++  char *out = result;
++  int i, nscreens = 0;
++  char *token = strtok (strdup(screens), ",");
++  while (token)
++    {
++      monitor *m = calloc (1, sizeof (monitor));
++      char c;
++      m->id = (testnum * 1000) + nscreens;
++      if (4 != sscanf (token, "%dx%d+%d+%d%c", 
++                      &m->width, &m->height, &m->x, &m->y, &c))
++        {
++          fprintf (stderr, "%s: unparsable geometry: %s\n", blurb(), token);
++          exit (1);
++        }
++      monitors[nscreens] = m;
++      nscreens++;
++      token = strtok (0, ",");
++    }
++  monitors[nscreens] = 0;
++
++  check_monitor_sanity (monitors);
++
++  *out = 0;
++  for (i = 0; i < nscreens; i++)
++    {
++      monitor *m = monitors[i];
++      if (out != result) *out++ = ',';
++      if (m->sanity == S_SANE)
++        sprintf (out, "%dx%d+%d+%d", m->width, m->height, m->x, m->y);
++      else
++        strcpy (out, failstr (m->sanity));
++      out += strlen(out);
++    }
++  *out = 0;
++
++  if (!strcmp (result, desired))
++    fprintf (stderr, "%s: test %2d OK\n", blurb(), testnum);
++  else
++    fprintf (stderr, "%s: test %2d FAILED:\n"
++             "%s:   given: %s\n"
++             "%s:  wanted: %s\n"
++             "%s:     got: %s\n",
++             blurb(), testnum,
++             blurb(), screens, 
++             blurb(), desired, 
++             blurb(), result);
++
++# if 0
++  {
++    saver_info SI;
++    SI.monitor_layout = monitors;
++    describe_monitor_layout (&SI);
++  }
++# endif
++
++}
++
++static void
++run_tests(void)
++{
++  int i = 1;
++# define A(a)   test (i++, a, a);
++# define B(a,b) test (i++, a, b)
++
++  A("");
++  A("1024x768+0+0");
++  A("1024x768+0+0,1024x768+1024+0");
++  A("1024x768+0+0,1024x768+0+768");
++  A("1024x768+0+0,1024x768+0+768,1024x768+1024+0");
++
++  B("1024x768+999999+0",
++    "OFF");
++  B("1024x768+-999999+-999999",
++    "OFF");
++  B("1024x768+0+0,1024x768+0+0",
++    "1024x768+0+0,DUP");
++  B("1024x768+0+0,1024x768+0+0,1024x768+0+0",
++    "1024x768+0+0,DUP,DUP");
++  B("1024x768+0+0,1024x768+1024+0,1024x768+0+0",
++    "1024x768+0+0,1024x768+1024+0,DUP");
++  B("1280x1024+0+0,1024x768+0+64,800x600+0+0,640x480+0+0,720x400+0+0",
++    "1280x1024+0+0,ENC,ENC,ENC,ENC");
++  B("1024x768+0+64,1280x1024+0+0,800x600+0+0,640x480+0+0,800x600+0+0,720x400+0+0",
++    "ENC,1280x1024+0+0,ENC,ENC,ENC,ENC");
++  B("1024x768+0+64,1280x1024+0+0,800x600+0+0,640x480+0+0,1280x1024+0+0,720x400+0+0",
++    "ENC,1280x1024+0+0,ENC,ENC,DUP,ENC");
++  B("720x400+0+0,640x480+0+0,800x600+0+0,1024x768+0+64,1280x1024+0+0",
++    "ENC,ENC,ENC,ENC,1280x1024+0+0");
++  B("1280x1024+0+0,800x600+1280+0,800x600+1300+0",
++    "1280x1024+0+0,800x600+1280+0,OVR");
++  B("1280x1024+0+0,800x600+1280+0,800x600+1300+0,1280x1024+0+0,800x600+1280+0",
++    "1280x1024+0+0,800x600+1280+0,OVR,DUP,DUP");
++
++  /*  +-------------+----+  +------+---+   1: 1440x900,  widescreen display
++      |             :    |  | 3+4  :   |   2: 1280x1024, conventional display
++      |     1+2     : 1  |  +......+   |   3: 1024x768,  laptop
++      |             :    |  |  3       |   4: 800x600,   external projector
++      +.............+----+  +----------+
++      |      2      |
++      |             |
++      +-------------+
++   */
++  B("1440x900+0+0,1280x1024+0+0,1024x768+1440+0,800x600+1440+0",
++    "1440x900+0+0,OVR,1024x768+1440+0,ENC");
++  B("800x600+0+0,800x600+0+0,800x600+800+0",
++    "800x600+0+0,DUP,800x600+800+0");
++  B("1600x1200+0+0,1360x768+0+0",
++    "1600x1200+0+0,ENC");
++}
++
++
++int
++main (int argc, char **argv)
++{
++  char *s;
++  progname = argv[0];
++  s = strrchr(progname, '/');
++  if (s) progname = s+1;
++  if (argc != 1)
++    {
++      fprintf (stderr, "usage: %s\n", argv[0]);
++      exit (1);
++    }
++
++  run_tests();
++
++  exit (0);
++}
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/timers.c xscreensaver-5.06/driver/timers.c
+--- xscreensaver-5.05/driver/timers.c	2008-01-26 14:22:54.000000000 -0800
++++ xscreensaver-5.06/driver/timers.c	2008-07-02 19:44:07.000000000 -0700
+@@ -264,14 +264,18 @@
+     }
+   else
+     {
++      int i;
+       maybe_reload_init_file (si);
+-      kill_screenhack (si);
++      for (i = 0; i < si->nscreens; i++)
++        kill_screenhack (&si->screens[i]);
++
++      raise_window (si, True, True, False);
+ 
+       if (!si->throttled_p)
+-        spawn_screenhack (si, False);
++        for (i = 0; i < si->nscreens; i++)
++          spawn_screenhack (&si->screens[i]);
+       else
+         {
+-          raise_window (si, True, True, False);
+           if (p->verbose_p)
+             fprintf (stderr, "%s: not launching new hack (throttled.)\n",
+                      blurb());
+@@ -1010,28 +1014,17 @@
+         if (event.type == (si->randr_event_number + RRScreenChangeNotify))
+           {
+             /* The Resize and Rotate extension sends an event when the
+-               size, rotation, or refresh rate of the screen has changed. */
+-
++               size, rotation, or refresh rate of any screen has changed.
++             */
+             XRRScreenChangeNotifyEvent *xrr_event =
+               (XRRScreenChangeNotifyEvent *) &event;
+-            /* XRRRootToScreen is in Xrandr.h 1.4, 2001/06/07 */
+-            int screen = XRRRootToScreen (si->dpy, xrr_event->window);
+ 
+             if (p->verbose_p)
+               {
+-                if (si->screens[screen].width  == xrr_event->width &&
+-                    si->screens[screen].height == xrr_event->height)
+-                  fprintf (stderr,
+-                          "%s: %d: no-op screen size change event (%dx%d)\n",
+-                           blurb(), screen,
+-                           xrr_event->width, xrr_event->height);
+-                else
+-                  fprintf (stderr,
+-                       "%s: %d: screen size changed from %dx%d to %dx%d\n",
+-                           blurb(), screen,
+-                           si->screens[screen].width,
+-                           si->screens[screen].height,
+-                           xrr_event->width, xrr_event->height);
++                /* XRRRootToScreen is in Xrandr.h 1.4, 2001/06/07 */
++                int screen = XRRRootToScreen (si->dpy, xrr_event->window);
++                fprintf (stderr, "%s: %d: screen change event received\n",
++                         blurb(), screen);
+               }
+ 
+ # ifdef RRScreenChangeNotifyMask
+@@ -1040,7 +1033,15 @@
+ # endif /* RRScreenChangeNotifyMask */
+ 
+             /* Resize the existing xscreensaver windows and cached ssi data. */
+-            resize_screensaver_window (si);
++            if (update_screen_layout (si))
++              {
++                if (p->verbose_p)
++                  {
++                    fprintf (stderr, "%s: new layout:\n", blurb());
++                    describe_monitor_layout (si);
++                  }
++                resize_screensaver_window (si);
++              }
+           }
+         else
+ #endif /* HAVE_RANDR */
+@@ -1401,11 +1402,13 @@
+       if (screenhack_running_p (si) &&
+           !monitor_powered_on_p (si))
+ 	{
++          int i;
+ 	  if (si->prefs.verbose_p)
+ 	    fprintf (stderr,
+ 		     "%s: X says monitor has powered down; "
+ 		     "killing running hacks.\n", blurb());
+-	  kill_screenhack (si);
++          for (i = 0; i < si->nscreens; i++)
++            kill_screenhack (&si->screens[i]);
+ 	}
+ 
+       /* Re-schedule this timer.  The watchdog timer defaults to a bit less
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/types.h xscreensaver-5.06/driver/types.h
+--- xscreensaver-5.05/driver/types.h	2007-03-15 01:32:27.000000000 -0700
++++ xscreensaver-5.06/driver/types.h	2008-07-02 20:58:58.000000000 -0700
+@@ -1,7 +1,4 @@
+-/* types.h
+- *
+- * This file is part of XScreenSaver,
+- * Copyright (c) 1993-2004 Jamie Zawinski <jwz@jwz.org>
++/* xscreensaver, Copyright (c) 1993-2008 Jamie Zawinski <jwz@jwz.org>
+  *
+  * Permission to use, copy, modify, distribute, and sell this software and its
+  * documentation for any purpose is hereby granted without fee, provided that
+@@ -12,20 +9,19 @@
+  * implied warranty.
+  */
+ 
+-#ifndef TYPES_H
+-#define TYPES_H
++#ifndef __XSCREENSAVER_TYPES_H__
++#define __XSCREENSAVER_TYPES_H__
+ 
+ typedef struct saver_info saver_info;
+ 
+-/* Unlock states. Old pw_* equivalents in square brackets:
+- * ul_read - reading input (or ready to do so) [pw_read]
+- * ul_success - auth success, unlock the screen [pw_ok]
+- * ul_fail - authentication failed [pw_fail]
+- * ul_cancel - user cancelled auth [pw_cancel or pw_null]
+- * ul_time - timed out, user took too long [pw_time]
+- * ul_finished - user pressed enter on the current prompt, process input
+- */
+-enum unlock_state { ul_read, ul_success, ul_fail, ul_cancel, ul_time, ul_finished };
++typedef enum {
++  ul_read,		/* reading input or ready to do so */
++  ul_success,		/* auth success, unlock */
++  ul_fail,		/* auth fail */
++  ul_cancel,		/* user cancelled auth (pw_cancel or pw_null) */
++  ul_time,		/* timed out */
++  ul_finished		/* user pressed enter */
++} unlock_state;
+ 
+ typedef struct screenhack screenhack;
+ struct screenhack {
+@@ -56,6 +52,7 @@
+ typedef struct saver_screen_info saver_screen_info;
+ typedef struct passwd_dialog_data passwd_dialog_data;
+ typedef struct splash_dialog_data splash_dialog_data;
++typedef struct _monitor monitor;
+ 
+ 
+ /* This structure holds all the user-specified parameters, read from the
+@@ -158,9 +155,11 @@
+   saver_preferences prefs;
+ 
+   int nscreens;
++  int ssi_count;
+   saver_screen_info *screens;
+   saver_screen_info *default_screen;	/* ...on which dialogs will appear. */
+-
++  monitor **monitor_layout;		/* private to screens.c */
++  Visual **best_gl_visuals;		/* visuals for GL hacks on screen N */
+ 
+   /* =======================================================================
+      global connection info
+@@ -173,7 +172,6 @@
+      server extension info
+      ======================================================================= */
+ 
+-  Bool xinerama_p;		   /* Whether Xinerama is in use.            */
+   Bool using_xidle_extension;	   /* which extension is being used.         */
+   Bool using_mit_saver_extension;  /* Note that `p->use_*' is the *request*, */
+   Bool using_sgi_saver_extension;  /* and `si->using_*' is the *reality*.    */
+@@ -247,7 +245,7 @@
+   char *user;			/* The user whose session is locked. */
+   char *cached_passwd;		/* Cached password, used to avoid multiple
+ 				   prompts for password-only auth mechanisms.*/
+-  enum unlock_state unlock_state;
++  unlock_state unlock_state;
+ 
+   auth_conv_cb_t unlock_cb;	/* The function used to prompt for creds. */
+   void (*auth_finished_cb) (saver_info *si);
+@@ -349,7 +347,6 @@
+   int current_depth;		/* How deep the visual (and the window) are. */
+ 
+   Visual *default_visual;	/* visual to use when none other specified */
+-  Visual *best_gl_visual;	/* visual to use for GL hacks */
+ 
+   Window real_vroot;		/* The original virtual-root window. */
+   Window real_vroot_value;	/* What was in the __SWM_VROOT property. */
+@@ -407,4 +404,4 @@
+ };
+ 
+ 
+-#endif
++#endif /* __XSCREENSAVER_TYPES_H__ */
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/windows.c xscreensaver-5.06/driver/windows.c
+--- xscreensaver-5.05/driver/windows.c	2008-01-26 14:03:51.000000000 -0800
++++ xscreensaver-5.06/driver/windows.c	2008-07-05 18:40:42.000000000 -0700
+@@ -226,6 +226,14 @@
+ }
+ 
+ 
++static void
++ungrab_keyboard_and_mouse (saver_info *si)
++{
++  ungrab_mouse (si);
++  ungrab_kbd (si);
++}
++
++
+ static Bool
+ grab_keyboard_and_mouse (saver_info *si, Window window, Cursor cursor,
+                          int screen_no)
+@@ -291,18 +299,15 @@
+    */
+ 
+   if (kstatus != GrabSuccess)	/* Do not blank without a kbd grab.   */
+-    return False;
++    {
++      /* If we didn't get both grabs, release the one we did get. */
++      ungrab_keyboard_and_mouse (si);
++      return False;
++    }
+ 
+   return True;			/* Grab is good, go ahead and blank.  */
+ }
+ 
+-static void
+-ungrab_keyboard_and_mouse (saver_info *si)
+-{
+-  ungrab_mouse (si);
+-  ungrab_kbd (si);
+-}
+-
+ 
+ int
+ move_mouse_grab (saver_info *si, Window to, Cursor cursor, int to_screen_no)
+@@ -393,6 +398,21 @@
+                    (char *) id);
+ 	  status = True;
+ 	}
++
++      else if (XGetWindowProperty (dpy, kids[i], XA_WM_COMMAND, 0, 128,
++                                   False, XA_STRING, &type, &format, &nitems,
++                                   &bytesafter, &version)
++               == Success
++               && type != None
++               && !strcmp ((char *) version, "gnome-screensaver"))
++	{
++	  fprintf (stderr,
++                 "%s: \"%s\" is already running on display %s (window 0x%x)\n",
++		   blurb(), (char *) version,
++                   DisplayString (dpy), (int) kids [i]);
++	  status = True;
++          break;
++	}
+     }
+ 
+   if (kids) XFree ((char *) kids);
+@@ -445,11 +465,6 @@
+ 
+ static Bool safe_XKillClient (Display *dpy, XID id);
+ 
+-#ifdef HAVE_XF86VMODE
+-static Bool safe_XF86VidModeGetViewPort (Display *, int, int *, int *);
+-#endif /* HAVE_XF86VMODE */
+-
+-
+ static void
+ kill_xsetroot_data_1 (Display *dpy, Window window,
+                       Atom prop, const char *atom_name,
+@@ -607,7 +622,8 @@
+     fprintf (stderr,
+ 	     "%s: restoring __SWM_VROOT property on the real vroot (0x%lx).\n",
+ 	     blurb(), (unsigned long) ssi->real_vroot);
+-  remove_vroot_property (si->dpy, ssi->screensaver_window);
++  if (ssi->screensaver_window)
++    remove_vroot_property (si->dpy, ssi->screensaver_window);
+   if (ssi->real_vroot)
+     {
+       store_vroot_property (si->dpy, ssi->real_vroot, ssi->real_vroot_value);
+@@ -812,8 +828,10 @@
+ 
+   if (si->screen_blanked_p)
+     {
++      int i;
++      for (i = 0; i < si->nscreens; i++)
++        kill_screenhack (&si->screens[i]);
+       unblank_screen (si);
+-      kill_screenhack (si);
+       XSync (si->dpy, False);
+     }
+ 
+@@ -999,232 +1017,6 @@
+ }
+ 
+ 
+-
+-/* Returns the area of the screen which the xscreensaver window should cover.
+-   Normally this is the whole screen, but if the X server's root window is
+-   actually larger than the monitor's displayable area, then we want to
+-   operate in the currently-visible portion of the desktop instead.
+- */
+-void
+-get_screen_viewport (saver_screen_info *ssi,
+-                     int *x_ret, int *y_ret,
+-                     int *w_ret, int *h_ret,
+-                     int target_x, int target_y,
+-                     Bool verbose_p)
+-{
+-  int w = WidthOfScreen (ssi->screen);
+-  int h = HeightOfScreen (ssi->screen);
+-
+-# ifdef HAVE_XF86VMODE
+-  saver_info *si = ssi->global;
+-  saver_preferences *p = &si->prefs;
+-  int event, error;
+-  int dot;
+-  XF86VidModeModeLine ml;
+-  int x, y;
+-  Bool xinerama_p = si->xinerama_p;
+-
+-#  ifndef HAVE_XINERAMA
+-  /* Even if we don't have the client-side Xinerama lib, check to see if
+-     the server supports Xinerama, so that we know to ignore the VidMode
+-     extension -- otherwise a server crash could result.  Yay. */
+-  xinerama_p = XQueryExtension (si->dpy, "XINERAMA", &error, &event, &error);
+-#  endif /* !HAVE_XINERAMA */
+-
+-#  ifdef HAVE_XINERAMA
+-  if (xinerama_p)
+-    {
+-      int mouse_p = (target_x != -1 && target_y != -1);
+-      int which = -1;
+-      int i;
+-
+-      /* If a mouse position wasn't passed in, assume we're talking about
+-         this screen. */
+-      if (!mouse_p)
+-        {
+-          target_x = ssi->x;
+-          target_y = ssi->y;
+-          which = ssi->number;
+-        }
+-
+-      /* Find the Xinerama rectangle that contains the mouse position. */
+-      for (i = 0; i < si->nscreens; i++)
+-        {
+-          if (which == -1 &&
+-              target_x >= si->screens[i].x &&
+-              target_y >= si->screens[i].y &&
+-              target_x <  si->screens[i].x + si->screens[i].width &&
+-              target_y <  si->screens[i].y + si->screens[i].height)
+-            which = i;
+-        }
+-      if (which == -1) which = 0;  /* didn't find it?  Use the first. */
+-      *x_ret = si->screens[which].x;
+-      *y_ret = si->screens[which].y;
+-      *w_ret = si->screens[which].width;
+-      *h_ret = si->screens[which].height;
+-
+-      if (verbose_p)
+-        {
+-          fprintf (stderr, "%s: %d: xinerama vp: %dx%d+%d+%d",
+-                   blurb(), which,
+-                   si->screens[which].width, si->screens[which].height,
+-                   si->screens[which].x, si->screens[which].y);
+-          if (mouse_p)
+-            fprintf (stderr, "; mouse at %d,%d", target_x, target_y);
+-          fprintf (stderr, ".\n");
+-        }
+-
+-      return;
+-    }
+-#  endif /* HAVE_XINERAMA */
+-
+-  if (!xinerama_p &&  /* Xinerama + VidMode = broken. */
+-      XF86VidModeQueryExtension (si->dpy, &event, &error) &&
+-      safe_XF86VidModeGetViewPort (si->dpy, ssi->number, &x, &y) &&
+-      XF86VidModeGetModeLine (si->dpy, ssi->number, &dot, &ml))
+-    {
+-      char msg[512];
+-      *x_ret = x;
+-      *y_ret = y;
+-      *w_ret = ml.hdisplay;
+-      *h_ret = ml.vdisplay;
+-
+-      if (*x_ret == 0 && *y_ret == 0 && *w_ret == w && *h_ret == h)
+-        /* There is no viewport -- the screen does not scroll. */
+-        return;
+-
+-
+-      /* Apparently some versions of XFree86 return nonsense here!
+-         I've had reports of 1024x768 viewports at -1936862040, -1953705044.
+-         So, sanity-check the values and give up if they are out of range.
+-       */
+-      if (*x_ret <  0 || *x_ret >= w ||
+-          *y_ret <  0 || *y_ret >= h ||
+-          *w_ret <= 0 || *w_ret >  w ||
+-          *h_ret <= 0 || *h_ret >  h)
+-        {
+-          static int warned_once = 0;
+-          if (!warned_once)
+-            {
+-              fprintf (stderr, "\n"
+-                  "%s: X SERVER BUG: %dx%d viewport at %d,%d is impossible.\n"
+-                  "%s: The XVidMode server extension is returning nonsense.\n"
+-                  "%s: Please report this bug to your X server vendor.\n\n",
+-                       blurb(), *w_ret, *h_ret, *x_ret, *y_ret,
+-                       blurb(), blurb());
+-              warned_once = 1;
+-            }
+-          *x_ret = 0;
+-          *y_ret = 0;
+-          *w_ret = w;
+-          *h_ret = h;
+-          return;
+-        }
+-
+-      sprintf (msg, "%s: %d: vp is %dx%d+%d+%d",
+-               blurb(), ssi->number,
+-               *w_ret, *h_ret, *x_ret, *y_ret);
+-
+-
+-      if (p->getviewport_full_of_lies_p)
+-        {
+-          /* XF86VidModeGetViewPort() tends to be full of lies on laptops
+-             that have a docking station or external monitor that runs in
+-             a different resolution than the laptop's screen:
+-
+-                 http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=81593
+-                 http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=208417
+-                 http://bugs.xfree86.org/show_bug.cgi?id=421
+-
+-             The XFree86 developers have closed the bug. As far as I can
+-             tell, their reason for this was, "this is an X server bug,
+-             but it's pretty hard to fix. Therefore, we are closing it."
+-
+-             So, now there's a preference item for those unfortunate users to
+-             tell us not to trust a word that XF86VidModeGetViewPort() says.
+-           */
+-          static int warned_once = 0;
+-          if (!warned_once && verbose_p)
+-            {
+-              warned_once = 1;
+-              fprintf (stderr,
+-                  "%s: %d: XF86VidModeGetViewPort() says vp is %dx%d+%d+%d;\n"
+-                  "%s: %d:     assuming that is a pack of lies;\n"
+-                  "%s: %d:     using %dx%d+0+0 instead.\n",
+-                       blurb(), ssi->number,
+-                       *w_ret, *h_ret, *x_ret, *y_ret,
+-                       blurb(), ssi->number,
+-                       blurb(), ssi->number, w, h);
+-            }
+-
+-          *x_ret = 0;
+-          *y_ret = 0;
+-          *w_ret = w;
+-          *h_ret = h;
+-          return;
+-        }
+-
+-
+-      /* Apparently, though the server stores the X position in increments of
+-         1 pixel, it will only make changes to the *display* in some other
+-         increment.  With XF86_SVGA on a Thinkpad, the display only updates
+-         in multiples of 8 pixels when in 8-bit mode, and in multiples of 4
+-         pixels in 16-bit mode.  I don't know what it does in 24- and 32-bit
+-         mode, because I don't have enough video memory to find out.
+-
+-         I consider it a bug that XF86VidModeGetViewPort() is telling me the
+-         server's *target* scroll position rather than the server's *actual*
+-         scroll position.  David Dawes agrees, and says they may fix this in
+-         XFree86 4.0, but it's notrivial.
+-
+-         He also confirms that this behavior is server-dependent, so the
+-         actual scroll position cannot be reliably determined by the client.
+-         So... that means the only solution is to provide a ``sandbox''
+-         around the blackout window -- we make the window be up to N pixels
+-         larger than the viewport on both the left and right sides.  That
+-         means some part of the outer edges of each hack might not be
+-         visible, but screw it.
+-
+-         I'm going to guess that 16 pixels is enough, and that the Y dimension
+-         doesn't have this problem.
+-
+-         The drawback of doing this, of course, is that some of the screenhacks
+-         will still look pretty stupid -- for example, "slidescreen" will cut
+-         off the left and right edges of the grid, etc.
+-      */
+-#  define FUDGE 16
+-      if (x > 0 && x < w - ml.hdisplay)  /* not at left edge or right edge */
+-        {
+-          /* Round X position down to next lower multiple of FUDGE.
+-             Increase width by 2*FUDGE in case some server rounds up.
+-           */
+-          *x_ret = ((x - 1) / FUDGE) * FUDGE;
+-          *w_ret += (FUDGE * 2);
+-        }
+-#  undef FUDGE
+-
+-      if (*x_ret != x ||
+-          *y_ret != y ||
+-          *w_ret != ml.hdisplay ||
+-          *h_ret != ml.vdisplay)
+-        sprintf (msg + strlen(msg), "; fudged to %dx%d+%d+%d",
+-                 *w_ret, *h_ret, *x_ret, *y_ret);
+-
+-      if (verbose_p)
+-        fprintf (stderr, "%s.\n", msg);
+-
+-      return;
+-    }
+-
+-# endif /* HAVE_XF86VMODE */
+-
+-  *x_ret = 0;
+-  *y_ret = 0;
+-  *w_ret = w;
+-  *h_ret = h;
+-}
+-
+-
+ static Bool error_handler_hit_p = False;
+ 
+ static int
+@@ -1318,7 +1110,7 @@
+ 
+ 
+ #ifdef HAVE_XF86VMODE
+-static Bool
++Bool
+ safe_XF86VidModeGetViewPort (Display *dpy, int screen, int *xP, int *yP)
+ {
+   Bool result;
+@@ -1362,13 +1154,9 @@
+   XColor black;
+   XSetWindowAttributes attrs;
+   unsigned long attrmask;
+-  int x, y, width, height;
+   static Bool printed_visual_info = False;  /* only print the message once. */
+   Window horked_window = 0;
+ 
+-  get_screen_viewport (ssi, &x, &y, &width, &height, -1, -1,
+-                       (p->verbose_p && !si->screen_blanked_p));
+-
+   black.red = black.green = black.blue = 0;
+ 
+   if (ssi->cmap == DefaultColormapOfScreen (ssi->screen))
+@@ -1421,13 +1209,6 @@
+   attrs.backing_pixel = ssi->black_pixel;
+   attrs.border_pixel = ssi->black_pixel;
+ 
+-  if (p->debug_p
+-# ifdef QUAD_MODE
+-      && !p->quad_p
+-# endif
+-      )
+-    width = width / 2;
+-
+   if (!p->verbose_p || printed_visual_info)
+     ;
+   else if (ssi->current_visual == DefaultVisualOfScreen (ssi->screen))
+@@ -1503,10 +1284,10 @@
+     {
+       XWindowChanges changes;
+       unsigned int changesmask = CWX|CWY|CWWidth|CWHeight|CWBorderWidth;
+-      changes.x = x;
+-      changes.y = y;
+-      changes.width = width;
+-      changes.height = height;
++      changes.x = ssi->x;
++      changes.y = ssi->y;
++      changes.width = ssi->width;
++      changes.height = ssi->height;
+       changes.border_width = 0;
+ 
+       if (! (safe_XConfigureWindow (si->dpy, ssi->screensaver_window,
+@@ -1523,10 +1304,9 @@
+     {
+       ssi->screensaver_window =
+ 	XCreateWindow (si->dpy, RootWindowOfScreen (ssi->screen),
+-                       x, y, width, height,
++                       ssi->x, ssi->y, ssi->width, ssi->height,
+                        0, ssi->current_depth, InputOutput,
+ 		       ssi->current_visual, attrmask, &attrs);
+-
+       reset_stderr (ssi);
+ 
+       if (horked_window)
+@@ -1578,10 +1358,10 @@
+ }
+ 
+ 
+-/* Called when the RANDR (Resize and Rotate) extension tells us that the
+-   size of the screen has changed while the screen was blanked.  If we
+-   don't do this, then the screen saver will no longer fully fill the
+-   screen, and some of the underlying desktop may be visible.
++/* Called when the RANDR (Resize and Rotate) extension tells us that
++   the size of the screen has changed while the screen was blanked.
++   Call update_screen_layout() first, then call this to synchronize
++   the size of the saver windows to the new sizes of the screens.
+  */
+ void
+ resize_screensaver_window (saver_info *si)
+@@ -1589,132 +1369,97 @@
+   saver_preferences *p = &si->prefs;
+   int i;
+ 
+-  /* First update the size info in the saver_screen_info structs.
+-   */
+-
+-# ifdef HAVE_XINERAMA
+-  if (si->xinerama_p)
++  for (i = 0; i < si->nscreens; i++)
+     {
+-      /* As of XFree86 4.3.0, the RANDR and XINERAMA extensions cannot coexist.
+-         However, maybe they will someday, so I'm guessing that the right thing
+-         to do in that case will be to re-query the Xinerama rectangles after
+-         a RANDR size change is received: presumably, if the resolution of one
+-         or more of the monitors has changed, then the Xinerama rectangle
+-         corresponding to that monitor will also have been updated.
+-       */
+-      int nscreens;
+-      XineramaScreenInfo *xsi = XineramaQueryScreens (si->dpy, &nscreens);
+-
+-      if (nscreens != si->nscreens) {
+-        /* Apparently some Xinerama implementations let you use a hot-key
+-           to change the number of screens in use!  This is, of course,
+-           documented nowhere.  Let's try to do something marginally less
+-           bad than crashing.
+-         */
+-        fprintf (stderr, "%s: bad craziness: xinerama screen count changed "
+-                 "from %d to %d!\n", blurb(), si->nscreens, nscreens);
+-        if (nscreens > si->nscreens)
+-          nscreens = si->nscreens;
+-      }
++      saver_screen_info *ssi = &si->screens[i];
++      XWindowAttributes xgwa;
+ 
+-      if (!xsi) abort();
+-      for (i = 0; i < nscreens; i++)
++      /* Make sure a window exists -- it might not if a monitor was just
++         added for the first time.
++       */
++      if (! ssi->screensaver_window)
+         {
+-          saver_screen_info *ssi = &si->screens[i];
+-          if (p->verbose_p &&
+-              (ssi->x      != xsi[i].x_org ||
+-               ssi->y      != xsi[i].y_org ||
+-               ssi->width  != xsi[i].width ||
+-               ssi->height != xsi[i].height))
++          initialize_screensaver_window_1 (ssi);
++          if (p->verbose_p)
+             fprintf (stderr,
+-                   "%s: %d: resize xinerama from %dx%d+%d+%d to %dx%d+%d+%d\n",
+-                     blurb(), i,
+-                     ssi->width,   ssi->height,   ssi->x,       ssi->y,
+-                     xsi[i].width, xsi[i].height, xsi[i].x_org, xsi[i].y_org);
+-
+-          ssi->x      = xsi[i].x_org;
+-          ssi->y      = xsi[i].y_org;
+-          ssi->width  = xsi[i].width;
+-          ssi->height = xsi[i].height;
++                     "%s: %d: newly added window 0x%lx %dx%d+%d+%d\n",
++                     blurb(), i, (unsigned long) ssi->screensaver_window,
++                     ssi->width, ssi->height, ssi->x, ssi->y);
+         }
+-      XFree (xsi);
+-    }
+-  else
+-# endif /* HAVE_XINERAMA */
+-    {
+-      /* Not Xinerama -- get the real sizes of the root windows. */
+-      for (i = 0; i < si->nscreens; i++)
++
++      /* Make sure the window is the right size -- it might not be if
++         the monitor changed resolution, or if a badly-behaved hack
++         screwed with it.
++       */
++      XGetWindowAttributes (si->dpy, ssi->screensaver_window, &xgwa);
++      if (xgwa.x      != ssi->x ||
++          xgwa.y      != ssi->y ||
++          xgwa.width  != ssi->width ||
++          xgwa.height != ssi->height)
+         {
+-          saver_screen_info *ssi = &si->screens[i];
+-          XWindowAttributes xgwa;
+-          XGetWindowAttributes (si->dpy, RootWindowOfScreen (ssi->screen),
+-                                &xgwa);
+-
+-          if (p->verbose_p &&
+-              (ssi->x      != xgwa.x ||
+-               ssi->y      != xgwa.y ||
+-               ssi->width  != xgwa.width ||
+-               ssi->height != xgwa.height))
++          XWindowChanges changes;
++          unsigned int changesmask = CWX|CWY|CWWidth|CWHeight|CWBorderWidth;
++          changes.x      = ssi->x;
++          changes.y      = ssi->y;
++          changes.width  = ssi->width;
++          changes.height = ssi->height;
++          changes.border_width = 0;
++
++          if (p->verbose_p)
+             fprintf (stderr,
+-                     "%s: %d: resize screen from %dx%d+%d+%d to %dx%d+%d+%d\n",
+-                     blurb(), i,
+-                     ssi->width, ssi->height, ssi->x, ssi->y,
+-                     xgwa.width, xgwa.height, xgwa.x, xgwa.y);
+-
+-          ssi->x      = xgwa.x;
+-          ssi->y      = xgwa.y;
+-          ssi->width  = xgwa.width;
+-          ssi->height = xgwa.height;
++                     "%s: %d: resize 0x%lx from %dx%d+%d+%d to %dx%d+%d+%d\n",
++                     blurb(), i, (unsigned long) ssi->screensaver_window,
++                     xgwa.width, xgwa.height, xgwa.x, xgwa.y,
++                     ssi->width, ssi->height, ssi->x, ssi->y);
++
++          if (! safe_XConfigureWindow (si->dpy, ssi->screensaver_window,
++                                       changesmask, &changes))
++            fprintf (stderr, "%s: %d: someone horked our saver window"
++                     " (0x%lx)!  Unable to resize it!\n",
++                     blurb(), i, (unsigned long) ssi->screensaver_window);
++        }
++
++      /* Now (if blanked) make sure that it's mapped and running a hack --
++         it might not be if we just added it.  (We also might be re-using
++         an old window that existed for a previous monitor that was
++         removed and re-added.)
++
++         Note that spawn_screenhack() calls select_visual() which may destroy
++         and re-create the window via initialize_screensaver_window_1().
++       */
++      if (si->screen_blanked_p)
++        {
++          if (ssi->cmap)
++            XInstallColormap (si->dpy, ssi->cmap);
++          XMapRaised (si->dpy, ssi->screensaver_window);
++          if (! ssi->pid)
++            spawn_screenhack (ssi);
++
++          /* Make sure the act of adding a screen doesn't present as 
++             pointer motion (and thus cause an unblank). */
++          {
++            Window root, child;
++            int x, y;
++            unsigned int mask;
++            XQueryPointer (si->dpy, ssi->screensaver_window, &root, &child,
++                           &ssi->poll_mouse_last_root_x,
++                           &ssi->poll_mouse_last_root_y,
++                           &x, &y, &mask);
++          }
+         }
+     }
+ 
+-  /* Next, ensure that the screensaver windows are the right size, taking
+-     into account both the new size of the screen in question's root window,
+-     and any viewport within that.
++  /* Kill off any savers running on no-longer-extant monitors.
+    */
+-
+-  for (i = 0; i < si->nscreens; i++)
++  for (; i < si->ssi_count; i++)
+     {
+       saver_screen_info *ssi = &si->screens[i];
+-      XWindowAttributes xgwa;
+-      XWindowChanges changes;
+-      int x, y, width, height;
+-      unsigned int changesmask = CWX|CWY|CWWidth|CWHeight|CWBorderWidth;
+-
+-      XGetWindowAttributes (si->dpy, ssi->screensaver_window, &xgwa);
+-      get_screen_viewport (ssi, &x, &y, &width, &height, -1, -1,
+-                           (p->verbose_p && !si->screen_blanked_p));
+-      if (xgwa.x == x &&
+-          xgwa.y == y &&
+-          xgwa.width  == width &&
+-          xgwa.height == height)
+-        continue;  /* no change! */
+-
+-      changes.x = x;
+-      changes.y = y;
+-      changes.width  = width;
+-      changes.height = height;
+-      changes.border_width = 0;
+-
+-      if (p->debug_p
+-# ifdef QUAD_MODE
+-          && !p->quad_p
+-# endif
+-          ) 
+-        changes.width = changes.width / 2;
+-
+-      if (p->verbose_p)
+-        fprintf (stderr,
+-                 "%s: %d: resize 0x%lx from %dx%d+%d+%d to %dx%d+%d+%d\n",
+-                 blurb(), i, (unsigned long) ssi->screensaver_window,
+-                 xgwa.width, xgwa.height, xgwa.x, xgwa.y,
+-                 width, height, x, y);
+-      if (! safe_XConfigureWindow (si->dpy, ssi->screensaver_window,
+-                                   changesmask, &changes))
++      if (ssi->pid)
++        kill_screenhack (ssi);
++      if (ssi->screensaver_window)
+         {
+-          fprintf (stderr,
+-    "%s: %d: someone horked our saver window (0x%lx)!  Unable to resize it!\n",
+-                   blurb(), i, (unsigned long) ssi->screensaver_window);
++          XUnmapWindow (si->dpy, ssi->screensaver_window);
++          restore_real_vroot_1 (ssi);
+         }
+     }
+ }
+@@ -2094,10 +1839,30 @@
+ }
+ 
+ 
++static Visual *
++get_screen_gl_visual (saver_info *si, int real_screen_number)
++{
++  int i;
++  int nscreens = ScreenCount (si->dpy);
++
++  if (! si->best_gl_visuals)
++    si->best_gl_visuals = (Visual **) 
++      calloc (nscreens + 1, sizeof (*si->best_gl_visuals));
++
++  for (i = 0; i < nscreens; i++)
++    if (! si->best_gl_visuals[i])
++      si->best_gl_visuals[i] = 
++        get_best_gl_visual (si, ScreenOfDisplay (si->dpy, i));
++
++  if (real_screen_number < 0 || real_screen_number >= nscreens) abort();
++  return si->best_gl_visuals[real_screen_number];
++}
++
+ 
+ Bool
+ select_visual (saver_screen_info *ssi, const char *visual_name)
+ {
++  XWindowAttributes xgwa;
+   saver_info *si = ssi->global;
+   saver_preferences *p = &si->prefs;
+   Bool install_cmap_p = p->install_cmap_p;
+@@ -2112,6 +1877,17 @@
+    */
+   Bool always_recreate_window_p = True;
+ 
++  get_screen_gl_visual (si, 0);   /* let's probe all the GL visuals early */
++
++  /* We make sure the existing window is actually on ssi->screen before
++     trying to use it, in case things moved around radically when monitors
++     were added or deleted.  If we don't do this we could get a BadMatch
++     even though the depths match.  I think.
++   */
++  memset (&xgwa, 0, sizeof(xgwa));
++  if (ssi->screensaver_window)
++    XGetWindowAttributes (si->dpy, ssi->screensaver_window, &xgwa);
++
+   if (visual_name && *visual_name)
+     {
+       if (!strcmp(visual_name, "default-i") ||
+@@ -2133,7 +1909,7 @@
+                !strcmp(visual_name, "Gl") ||
+                !strcmp(visual_name, "GL"))
+         {
+-          new_v = ssi->best_gl_visual;
++          new_v = get_screen_gl_visual (si, ssi->real_screen_number);
+           if (!new_v && p->verbose_p)
+             fprintf (stderr, "%s: no GL visuals.\n", progname);
+         }
+@@ -2154,13 +1930,16 @@
+ 
+   ssi->install_cmap_p = install_cmap_p;
+ 
+-  if (new_v &&
+-      (always_recreate_window_p ||
+-       (ssi->current_visual != new_v) ||
+-       (install_cmap_p != was_installed_p)))
++  if ((ssi->screen != xgwa.screen) ||
++      (new_v &&
++       (always_recreate_window_p ||
++        (ssi->current_visual != new_v) ||
++        (install_cmap_p != was_installed_p))))
+     {
+       Colormap old_c = ssi->cmap;
+       Window old_w = ssi->screensaver_window;
++      if (! new_v) 
++        new_v = ssi->current_visual;
+ 
+       if (p->verbose_p)
+ 	{
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/xscreensaver.c xscreensaver-5.06/driver/xscreensaver.c
+--- xscreensaver-5.05/driver/xscreensaver.c	2008-02-29 20:05:12.000000000 -0800
++++ xscreensaver-5.06/driver/xscreensaver.c	2008-07-05 05:48:31.000000000 -0700
+@@ -46,6 +46,8 @@
+  *   via the $XSCREENSAVER_WINDOW environment variable -- this trick requires
+  *   a recent (Aug 2003) revision of vroot.h.
+  *
++ *   (See comments in screens.c for more details about Xinerama/RANDR stuff.)
++ *
+  *   While we are waiting for user activity, we also set up timers so that,
+  *   after a certain amount of time has passed, we can start a different
+  *   screenhack.  We do this by killing the running child process with
+@@ -205,6 +207,7 @@
+ 
+   /* useful for debugging */
+   { "-no-capture-stderr",  ".captureStderr",	XrmoptionNoArg, "off" },
++  { "-log",		   ".logFile",		XrmoptionSepArg, 0 },
+ };
+ 
+ #ifdef __GNUC__
+@@ -263,7 +266,7 @@
+   return str;
+ }
+ 
+-static Bool blurb_timestamp_p = False;   /* kludge */
++static Bool blurb_timestamp_p = True;   /* kludge */
+ 
+ const char *
+ blurb (void)
+@@ -334,27 +337,30 @@
+ 	}
+       else
+ 	{
++#ifdef __GNUC__
++  __extension__   /* don't warn about "string length is greater than the
++                     length ISO C89 compilers are required to support". */
++#endif
+           fprintf (real_stderr,
+-                   "#######################################"
+-                   "#######################################\n\n");
+-          fprintf (real_stderr,
++   "#######################################################################\n"
++   "\n"
+    "    If at all possible, please re-run xscreensaver with the command\n"
+-   "    line arguments `-sync -verbose -no-capture', and reproduce this\n"
++   "    line arguments `-sync -verbose -log log.txt', and reproduce this\n"
+    "    bug.  That will cause xscreensaver to dump a `core' file to the\n"
+    "    current directory.  Please include the stack trace from that core\n"
+-   "    file in your bug report.  *DO NOT* mail the core file itself!\n"
+-   "    That won't work.\n");
+-          fprintf (real_stderr,
++   "    file in your bug report.  *DO NOT* mail the core file itself!  That\n"
++   "    won't work.  A \"log.txt\" file will also be written.  Please *do*\n"
++   "    include the complete \"log.txt\" file with your bug report.\n"
+    "\n"
+    "    http://www.jwz.org/xscreensaver/bugs.html explains how to create\n"
+    "    the most useful bug reports, and how to examine core files.\n"
+    "\n"
+    "    The more information you can provide, the better.  But please\n"
+    "    report this bug, regardless!\n"
++   "\n"
++   "#######################################################################\n"
++   "\n"
+    "\n");
+-          fprintf (real_stderr,
+-                   "#######################################"
+-                   "#######################################\n\n");
+ 
+ 	  saver_exit (si, -1, 0);
+ 	}
+@@ -658,13 +664,6 @@
+     with `xscreensaver-demo' or `xscreensaver-command'.\n\
+ .   See the man pages for details, or check the web page:\n\
+     http://www.jwz.org/xscreensaver/\n\n");
+-
+-	      /* Since version 1.21 renamed the "-lock" option to "-lock-mode",
+-		 suggest that explicitly. */
+-	      if (!strcmp (s, "-lock"))
+-		fprintf (stderr, "\
+-    Or perhaps you meant either the \"-lock-mode\" or the\n\
+-    \"-lock-timeout <minutes>\" options to xscreensaver?\n\n");
+ 	    }
+ 
+ 	  exit (1);
+@@ -755,110 +754,24 @@
+ }
+ 
+ 
+-#ifdef HAVE_XINERAMA
+-
+-static Bool
+-screens_overlap_p (XineramaScreenInfo *a, XineramaScreenInfo *b)
+-{
+-  /* Two rectangles overlap if the max of the tops is less than the
+-     min of the bottoms and the max of the lefts is less than the min
+-     of the rights.
+-   */
+-# undef MAX
+-# undef MIN
+-# define MAX(A,B) ((A)>(B)?(A):(B))
+-# define MIN(A,B) ((A)<(B)?(A):(B))
+-
+-  int maxleft  = MAX(a->x_org, b->x_org);
+-  int maxtop   = MAX(a->y_org, b->y_org);
+-  int minright = MIN(a->x_org + a->width  - 1, b->x_org + b->width);
+-  int minbot   = MIN(a->y_org + a->height - 1, b->y_org + b->height);
+-  return (maxtop < minbot && maxleft < minright);
+-}
+-
+-
+-/* Go through the list of Xinerama screen descriptions, and mark the
+-   ones that appear to be insane, so that we don't use them.
+- */
+-static void
+-check_xinerama_sanity (int count, Bool verbose_p, XineramaScreenInfo *xsi)
++/* called from screens.c so that all the Xt crud is here. */
++void
++initialize_screen_root_widget (saver_screen_info *ssi)
+ {
+-  static Bool printed_p = False;
+-  int i, j;
+-  char err[1024];
+-  *err = 0;
+-
+-# define X1 xsi[i].x_org
+-# define X2 xsi[j].x_org
+-# define Y1 xsi[i].y_org
+-# define Y2 xsi[j].y_org
+-# define W1 xsi[i].width
+-# define W2 xsi[j].width
+-# define H1 xsi[i].height
+-# define H2 xsi[j].height
+-
+-# define WHINE() do {                                                        \
+-    if (verbose_p) {                                                         \
+-      if (! printed_p) {                                                     \
+-        fprintf (stderr, "%s: compensating for Xinerama braindamage:\n",     \
+-                 blurb());                                                   \
+-        printed_p = True;                                                    \
+-      }                                                                      \
+-      fprintf (stderr, "%s:   %d: %s\n", blurb(), xsi[i].screen_number,err); \
+-    }                                                                        \
+-    xsi[i].screen_number = -1;                                               \
+-  } while(0)
+-
+-  /* If a screen is enclosed by any other screen, that's insane.
+-   */
+-  for (i = 0; i < count; i++)
+-    for (j = 0; j < count; j++)
+-      if (i != j &&
+-          xsi[i].screen_number >= 0 &&
+-          xsi[j].screen_number >= 0 &&
+-          X1 >= X2 && Y1 >= Y2 && (X1+W1) <= (X2+W2) && (X1+H1) <= (X2+H2))
+-        {
+-          sprintf (err, "%dx%d+%d+%d enclosed by %dx%d+%d+%d",
+-                   W1, H1, X1, Y1,
+-                   W2, H2, X2, Y2);
+-          WHINE();
+-          continue;
+-        }
+-
+-  /* After checking for enclosure, check for other lossage against earlier
+-     screens.  We do enclosure first so that we make sure to pick the
+-     larger one.
+-   */
+-  for (i = 0; i < count; i++)
+-    for (j = 0; j < i; j++)
+-      {
+-        if (xsi[i].screen_number < 0) continue; /* already marked */
+-
+-        *err = 0;
+-        if (X1 == X2 && Y1 == Y2 && W1 == W2 && H1 == H2)
+-          sprintf (err, "%dx%d+%d+%d duplicated", W1, H1, X1, Y1);
+-
+-        else if (screens_overlap_p (&xsi[i], &xsi[j]))
+-          sprintf (err, "%dx%d+%d+%d overlaps %dx%d+%d+%d",
+-                   W1, H1, X1, Y1,
+-                   W2, H2, X2, Y2);
+-
+-        if (*err) WHINE();
+-      }
+-
+-# undef X1
+-# undef X2
+-# undef Y1
+-# undef Y2
+-# undef W1
+-# undef W2
+-# undef H1
+-# undef H2
++  saver_info *si = ssi->global;
++  if (ssi->toplevel_shell)
++    XtDestroyWidget (ssi->toplevel_shell);
++  ssi->toplevel_shell =
++    XtVaAppCreateShell (progname, progclass, 
++                        applicationShellWidgetClass,
++                        si->dpy,
++                        XtNscreen, ssi->screen,
++                        XtNvisual, ssi->current_visual,
++                        XtNdepth,  visual_depth (ssi->screen,
++                                                 ssi->current_visual),
++                        NULL);
+ }
+ 
+-#endif /* HAVE_XINERAMA */
+-
+-
+ 
+ /* Examine all of the display's screens, and populate the `saver_screen_info'
+    structures.  Make sure this is called after hack_environment() sets $PATH.
+@@ -866,182 +779,28 @@
+ static void
+ initialize_per_screen_info (saver_info *si, Widget toplevel_shell)
+ {
+-  Bool found_any_writable_cells = False;
+   int i;
+ 
+-# ifdef HAVE_XINERAMA
+-  {
+-    int event, error;
+-    si->xinerama_p = (XineramaQueryExtension (si->dpy, &event, &error) &&
+-                      XineramaIsActive (si->dpy));
+-  }
+-
+-  if (si->xinerama_p && ScreenCount (si->dpy) != 1)
+-    {
+-      si->xinerama_p = False;
+-      if (si->prefs.verbose_p)
+-	fprintf (stderr,
+-                 "%s: Xinerama AND %d screens?  Disabling Xinerama support!\n",
+-                 blurb(), ScreenCount(si->dpy));
+-    }
+-
+-  if (si->xinerama_p)
+-    {
+-      int nscreens = 0;
+-      XineramaScreenInfo *xsi = XineramaQueryScreens (si->dpy, &nscreens);
+-      if (!xsi)
+-        si->xinerama_p = False;
+-      else
+-        {
+-          int j = 0;
+-          si->screens = (saver_screen_info *)
+-            calloc(sizeof(saver_screen_info), nscreens);
+-          check_xinerama_sanity (nscreens, si->prefs.verbose_p, xsi);
+-          for (i = 0; i < nscreens; i++)
+-            {
+-              if (xsi[i].screen_number < 0)  /* deemed insane */
+-                continue;
+-              si->screens[j].x      = xsi[i].x_org;
+-              si->screens[j].y      = xsi[i].y_org;
+-              si->screens[j].width  = xsi[i].width;
+-              si->screens[j].height = xsi[i].height;
+-              j++;
+-            }
+-          si->nscreens = j;
+-          XFree (xsi);
+-        }
+-      si->default_screen = &si->screens[0];
+-      si->default_screen->real_screen_p = True;
+-    }
+-# endif /* !HAVE_XINERAMA */
+-
+-  if (!si->xinerama_p)
+-    {
+-      si->nscreens = ScreenCount(si->dpy);
+-      si->screens = (saver_screen_info *)
+-        calloc(sizeof(saver_screen_info), si->nscreens);
+-      si->default_screen = &si->screens[DefaultScreen(si->dpy)];
+-
+-      for (i = 0; i < si->nscreens; i++)
+-        {
+-          saver_screen_info *ssi = &si->screens[i];
+-          ssi->width  = DisplayWidth  (si->dpy, i);
+-          ssi->height = DisplayHeight (si->dpy, i);
+-          ssi->real_screen_p = True;
+-          ssi->real_screen_number = i;
+-        }
+-    }
+-
+-
+-# ifdef QUAD_MODE
+-  /* In "quad mode", we use the Xinerama code to pretend that there are 4
+-     screens for every physical screen, and run four times as many hacks...
+-   */
+-  if (si->prefs.quad_p)
+-    {
+-      int ns2 = si->nscreens * 4;
+-      saver_screen_info *ssi2 = (saver_screen_info *)
+-        calloc(sizeof(saver_screen_info), ns2);
+-
+-      for (i = 0; i < si->nscreens; i++)
+-        {
+-          saver_screen_info *old = &si->screens[i];
++  update_screen_layout (si);
+ 
+-          if (si->prefs.debug_p) old->width = old->width / 2;
+-
+-          ssi2[i*4  ] = *old;
+-          ssi2[i*4+1] = *old;
+-          ssi2[i*4+2] = *old;
+-          ssi2[i*4+3] = *old;
+-
+-          ssi2[i*4  ].width  /= 2;
+-          ssi2[i*4  ].height /= 2;
+-
+-          ssi2[i*4+1].x      += ssi2[i*4  ].width;
+-          ssi2[i*4+1].width  -= ssi2[i*4  ].width;
+-          ssi2[i*4+1].height /= 2;
+-
+-          ssi2[i*4+2].y      += ssi2[i*4  ].height;
+-          ssi2[i*4+2].width  /= 2;
+-          ssi2[i*4+2].height -= ssi2[i*4  ].height;
+-
+-          ssi2[i*4+3].x      += ssi2[i*4+2].width;
+-          ssi2[i*4+3].y      += ssi2[i*4+2].height;
+-          ssi2[i*4+3].width  -= ssi2[i*4+2].width;
+-          ssi2[i*4+3].height -= ssi2[i*4+2].height;
+-
+-          ssi2[i*4+1].real_screen_p = False;
+-          ssi2[i*4+2].real_screen_p = False;
+-          ssi2[i*4+3].real_screen_p = False;
+-        }
+-
+-      si->nscreens = ns2;
+-      free (si->screens);
+-      si->screens = ssi2;
+-      si->default_screen = &si->screens[DefaultScreen(si->dpy) * 4];
+-      si->xinerama_p = True;
+-    }
+-# endif /* QUAD_MODE */
+-
+-  /* finish initializing the screens.
++  /* Check to see whether fading is ever possible -- if any of the
++     screens on the display has a PseudoColor visual, then fading can
++     work (on at least some screens.)  If no screen has a PseudoColor
++     visual, then don't bother ever trying to fade, because it will
++     just cause a delay without causing any visible effect.
+    */
+   for (i = 0; i < si->nscreens; i++)
+     {
+       saver_screen_info *ssi = &si->screens[i];
+-      ssi->global = si;
+-
+-      ssi->number = i;
+-      ssi->screen = ScreenOfDisplay (si->dpy, ssi->real_screen_number);
+-      ssi->poll_mouse_last_root_x = -1;
+-      ssi->poll_mouse_last_root_y = -1;
+-
+-      if (!si->xinerama_p)
++      if (has_writable_cells (ssi->screen, ssi->current_visual) ||
++          get_visual (ssi->screen, "PseudoColor", True, False) ||
++          get_visual (ssi->screen, "GrayScale", True, False))
+         {
+-          ssi->width  = WidthOfScreen  (ssi->screen);
+-          ssi->height = HeightOfScreen (ssi->screen);
++          si->fading_possible_p = True;
++          break;
+         }
+-
+-      /* Note: we can't use the resource ".visual" because Xt is SO FUCKED. */
+-      ssi->default_visual =
+-	get_visual_resource (ssi->screen, "visualID", "VisualID", False);
+-
+-      ssi->current_visual = ssi->default_visual;
+-      ssi->current_depth = visual_depth (ssi->screen, ssi->current_visual);
+-
+-      /* Execute a subprocess to find the GL visual. */
+-      ssi->best_gl_visual = get_best_gl_visual (ssi);
+-
+-      if (ssi == si->default_screen)
+-	/* Since this is the default screen, use the one already created. */
+-	ssi->toplevel_shell = toplevel_shell;
+-      else
+-	/* Otherwise, each screen must have its own unmapped root widget. */
+-	ssi->toplevel_shell =
+-	  XtVaAppCreateShell (progname, progclass, applicationShellWidgetClass,
+-			      si->dpy,
+-			      XtNscreen, ssi->screen,
+-			      XtNvisual, ssi->current_visual,
+-			      XtNdepth,  visual_depth (ssi->screen,
+-						       ssi->current_visual),
+-			      NULL);
+-
+-      if (! found_any_writable_cells)
+-	{
+-	  /* Check to see whether fading is ever possible -- if any of the
+-	     screens on the display has a PseudoColor visual, then fading can
+-	     work (on at least some screens.)  If no screen has a PseudoColor
+-	     visual, then don't bother ever trying to fade, because it will
+-	     just cause a delay without causing any visible effect.
+-	  */
+-	  if (has_writable_cells (ssi->screen, ssi->current_visual) ||
+-	      get_visual (ssi->screen, "PseudoColor", True, False) ||
+-	      get_visual (ssi->screen, "GrayScale", True, False))
+-	    found_any_writable_cells = True;
+-	}
+     }
+ 
+-  si->fading_possible_p = found_any_writable_cells;
+-
+ #ifdef HAVE_XF86VMODE_GAMMA
+   si->fading_possible_p = True;  /* if we can gamma fade, go for it */
+ #endif
+@@ -1115,15 +874,6 @@
+ 		 blurb());
+     }
+ 
+-  /* These are incompatible (or at least, our support for them is...) */
+-  if (si->xinerama_p && si->using_mit_saver_extension)
+-    {
+-      si->using_mit_saver_extension = False;
+-      if (p->verbose_p)
+-        fprintf (stderr, "%s: Xinerama in use: disabling MIT-SCREEN-SAVER.\n",
+-                 blurb());
+-    }
+-
+ #ifdef HAVE_RANDR
+   query_randr_extension (si);
+ #endif
+@@ -1149,6 +899,26 @@
+ }
+ 
+ 
++#ifdef DEBUG_MULTISCREEN
++static void
++debug_multiscreen_timer (XtPointer closure, XtIntervalId *id)
++{
++  saver_info *si = (saver_info *) closure;
++  saver_preferences *p = &si->prefs;
++  if (update_screen_layout (si))
++    {
++      if (p->verbose_p)
++        {
++          fprintf (stderr, "%s: new layout:\n", blurb());
++          describe_monitor_layout (si);
++        }
++      resize_screensaver_window (si);
++    }
++  XtAppAddTimeOut (si->app, 1000*4, debug_multiscreen_timer, (XtPointer) si);
++}
++#endif /* DEBUG_MULTISCREEN */
++
++
+ /* For the case where we aren't using an server extensions, select user events
+    on all the existing windows, and launch timers to select events on
+    newly-created windows as well.
+@@ -1201,6 +971,10 @@
+ 
+   if (p->verbose_p)
+     fprintf (stderr, " done.\n");
++
++# ifdef DEBUG_MULTISCREEN
++  if (p->debug_p) debug_multiscreen_timer ((XtPointer) si, 0);
++# endif
+ }
+ 
+ 
+@@ -1247,6 +1021,7 @@
+ {
+   saver_preferences *p = &si->prefs;
+   Bool ok_to_unblank;
++  int i;
+ 
+   while (1)
+     {
+@@ -1342,12 +1117,15 @@
+             }
+         }
+ 
+-      kill_screenhack (si);
++      for (i = 0; i < si->nscreens; i++)
++        kill_screenhack (&si->screens[i]);
+ 
+-      if (!si->throttled_p)
+-        spawn_screenhack (si, True);
+-      else if (p->verbose_p)
++      raise_window (si, True, True, False);
++      if (si->throttled_p)
+         fprintf (stderr, "%s: not launching hack (throttled.)\n", blurb());
++      else
++        for (i = 0; i < si->nscreens; i++)
++          spawn_screenhack (&si->screens[i]);
+ 
+       /* Don't start the cycle timer in demo mode. */
+       if (!si->demoing_p && p->cycle)
+@@ -1418,14 +1196,16 @@
+ 
+             was_locked = True;
+ 	    si->dbox_up_p = True;
+-	    suspend_screenhack (si, True);
++            for (i = 0; i < si->nscreens; i++)
++              suspend_screenhack (&si->screens[i], True);	  /* suspend */
+ 	    XUndefineCursor (si->dpy, ssi->screensaver_window);
+ 
+ 	    ok_to_unblank = unlock_p (si);
+ 
+ 	    si->dbox_up_p = False;
+ 	    XDefineCursor (si->dpy, ssi->screensaver_window, ssi->cursor);
+-	    suspend_screenhack (si, False);	/* resume */
++            for (i = 0; i < si->nscreens; i++)
++              suspend_screenhack (&si->screens[i], False);	   /* resume */
+ 
+             if (!ok_to_unblank &&
+                 !screenhack_running_p (si))
+@@ -1451,7 +1231,8 @@
+ 		 blurb(), timestring ());
+ 
+       /* Kill before unblanking, to stop drawing as soon as possible. */
+-      kill_screenhack (si);
++      for (i = 0; i < si->nscreens; i++)
++        kill_screenhack (&si->screens[i]);
+       unblank_screen (si);
+ 
+       set_locked_p (si, False);
+@@ -1530,6 +1311,7 @@
+ 
+   shell = connect_to_server (si, &argc, argv);
+   process_command_line (si, &argc, argv);
++  stderr_log_file (si);
+   print_banner (si);
+ 
+   load_init_file(si->dpy, p); /* must be before initialize_per_screen_info() */
+@@ -1951,8 +1733,10 @@
+ 				  "exiting.");
+ 	  if (! until_idle_p)
+ 	    {
++              int i;
++              for (i = 0; i < si->nscreens; i++)
++                kill_screenhack (&si->screens[i]);
+ 	      unblank_screen (si);
+-	      kill_screenhack (si);
+ 	      XSync (si->dpy, False);
+ 	    }
+ 	  saver_exit (si, 0, 0);
+@@ -1974,8 +1758,10 @@
+ 				  "restarting.");
+ 	  if (! until_idle_p)
+ 	    {
++              int i;
++              for (i = 0; i < si->nscreens; i++)
++                kill_screenhack (&si->screens[i]);
+ 	      unblank_screen (si);
+-	      kill_screenhack (si);
+ 	      XSync (si->dpy, False);
+ 	    }
+ 
+@@ -2254,17 +2040,15 @@
+ #     else
+         False
+ #     endif
++   }, { "DRI",		                        "DRI",
++        True
+    }, { "Apple-DRI",                            "Apple-DRI (XDarwin)",
+         True
+    },
+   };
+ 
+-  fprintf (stderr, "%s: running on display \"%s\" (%d %sscreen%s).\n",
+-           blurb(),
+-	   DisplayString(si->dpy),
+-           si->nscreens,
+-           (si->xinerama_p ? "Xinerama " : ""),
+-           (si->nscreens == 1 ? "" : "s"));
++  fprintf (stderr, "%s: running on display \"%s\"\n", blurb(), 
++           DisplayString(si->dpy));
+   fprintf (stderr, "%s: vendor is %s, %d.\n", blurb(),
+ 	   ServerVendor(si->dpy), VendorRelease(si->dpy));
+ 
+@@ -2324,21 +2108,10 @@
+ 	}
+     }
+ 
+-  if (si->xinerama_p)
+-    {
+-      fprintf (stderr, "%s: Xinerama layout:\n", blurb());
+-      for (i = 0; i < si->nscreens; i++)
+-        {
+-          saver_screen_info *ssi = &si->screens[i];
+-          fprintf (stderr, "%s:   %c %d/%d: %dx%d+%d+%d\n",
+-                   blurb(),
+-                   (ssi->real_screen_p ? '+' : ' '),
+-                   ssi->number, ssi->real_screen_number,
+-                   ssi->width, ssi->height, ssi->x, ssi->y);
+-        }
+-    }
++  describe_monitor_layout (si);
+ }
+ 
++
+ Bool
+ display_is_on_console_p (saver_info *si)
+ {
+diff -ur --unidirectional-new-file xscreensaver-5.05/driver/xscreensaver.h xscreensaver-5.06/driver/xscreensaver.h
+--- xscreensaver-5.05/driver/xscreensaver.h	2007-03-15 01:23:38.000000000 -0700
++++ xscreensaver-5.06/driver/xscreensaver.h	2008-07-05 05:48:11.000000000 -0700
+@@ -1,4 +1,4 @@
+-/* xscreensaver, Copyright (c) 1993-2006 Jamie Zawinski <jwz@jwz.org>
++/* xscreensaver, Copyright (c) 1993-2008 Jamie Zawinski <jwz@jwz.org>
+  *
+  * Permission to use, copy, modify, distribute, and sell this software and its
+  * documentation for any purpose is hereby granted without fee, provided that
+@@ -67,7 +67,10 @@
+    blanking
+    ======================================================================= */
+ 
++extern Bool update_screen_layout (saver_info *si);
+ extern void initialize_screensaver_window (saver_info *si);
++extern void initialize_screen_root_widget (saver_screen_info *ssi);
++
+ extern void raise_window (saver_info *si,
+ 			    Bool inhibit_fade, Bool between_hacks_p,
+ 			    Bool dont_clear);
+@@ -156,12 +159,12 @@
+ #endif /* !HAVE_SIGACTION */
+ extern void unblock_sigchld (void);
+ extern void hack_environment (saver_info *si);
+-extern void hack_subproc_environment (saver_screen_info *ssi);
++extern void hack_subproc_environment (Screen *, Window saver_window);
+ extern void init_sigchld (void);
+-extern void spawn_screenhack (saver_info *si, Bool first_time_p);
++extern void spawn_screenhack (saver_screen_info *ssi);
+ extern pid_t fork_and_exec (saver_screen_info *ssi, const char *command);
+-extern void kill_screenhack (saver_info *si);
+-extern void suspend_screenhack (saver_info *si, Bool suspend_p);
++extern void kill_screenhack (saver_screen_info *ssi);
++extern void suspend_screenhack (saver_screen_info *ssi, Bool suspend_p);
+ extern Bool screenhack_running_p (saver_info *si);
+ extern void emergency_kill_subproc (saver_info *si);
+ extern Bool select_visual (saver_screen_info *ssi, const char *visual_name);
+@@ -174,6 +177,7 @@
+ 
+ extern FILE *real_stderr;
+ extern FILE *real_stdout;
++extern void stderr_log_file (saver_info *si);
+ extern void initialize_stderr (saver_info *si);
+ extern void reset_stderr (saver_screen_info *ssi);
+ extern void clear_stderr (saver_screen_info *ssi);
+@@ -194,8 +198,13 @@
+ extern Bool window_exists_p (Display *dpy, Window window);
+ extern char *timestring (void);
+ extern Bool display_is_on_console_p (saver_info *si);
+-extern Visual *get_best_gl_visual (saver_screen_info *ssi);
++extern Visual *get_best_gl_visual (saver_info *si, Screen *screen);
+ extern void check_for_leaks (const char *where);
++extern void describe_monitor_layout (saver_info *si);
++
++#ifdef HAVE_XF86VMODE
++Bool safe_XF86VidModeGetViewPort (Display *, int, int *, int *);
++#endif /* HAVE_XF86VMODE */
+ 
+ extern Atom XA_VROOT, XA_XSETROOT_ID, XA_ESETROOT_PMAP_ID, XA_XROOTPMAP_ID;
+ extern Atom XA_SCREENSAVER, XA_SCREENSAVER_VERSION, XA_SCREENSAVER_ID;
