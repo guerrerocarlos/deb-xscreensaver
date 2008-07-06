@@ -44,7 +44,9 @@ Description: data files to be shared among screensaver frontends
  This is the selected set of non-GL screensavers shipped by default:
  deco, distort, fiberlamp, fuzzyflakes, galaxy, metaballs, penrose, 
  ripples, shadebobs, slidescreen, sonar, swirl.
- More hacks can be found in the xscreensaver-data-extra package.
+ .
+ Mode display modes can be found in xscreensaver-data-extra, xscreensaver-gl
+ and xscreensaver-gl-extra packages.
 
 Package: xscreensaver-data-extra
 Architecture: any
