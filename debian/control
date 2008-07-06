@@ -94,7 +94,7 @@ Description: GL(Mesa) screen hacks for xscreensaver
  .
  This package contains a small selection of 3D (OpenGL) screen
  saver modules from the xscreensaver collection. This package is
- used byy both xscreensaver and gnome-screensaver.
+ used by both xscreensaver and gnome-screensaver.
  .
  This is the set of GL screensavers shipped by default:
  antinspect, antspotlight, atunnel, blinkbox, bubble3d, circuit, cubestorm,
