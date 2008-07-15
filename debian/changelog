@@ -1,3 +1,11 @@
+xscreensaver (5.05-4) UNRELEASED; urgency=low
+
+  * debian/patches/69_XineRama_crash-482385-jamies-version.patch:
+    + Added Jamie Zawinski patch that addresses issues with XineRama.
+    (Closes: #482385, #428797, #471920, #453708, #473681, #479715, #480231)
+
+ -- Jose Luis Rivas <ghostbar38@gmail.com>  Tue, 15 Jul 2008 14:49:02 -0430
+
 xscreensaver (5.05-3) unstable; urgency=low
 
   [ Tormod Volden ]
@@ -5,10 +13,7 @@ xscreensaver (5.05-3) unstable; urgency=low
   * refresh (disabled) 60_add-ant-hack.patch
 
   [ Jose Luis Rivas ]
-  * Patch for the XineRama crash when changing thanks to Bas Zoetekouw
-  (Closes: #482385)
   * Moved flurry to xscreensaver-gl-extra
-  * Deleted the patch since the format doesn't works
   * Changed from xlibmesa-gl-dev to libgl1-mesa-dev, xutils to xutils-dev,
     x-dev to x11proto-core-dev.
   * Fixing categories in xscreensaver.menu
@@ -18,7 +23,7 @@ xscreensaver (5.05-3) unstable; urgency=low
   * Added Vcs fields.
   * Added Desktop file, thanks to Daniel Dickinson (Closes: #480592)
 
- -- Jose Luis Rivas <ghostbar38@gmail.com>  Mon, 23 Jun 2008 23:52:52 -0430
+ -- Jose Luis Rivas <ghostbar38@gmail.com>  Tue, 15 Jul 2008 14:48:48 -0430
 
 xscreensaver (5.05-2) unstable; urgency=low
 
