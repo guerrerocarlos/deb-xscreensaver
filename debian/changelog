@@ -8,6 +8,7 @@ xscreensaver (5.05-4) UNRELEASED; urgency=low
   * drop 61_DualHead-nVidia_bug471920.patch (obsolete)
   * drop 67_XineRama-mode_bug473681.patch (obsolete)
   * refresh 53_XScreenSaver.ad.in.patch
+  * correct Vcs fields in debian/control
 
  -- Jose Luis Rivas <ghostbar38@gmail.com>  Tue, 15 Jul 2008 14:49:02 -0430
 
@@ -25,7 +26,7 @@ xscreensaver (5.05-3) unstable; urgency=low
   * change build-deps from xlibmesa-gl-dev to libgl1-mesa-dev,
     xutils to xutils-dev, x-dev to x11proto-core-dev.
   * bump Standards-Version to 3.8.0.1
-  * add Vcs fields and Homepage
+  * add Vcs fields and Homepage to debian/control
 
  -- Jose Luis Rivas <ghostbar38@gmail.com>  Tue, 15 Jul 2008 14:48:48 -0430
 

@@ -6,8 +6,8 @@ Uploaders: Tormod Volden <debian.tormod@gmail.com>
 Build-Depends: bc, debhelper (>= 4.0), fortune-mod, libgtk2.0-dev, libpam0g-dev (>= 0.72), libgl1-mesa-dev | libgl-dev, libglu1-mesa-dev | xlibmesa-glu-dev | libglu-dev, xutils-dev, libgnome2-dev, libxml2-dev, libglade2-dev, libjpeg62-dev, libgle-dev, intltool, autotools-dev, libx11-dev, libxext-dev, libxinerama-dev, libxmu-dev, libxpm-dev, libxrandr-dev, libxss-dev, libxt-dev, libxtst-dev, libxxf86misc-dev, libxxf86vm-dev, x11proto-core-dev, xbitmaps, quilt, gdm, libxss-dev, libxtst-dev, libxxf86misc-dev
 Standards-Version: 3.8.0.1
 Homepage: http://www.jwz.org/xscreensaver/
-Vcs-git: git://git.rivco.info/debian/xscreensaver.git
-Vcs-browser: http://git.rivco.info/?p=debian/xscreensaver.git;a=summary
+Vcs-git: git://git.debian.org/git/collab-maint/xscreensaver.git
+Vcs-browser: http://git.debian.org/git/collab-maint/xscreensaver.git
 
 Package: xscreensaver
 Architecture: any
@@ -24,7 +24,7 @@ Description: Automatic screensaver for X
  gnome-screensaver. If you prefer gnome-screensaver, you don't
  need to install this package.
  .
- The graphical display modes are the xscreensaver-data, 
+ The graphical display modes are in the xscreensaver-data, 
  xscreensaver-data-extra, xscreensaver-gl and xscreensaver-gl-extra 
  packages.
 
@@ -38,7 +38,7 @@ Description: data files to be shared among screensaver frontends
  containing more than 200 screen savers.
  .
  This package contains a small selection of graphical screen saver
- (listed at bottom) modules from the xscreensaver collection. This package
+ modules (listed below) from the xscreensaver collection. This package
  is used by both xscreensaver and gnome-screensaver.
  .
  This is the selected set of non-GL screensavers shipped by default:
@@ -81,7 +81,7 @@ Description: data files to be shared among screensaver frontends
  displays images that are the result of random web searches. The
  Internet being what it is, absolutely anything might show up in the
  collage of search results including -- quite possibly -- pornography, or
- even nodity. Please act accordingly.
+ even nudity. Please act accordingly.
  .
  More display modes can be found in the xscreensaver-data, xscreensaver-gl
  and xscreensaver-gl-extra packages.
