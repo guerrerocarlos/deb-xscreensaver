@@ -1,8 +1,13 @@
 xscreensaver (5.05-4) UNRELEASED; urgency=low
 
-  * debian/patches/69_XineRama_crash-482385-jamies-version.patch:
-    + Added Jamie Zawinski patch that addresses issues with XineRama.
+  [ Tormod Volden ]
+  * debian/patches/10_jwz-xscreensaver-randr-patch-3.patch:
+    From upstream, addresses issues with xrandr/xinerama
     (Closes: #482385, #428797, #471920, #453708, #473681, #479715, #480231)
+  * fixed typo "screen < real_nscreens" in driver/lock:1527 from above patch
+  * drop 61_DualHead-nVidia_bug471920.patch (obsolete)
+  * drop 67_XineRama-mode_bug473681.patch (obsolete)
+  * refresh 53_XScreenSaver.ad.in.patch
 
  -- Jose Luis Rivas <ghostbar38@gmail.com>  Tue, 15 Jul 2008 14:49:02 -0430
 
@@ -13,15 +18,14 @@ xscreensaver (5.05-3) unstable; urgency=low
   * refresh (disabled) 60_add-ant-hack.patch
 
   [ Jose Luis Rivas ]
-  * Moved flurry to xscreensaver-gl-extra
-  * Changed from xlibmesa-gl-dev to libgl1-mesa-dev, xutils to xutils-dev,
-    x-dev to x11proto-core-dev.
-  * Fixing categories in xscreensaver.menu
-  * Changed x-dev for x11proto-core-dev
-  * Adding desktop file of flurry to xss-gl-extra.files
-  * Now Standards-Version is 3.8.0.1
-  * Added Vcs fields.
-  * Added Desktop file, thanks to Daniel Dickinson (Closes: #480592)
+  * move flurry to xscreensaver-gl-extra (Closes: #484112)
+  * add xscreensaver-demo desktop file, thanks to Daniel Dickinson
+    (Closes: #480592)
+  * fix categories in xscreensaver.menu
+  * change build-deps from xlibmesa-gl-dev to libgl1-mesa-dev,
+    xutils to xutils-dev, x-dev to x11proto-core-dev.
+  * bump Standards-Version to 3.8.0.1
+  * add Vcs fields and Homepage
 
  -- Jose Luis Rivas <ghostbar38@gmail.com>  Tue, 15 Jul 2008 14:48:48 -0430
 

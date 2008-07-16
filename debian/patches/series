@@ -1,10 +1,7 @@
-
+10_jwz-xscreensaver-randr-patch-3.patch
 20_hacks_Makefile.patch
-
 21_driver_xscreensaver-getimage-video
-
 22_hacks_barcode.patch
-
 23_hacks_glx_glsnake.patch
 
 # These two go together
@@ -23,10 +20,3 @@
 
 # overrule upstream 4.23 removal
 #60_add-ant-hack.patch
-# DualHead nVidia fix since 5.05
-61_DualHead-nVidia_bug471920.patch
-
-# Fix for XineRama issues since 5.05
-67_XineRama-mode_bug473681.patch
-
-69_XineRama_crash-482385-jamies-version.patch

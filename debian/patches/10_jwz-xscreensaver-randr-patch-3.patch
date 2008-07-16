@@ -1,53 +1,22 @@
-This patch should improve xscreensaver's behavior with RANDR 1.2.
-Please try it out and let me know how it works.  Things to test are:
+# Upstream patch, downloaded from
+# http://www.jwz.org/xscreensaver/xscreensaver-randr-patch-3.txt
+# + fixed typo "screen < real_nscreens" in driver/lock:1527
+# Will probably go upstream with 5.06
+# Fixes a bunch of xrandr/xinerama issues
 
-    - Systems with multiple monitors.  Do all monitors go
-      black when xscreensaver activates?
-
-    - Adding and removing monitors while the screen is not
-      blanked.  Does it look right once the screen blanks?
-
-    - Adding and removing monitors while the screen is
-      already blanked.  Does everything reconfigure properly?
-
-    - Changing the resolution of the monitor(s) using the
-      "xrandr" command.
-
-    - Does it correctly realize which monitors are actually
-      attached to the system and in use?
-
-    - Does it work with multiple X screens (the :0.1 style)?
-
-    - Does it work when using the old Xinerama extension
-      instead of RANDR.
-
-    - Does it work using the VidMode extension to zoom and pan
-      around (that is, "monitor" and "desktop" are different
-      resolutions, via Ctrl-Alt-KP_Plus and KP_Minus.)
-
-There is a bug if:
-
-    - It ever crashes (obviously!)
-
-    - There is ever a situation where a screen is not
-      completely covered by the xscreensaver windows.
-      (Unless two screens are configured to overlap).
+Please see http://jwz.livejournal.com/908354.html
 
 Apply this patch with:
 
     cd xscreensaver-5.05
-    patch -p1 < ../xscreensaver-randr-patch.txt
+    patch -p1 < ../xscreensaver-randr-patch-3.txt
 
 Thanks!
 
-    Jamie Zawinski <jwz@jwz.org>
-
-
-
-
-diff -ur --unidirectional-new-file xscreensaver-5.05/config.h.in xscreensaver-5.06/config.h.in
---- xscreensaver-5.05/config.h.in	2008-02-28 19:56:36.000000000 -0800
-+++ xscreensaver-5.06/config.h.in	2008-07-01 10:26:31.000000000 -0700
+Index: xscreensaver/config.h.in
+===================================================================
+--- xscreensaver.orig/config.h.in	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/config.h.in	2008-07-17 00:07:00.000000000 +0200
 @@ -234,6 +234,9 @@
     available if the file /usr/include/X11/extensions/Xrandr.h exists.) */
  #undef HAVE_RANDR
@@ -58,9 +27,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/config.h.in xscreensaver-5.
  /* Define this if you have the XReadDisplay extension (I think this is an
     SGI-only thing; it's in <X11/extensions/readdisplay.h>.) A few of the
     screenhacks will take advantage of this if it's available. */
-diff -ur --unidirectional-new-file xscreensaver-5.05/configure xscreensaver-5.06/configure
---- xscreensaver-5.05/configure	2008-03-01 21:34:45.000000000 -0800
-+++ xscreensaver-5.06/configure	2008-07-05 19:26:55.000000000 -0700
+Index: xscreensaver/configure
+===================================================================
+--- xscreensaver.orig/configure	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/configure	2008-07-17 00:07:00.000000000 +0200
 @@ -2060,6 +2060,9 @@
  
  
@@ -355,9 +325,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/configure xscreensaver-5.06
  if test "${bindir}" = "${HACKDIR}" ; then
    do_dir_warning=yes
  fi
-diff -ur --unidirectional-new-file xscreensaver-5.05/configure.in xscreensaver-5.06/configure.in
---- xscreensaver-5.05/configure.in	2008-03-01 14:14:30.000000000 -0800
-+++ xscreensaver-5.06/configure.in	2008-07-05 16:46:23.000000000 -0700
+Index: xscreensaver/configure.in
+===================================================================
+--- xscreensaver.orig/configure.in	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/configure.in	2008-07-17 00:07:00.000000000 +0200
 @@ -106,6 +106,9 @@
  	    possibly elsewhere.  (It's available if the file
  	    /usr/include/X11/extensions/Xrandr.h exists.)])
@@ -517,9 +488,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/configure.in xscreensaver-5
  if test "${bindir}" = "${HACKDIR}" ; then
    do_dir_warning=yes
  fi
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/Makefile.in xscreensaver-5.06/driver/Makefile.in
---- xscreensaver-5.05/driver/Makefile.in	2008-03-01 21:34:46.000000000 -0800
-+++ xscreensaver-5.06/driver/Makefile.in	2008-07-05 19:26:58.000000000 -0700
+Index: xscreensaver/driver/Makefile.in
+===================================================================
+--- xscreensaver.orig/driver/Makefile.in	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/Makefile.in	2008-07-17 00:07:00.000000000 +0200
 @@ -116,10 +116,10 @@
  
  TEST_SRCS	= test-passwd.c test-uid.c  test-xdpms.c    test-grab.c \
@@ -644,9 +616,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/Makefile.in xscreens
  test-uid.o: ../config.h
  test-vp.o: ../config.h
  test-xdpms.o: ../config.h
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/XScreenSaver.ad.in xscreensaver-5.06/driver/XScreenSaver.ad.in
---- xscreensaver-5.05/driver/XScreenSaver.ad.in	2008-03-01 13:33:47.000000000 -0800
-+++ xscreensaver-5.06/driver/XScreenSaver.ad.in	2008-07-05 19:26:57.000000000 -0700
+Index: xscreensaver/driver/XScreenSaver.ad.in
+===================================================================
+--- xscreensaver.orig/driver/XScreenSaver.ad.in	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/XScreenSaver.ad.in	2008-07-17 00:07:00.000000000 +0200
 @@ -4,8 +4,8 @@
  !            a screen saver and locker for the X window system
  !                            by Jamie Zawinski
@@ -668,10 +641,64 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/XScreenSaver.ad.in x
  !
  @NEW_LOGIN_COMMAND_P@*newLoginCommand:	@NEW_LOGIN_COMMAND@
  
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/demo-Gtk.c xscreensaver-5.06/driver/demo-Gtk.c
---- xscreensaver-5.05/driver/demo-Gtk.c	2008-02-09 18:54:43.000000000 -0800
-+++ xscreensaver-5.06/driver/demo-Gtk.c	2008-06-27 13:40:21.000000000 -0700
-@@ -582,13 +582,13 @@
+Index: xscreensaver/driver/demo-Gtk.c
+===================================================================
+--- xscreensaver.orig/driver/demo-Gtk.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/demo-Gtk.c	2008-07-17 00:07:00.000000000 +0200
+@@ -272,6 +272,9 @@
+ void settings_cancel_cb (GtkButton *, gpointer user_data);
+ void settings_ok_cb (GtkButton *, gpointer user_data);
+ 
++static void kill_gnome_screensaver (void);
++static void kill_kde_screensaver (void);
++
+ 
+ /* Some random utility functions
+  */
+@@ -482,9 +485,23 @@
+   warning_dialog_dismiss_cb (widget, user_data);
+ }
+ 
++static void warning_dialog_killg_cb (GtkWidget *widget, gpointer user_data)
++{
++  kill_gnome_screensaver ();
++  warning_dialog_dismiss_cb (widget, user_data);
++}
++
++static void warning_dialog_killk_cb (GtkWidget *widget, gpointer user_data)
++{
++  kill_kde_screensaver ();
++  warning_dialog_dismiss_cb (widget, user_data);
++}
++
++typedef enum { D_NONE, D_LAUNCH, D_GNOME, D_KDE } dialog_button;
++
+ static void
+ warning_dialog (GtkWidget *parent, const char *message,
+-                Boolean restart_button_p, int center)
++                dialog_button button_type, int center)
+ {
+   char *msg = strdup (message);
+   char *head;
+@@ -557,7 +574,7 @@
+                       label, TRUE, TRUE, 0);
+ 
+ #ifdef HAVE_GTK2
+-  if (restart_button_p)
++  if (button_type != D_NONE)
+     {
+       cancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+       gtk_container_add (GTK_CONTAINER (label), cancel);
+@@ -571,7 +588,7 @@
+   ok = gtk_button_new_with_label ("OK");
+   gtk_container_add (GTK_CONTAINER (label), ok);
+ 
+-  if (restart_button_p)
++  if (button_type != D_NONE)
+     {
+       cancel = gtk_button_new_with_label ("Cancel");
+       gtk_container_add (GTK_CONTAINER (label), cancel);
+@@ -582,22 +599,28 @@
    gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
    gtk_container_set_border_width (GTK_CONTAINER (dialog), 10);
    gtk_window_set_title (GTK_WINDOW (dialog), progclass);
@@ -687,9 +714,276 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/demo-Gtk.c xscreensa
        gtk_widget_show (cancel);
      }
    gtk_widget_show (label);
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/exec.c xscreensaver-5.06/driver/exec.c
---- xscreensaver-5.05/driver/exec.c	2006-02-03 23:36:33.000000000 -0800
-+++ xscreensaver-5.06/driver/exec.c	2008-07-05 04:31:59.000000000 -0700
+   gtk_widget_show (dialog);
+ 
+-  if (restart_button_p)
++  if (button_type != D_NONE)
+     {
+-      gtk_signal_connect_object (GTK_OBJECT (ok), "clicked",
+-                                 GTK_SIGNAL_FUNC (warning_dialog_restart_cb),
++      GtkSignalFunc fn;
++      switch (button_type) {
++      case D_LAUNCH: fn = GTK_SIGNAL_FUNC (warning_dialog_restart_cb); break;
++      case D_GNOME:  fn = GTK_SIGNAL_FUNC (warning_dialog_killg_cb);   break;
++      case D_KDE:    fn = GTK_SIGNAL_FUNC (warning_dialog_killk_cb);   break;
++      default: abort(); break;
++      }
++      gtk_signal_connect_object (GTK_OBJECT (ok), "clicked", fn, 
+                                  (gpointer) dialog);
+       gtk_signal_connect_object (GTK_OBJECT (cancel), "clicked",
+                                  GTK_SIGNAL_FUNC (warning_dialog_dismiss_cb),
+@@ -644,7 +667,7 @@
+         sprintf (buf, "Error:\n\n%s", err);
+       else
+         strcpy (buf, "Unknown error!");
+-      warning_dialog (s->toplevel_widget, buf, False, 100);
++      warning_dialog (s->toplevel_widget, buf, D_NONE, 100);
+     }
+   if (err) free (err);
+ 
+@@ -685,7 +708,7 @@
+                 sprintf (buf, "Error:\n\n%s", err);
+               else
+                 strcpy (buf, "Unknown error!");
+-              warning_dialog (s->toplevel_widget, buf, False, 100);
++              warning_dialog (s->toplevel_widget, buf, D_NONE, 100);
+             }
+         }
+       else
+@@ -700,7 +723,7 @@
+                      "The XScreenSaver daemon doesn't seem to be running\n"
+                      "on display \"%s\".  Launch it now?"),
+                    d);
+-          warning_dialog (s->toplevel_widget, msg, True, 1);
++          warning_dialog (s->toplevel_widget, msg, D_LAUNCH, 1);
+         }
+     }
+ 
+@@ -875,7 +898,7 @@
+     {
+       warning_dialog (s->toplevel_widget,
+                       _("Error:\n\n"
+-			"No Help URL has been specified.\n"), False, 100);
++			"No Help URL has been specified.\n"), D_NONE, 100);
+       return;
+     }
+ 
+@@ -1001,7 +1024,7 @@
+       else
+         strcat (buf, _("Please check your $PATH and permissions."));
+ 
+-      warning_dialog (s->toplevel_widget, buf, False, 1);
++      warning_dialog (s->toplevel_widget, buf, D_NONE, 1);
+     }
+ 
+   force_dialog_repaint (s);
+@@ -1038,12 +1061,12 @@
+       if (!f || !*f)
+         warning_dialog (s->toplevel_widget,
+                         _("Error:\n\nCouldn't determine init file name!\n"),
+-                        False, 100);
++                        D_NONE, 100);
+       else
+         {
+           char *b = (char *) malloc (strlen(f) + 1024);
+           sprintf (b, _("Error:\n\nCouldn't write %s\n"), f);
+-          warning_dialog (s->toplevel_widget, b, False, 100);
++          warning_dialog (s->toplevel_widget, b, D_NONE, 100);
+           free (b);
+         }
+       return -1;
+@@ -1106,7 +1129,7 @@
+     {
+       warning_dialog (GTK_WIDGET (button),
+                       _("Error:\n\nno `manualCommand' resource set."),
+-                      False, 100);
++                      D_NONE, 100);
+     }
+ 
+   free (oname);
+@@ -1291,7 +1314,7 @@
+ 		   _("Error:\n\n"
+ 		     "Unparsable time format: \"%s\"\n"),
+ 		   line);
+-	  warning_dialog (s->toplevel_widget, b, False, 100);
++	  warning_dialog (s->toplevel_widget, b, D_NONE, 100);
+ 	}
+       else
+ 	*store = value;
+@@ -1537,7 +1560,7 @@
+       char b[255];
+       sprintf (b, "Error:\n\n" "Directory does not exist: \"%s\"\n",
+                p2->image_directory);
+-      warning_dialog (s->toplevel_widget, b, False, 100);
++      warning_dialog (s->toplevel_widget, b, D_NONE, 100);
+     }
+ 
+ 
+@@ -1808,7 +1831,7 @@
+   char *str;
+   int list_elt;
+ 
+-  STFU g_return_if_fail (!gdk_pointer_is_grabbed ());
++  g_return_if_fail (!gdk_pointer_is_grabbed ());
+ 
+   str = gtk_tree_path_to_string (path);
+   list_elt = strtol (str, NULL, 10);
+@@ -1996,7 +2019,7 @@
+     {
+       char b[255];
+       sprintf (b, _("Error:\n\n" "Directory does not exist: \"%s\"\n"), path);
+-      warning_dialog (GTK_WIDGET (top), b, False, 100);
++      warning_dialog (GTK_WIDGET (top), b, D_NONE, 100);
+       return;
+     }
+ 
+@@ -2026,7 +2049,7 @@
+     {
+       char b[255];
+       sprintf (b, _("Error:\n\n" "File does not exist: \"%s\"\n"), path);
+-      warning_dialog (GTK_WIDGET (top), b, False, 100);
++      warning_dialog (GTK_WIDGET (top), b, D_NONE, 100);
+       return;
+     }
+ 
+@@ -2057,7 +2080,7 @@
+     {
+       char b[255];
+       sprintf (b, _("Error:\n\n" "File does not exist: \"%s\"\n"), path);
+-      warning_dialog (GTK_WIDGET (top), b, False, 100);
++      warning_dialog (GTK_WIDGET (top), b, D_NONE, 100);
+       return;
+     }
+ # endif
+@@ -3414,7 +3437,7 @@
+                _("Warning:\n\n"
+ 		 "file \"%s\" has changed, reloading.\n"),
+                f);
+-      warning_dialog (s->toplevel_widget, b, False, 100);
++      warning_dialog (s->toplevel_widget, b, D_NONE, 100);
+       free (b);
+ 
+       load_init_file (dpy, p);
+@@ -4247,6 +4270,77 @@
+ #endif
+ 
+ 
++static Window
++gnome_screensaver_window (Screen *screen)
++{
++  Display *dpy = DisplayOfScreen (screen);
++  Window root = RootWindowOfScreen (screen);
++  Window parent, *kids;
++  unsigned int nkids;
++  Window gnome_window = 0;
++  int i;
++
++  if (! XQueryTree (dpy, root, &root, &parent, &kids, &nkids))
++    abort ();
++  for (i = 0; i < nkids; i++)
++    {
++      Atom type;
++      int format;
++      unsigned long nitems, bytesafter;
++      unsigned char *name;
++      if (XGetWindowProperty (dpy, kids[i], XA_WM_COMMAND, 0, 128,
++                              False, XA_STRING, &type, &format, &nitems,
++                              &bytesafter, &name)
++          == Success
++          && type != None
++          && !strcmp ((char *) name, "gnome-screensaver"))
++	{
++	  gnome_window = kids[i];
++          break;
++	}
++    }
++
++  if (kids) XFree ((char *) kids);
++  return gnome_window;
++}
++
++static Bool
++gnome_screensaver_active_p (void)
++{
++  Display *dpy = GDK_DISPLAY();
++  Window w = gnome_screensaver_window (DefaultScreenOfDisplay (dpy));
++  return (w ? True : False);
++}
++
++static void
++kill_gnome_screensaver (void)
++{
++  Display *dpy = GDK_DISPLAY();
++  Window w = gnome_screensaver_window (DefaultScreenOfDisplay (dpy));
++  if (w) XKillClient (dpy, (XID) w);
++}
++
++static Bool
++kde_screensaver_active_p (void)
++{
++  FILE *p = popen ("dcop kdesktop KScreensaverIface isEnabled 2>/dev/null",
++                   "r");
++  char buf[255];
++  fgets (buf, sizeof(buf)-1, p);
++  pclose (p);
++  if (!strcmp (buf, "true\n"))
++    return True;
++  else
++    return False;
++}
++
++static void
++kill_kde_screensaver (void)
++{
++  system ("dcop kdesktop KScreensaverIface enable false");
++}
++
++
+ static void
+ the_network_is_not_the_computer (state *s)
+ {
+@@ -4360,12 +4454,36 @@
+ 
+ 
+   if (*msg)
+-    warning_dialog (s->toplevel_widget, msg, True, 1);
++    warning_dialog (s->toplevel_widget, msg, D_LAUNCH, 1);
+ 
+   if (rversion) free (rversion);
+   if (ruser) free (ruser);
+   if (rhost) free (rhost);
+   free (msg);
++  msg = 0;
++
++  /* Note: since these dialogs are not modal, they will stack up.
++     So we do this check *after* popping up the "xscreensaver is not
++     running" dialog so that these are on top.  Good enough.
++   */
++
++  if (gnome_screensaver_active_p ())
++    warning_dialog (s->toplevel_widget,
++                    _("Warning:\n\n"
++                      "The GNOME screensaver daemon appears to be running.\n"
++                      "It must be stopped for XScreenSaver to work properly.\n"
++                      "\n"
++                      "Stop the GNOME screen saver daemon now?\n"),
++                    D_GNOME, 1);
++
++  if (kde_screensaver_active_p ())
++    warning_dialog (s->toplevel_widget,
++                    _("Warning:\n\n"
++                      "The KDE screen saver daemon appears to be running.\n"
++                      "It must be stopped for XScreenSaver to work properly.\n"
++                      "\n"
++                      "Stop the KDE screen saver daemon now?\n"),
++                    D_KDE, 1);
+ }
+ 
+ 
+Index: xscreensaver/driver/exec.c
+===================================================================
+--- xscreensaver.orig/driver/exec.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/exec.c	2008-07-17 00:07:00.000000000 +0200
 @@ -1,5 +1,5 @@
  /* exec.c --- executes a program in *this* pid, without an intervening process.
 - * xscreensaver, Copyright (c) 1991-2006 Jamie Zawinski <jwz@jwz.org>
@@ -707,9 +1001,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/exec.c xscreensaver-
  
    hairy_p = !!strpbrk (command, "*?$&!<>[];`'\\\"=");
    /* note: = is in the above because of the sh syntax "FOO=bar cmd". */
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/lock.c xscreensaver-5.06/driver/lock.c
---- xscreensaver-5.05/driver/lock.c	2008-03-01 21:04:35.000000000 -0800
-+++ xscreensaver-5.06/driver/lock.c	2008-07-01 20:13:26.000000000 -0700
+Index: xscreensaver/driver/lock.c
+===================================================================
+--- xscreensaver.orig/driver/lock.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/lock.c	2008-07-17 00:08:10.000000000 +0200
 @@ -1,5 +1,5 @@
  /* lock.c --- handling the password dialog for locking-mode.
 - * xscreensaver, Copyright (c) 1993-2007 Jamie Zawinski <jwz@jwz.org>
@@ -807,7 +1102,7 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/lock.c xscreensaver-
      return;
  
 -  for (screen = 0; screen < (si->xinerama_p ? 1 : si->nscreens); screen++)
-+  for (screen = 0; real_nscreens; screen++)
++  for (screen = 0; screen < real_nscreens; screen++)
      {
        XSync (si->dpy, False);
        old_handler = XSetErrorHandler (ignore_all_errors_ehandler);
@@ -822,7 +1117,7 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/lock.c xscreensaver-
      return;
  
 -  for (screen = 0; screen < si->nscreens; screen++)
-+  for (screen = 0; real_nscreens; screen++)
++  for (screen = 0; screen < real_nscreens; screen++)
      {
        saver_screen_info *ssi = &si->screens[screen];
        int x, y;
@@ -841,9 +1136,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/lock.c xscreensaver-
  
  	if (info_msg_trimmed)
  	  free(info_msg_trimmed);
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/passwd-kerberos.c xscreensaver-5.06/driver/passwd-kerberos.c
---- xscreensaver-5.05/driver/passwd-kerberos.c	2005-06-21 20:20:11.000000000 -0700
-+++ xscreensaver-5.06/driver/passwd-kerberos.c	2008-07-01 13:28:28.000000000 -0700
+Index: xscreensaver/driver/passwd-kerberos.c
+===================================================================
+--- xscreensaver.orig/driver/passwd-kerberos.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/passwd-kerberos.c	2008-07-17 00:07:00.000000000 +0200
 @@ -78,6 +78,10 @@
   static const char *tk_file;
  #endif /* !HAVE_DARWIN */
@@ -855,9 +1151,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/passwd-kerberos.c xs
  
  /* Called at startup to grab user, instance, and realm information
     from the user's ticketfile (remember, name.inst@realm). Since we're
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/passwd-pam.c xscreensaver-5.06/driver/passwd-pam.c
---- xscreensaver-5.05/driver/passwd-pam.c	2008-02-29 18:49:44.000000000 -0800
-+++ xscreensaver-5.06/driver/passwd-pam.c	2008-06-30 17:59:47.000000000 -0700
+Index: xscreensaver/driver/passwd-pam.c
+===================================================================
+--- xscreensaver.orig/driver/passwd-pam.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/passwd-pam.c	2008-07-17 00:07:00.000000000 +0200
 @@ -452,6 +452,14 @@
  
    ret = si->unlock_cb(nmsgs, messages, &authresp, si);
@@ -873,9 +1170,77 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/passwd-pam.c xscreen
    if (ret == 0)
      {
        for (i = 0; i < nmsgs; ++i)
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/prefs.c xscreensaver-5.06/driver/prefs.c
---- xscreensaver-5.05/driver/prefs.c	2006-05-23 15:03:47.000000000 -0700
-+++ xscreensaver-5.06/driver/prefs.c	2008-07-02 17:21:22.000000000 -0700
+Index: xscreensaver/driver/pdf2jpeg.m
+===================================================================
+--- xscreensaver.orig/driver/pdf2jpeg.m	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/pdf2jpeg.m	2008-07-17 00:07:00.000000000 +0200
+@@ -1,6 +1,6 @@
+ /* pdf2jpeg -- converts a PDF file to a JPEG file, using Cocoa
+  *
+- * Copyright (c) 2003 by Jamie Zawinski <jwz@jwz.org>
++ * Copyright (c) 2003, 2008 by Jamie Zawinski <jwz@jwz.org>
+  *
+  * Permission to use, copy, modify, distribute, and sell this software and its
+  * documentation for any purpose is hereby granted without fee, provided that
+@@ -23,6 +23,7 @@
+   const char *progname = argv[0];
+   const char *infile = 0, *outfile = 0;
+   double compression = 0.85;
++  double scale = 1.0;
+   int verbose = 0;
+   int i;
+ 
+@@ -45,6 +46,18 @@
+             }
+           compression = q / 100.0;
+         }
++      else if (!strcmp (argv[i], "-scale"))
++        {
++          float s;
++          if (1 != sscanf (argv[++i], " %f %c", &s, &c) ||
++              s <= 0 || s > 50)
++            {
++              fprintf (stderr, "%s: scale must be 0.0 - 50.0 (%f)\n",
++                       progname, s);
++              goto USAGE;
++            }
++          scale = s;
++        }
+       else if (!strcmp (argv[i], "-verbose"))
+         verbose++;
+       else if (!strcmp (argv[i], "-v") ||
+@@ -64,7 +77,7 @@
+         {
+         USAGE:
+           fprintf (stderr,
+-                   "usage: %s [-verbose] [-quality NN] "
++                   "usage: %s [-verbose] [-scale N] [-quality NN] "
+                    "infile.pdf outfile.jpg\n",
+                    progname);
+           exit (1);
+@@ -93,11 +106,16 @@
+   NSPDFImageRep *pdf_rep = [NSPDFImageRep imageRepWithData:pdf_data];
+ 
+   // Create an NSImage instance
+-  NSImage *image = [[NSImage alloc] initWithSize:[pdf_rep size]];
++  NSRect rect;
++  rect.size = [pdf_rep size];
++  rect.size.width  *= scale;
++  rect.size.height *= scale;
++  rect.origin.x = rect.origin.y = 0;
++  NSImage *image = [[NSImage alloc] initWithSize:rect.size];
+ 
+   // Draw the PDFImageRep in the NSImage
+   [image lockFocus];
+-  [pdf_rep drawAtPoint:NSMakePoint(0.0,0.0)];
++  [pdf_rep drawInRect:rect];
+   [image unlockFocus];
+ 
+   // Load the NSImage's contents into an NSBitmapImageRep:
+Index: xscreensaver/driver/prefs.c
+===================================================================
+--- xscreensaver.orig/driver/prefs.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/prefs.c	2008-07-17 00:07:00.000000000 +0200
 @@ -1,5 +1,5 @@
  /* dotfile.c --- management of the ~/.xscreensaver file.
 - * xscreensaver, Copyright (c) 1998-2006 Jamie Zawinski <jwz@jwz.org>
@@ -899,10 +1264,11 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/prefs.c xscreensaver
        CHECK("ignoreUninstalledPrograms")
                                  type = pref_bool, b = p->ignore_uninstalled_p;
  
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/screens.c xscreensaver-5.06/driver/screens.c
---- xscreensaver-5.05/driver/screens.c	1969-12-31 16:00:00.000000000 -0800
-+++ xscreensaver-5.06/driver/screens.c	2008-07-05 05:24:51.000000000 -0700
-@@ -0,0 +1,873 @@
+Index: xscreensaver/driver/screens.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ xscreensaver/driver/screens.c	2008-07-17 00:07:00.000000000 +0200
+@@ -0,0 +1,894 @@
 +/* screens.c --- dealing with RANDR, Xinerama, and VidMode Viewports.
 + * xscreensaver, Copyright (c) 1991-2008 Jamie Zawinski <jwz@jwz.org>
 + *
@@ -1267,8 +1633,17 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/screens.c xscreensav
 +
 +              size = XRRConfigCurrentConfiguration (rrc, &rot);
 +              rrsizes = XRRConfigSizes (rrc, &nsizes);
-+              m->width  = rrsizes[i].width;
-+              m->height = rrsizes[i].height;
++
++              if (rot & (RR_Rotate_90|RR_Rotate_270))
++                {
++                  m->width  = rrsizes[size].height;
++                  m->height = rrsizes[size].width;
++                }
++              else
++                {
++                  m->width  = rrsizes[size].width;
++                  m->height = rrsizes[size].height;
++                }
 +
 +              /* don't free 'rrsizes' */
 +              XRRFreeScreenConfigInfo (rrc);
@@ -1294,8 +1669,18 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/screens.c xscreensav
 +              m->desc     = (rroi->name ? strdup (rroi->name) : 0);
 +              m->x        = crtci->x;
 +              m->y        = crtci->y;
-+              m->width    = crtci->width;
-+              m->height   = crtci->height;
++
++              if (crtci->rotation & (RR_Rotate_90|RR_Rotate_270))
++                {
++                  m->width  = crtci->height;
++                  m->height = crtci->width;
++                }
++              else
++                {
++                  m->width  = crtci->width;
++                  m->height = crtci->height;
++                }
++
 +              j++;
 +
 +              if (rroi->connection == RR_Disconnected)
@@ -1414,6 +1799,8 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/screens.c xscreensav
 +          monitors2[j+k]->width  /= (debug_p ? 4 : 2);
 +          monitors2[j+k]->height /= 2;
 +          monitors2[j+k]->id = (monitors[i]->id * 4) + k;
++          monitors2[j+k]->name = (monitors[i]->name
++                                  ? strdup (monitors[i]->name) : 0);
 +        }
 +      monitors2[j+1]->x += monitors2[j]->width;
 +      monitors2[j+2]->y += monitors2[j]->height;
@@ -1776,9 +2163,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/screens.c xscreensav
 +  si->default_screen = &si->screens[0];
 +  return True;
 +}
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/splash.c xscreensaver-5.06/driver/splash.c
---- xscreensaver-5.05/driver/splash.c	2007-11-05 14:26:36.000000000 -0800
-+++ xscreensaver-5.06/driver/splash.c	2008-07-01 13:16:49.000000000 -0700
+Index: xscreensaver/driver/splash.c
+===================================================================
+--- xscreensaver.orig/driver/splash.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/splash.c	2008-07-17 00:07:00.000000000 +0200
 @@ -1,4 +1,4 @@
 -/* xscreensaver, Copyright (c) 1991-2006 Jamie Zawinski <jwz@netscape.com>
 +/* xscreensaver, Copyright (c) 1991-2008 Jamie Zawinski <jwz@netscape.com>
@@ -1796,6 +2184,15 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/splash.c xscreensave
    cmap = DefaultColormapOfScreen (ssi->screen);
  
    sp = (splash_dialog_data *) calloc (1, sizeof(*sp));
+@@ -376,7 +380,7 @@
+   attrs.event_mask = (ExposureMask | ButtonPressMask | ButtonReleaseMask);
+ 
+   {
+-    int sx, sy, w, h;
++    int sx = 0, sy = 0, w, h;
+     int mouse_x = 0, mouse_y = 0;
+ 
+     {
 @@ -393,7 +397,10 @@
          }
      }
@@ -1808,9 +2205,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/splash.c xscreensave
      if (si->prefs.debug_p) w /= 2;
      x = sx + (((w + sp->width)  / 2) - sp->width);
      y = sy + (((h + sp->height) / 2) - sp->height);
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/stderr.c xscreensaver-5.06/driver/stderr.c
---- xscreensaver-5.05/driver/stderr.c	2006-02-02 18:56:21.000000000 -0800
-+++ xscreensaver-5.06/driver/stderr.c	2008-07-05 04:32:49.000000000 -0700
+Index: xscreensaver/driver/stderr.c
+===================================================================
+--- xscreensaver.orig/driver/stderr.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/stderr.c	2008-07-17 00:07:00.000000000 +0200
 @@ -1,5 +1,5 @@
  /* stderr.c --- capturing stdout/stderr output onto the screensaver window.
 - * xscreensaver, Copyright (c) 1991-2006 Jamie Zawinski <jwz@jwz.org>
@@ -1876,9 +2274,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/stderr.c xscreensave
        stderr_buffer < stderr_tail)
      {
        *stderr_tail = 0;
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/subprocs.c xscreensaver-5.06/driver/subprocs.c
---- xscreensaver-5.05/driver/subprocs.c	2008-01-26 14:14:26.000000000 -0800
-+++ xscreensaver-5.06/driver/subprocs.c	2008-07-02 21:04:41.000000000 -0700
+Index: xscreensaver/driver/subprocs.c
+===================================================================
+--- xscreensaver.orig/driver/subprocs.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/subprocs.c	2008-07-17 00:07:00.000000000 +0200
 @@ -851,7 +851,7 @@
      case 0:
        close (ConnectionNumber (si->dpy));	/* close display fd */
@@ -2071,9 +2470,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/subprocs.c xscreensa
              return v;
            }
        }
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/test-passwd.c xscreensaver-5.06/driver/test-passwd.c
---- xscreensaver-5.05/driver/test-passwd.c	2008-02-29 19:08:44.000000000 -0800
-+++ xscreensaver-5.06/driver/test-passwd.c	2008-07-01 13:16:59.000000000 -0700
+Index: xscreensaver/driver/test-passwd.c
+===================================================================
+--- xscreensaver.orig/driver/test-passwd.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/test-passwd.c	2008-07-17 00:07:00.000000000 +0200
 @@ -1,4 +1,4 @@
 -/* xscreensaver, Copyright (c) 1998-2007 Jamie Zawinski <jwz@jwz.org>
 +/* xscreensaver, Copyright (c) 1998-2008 Jamie Zawinski <jwz@jwz.org>
@@ -2121,9 +2521,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/test-passwd.c xscree
    while (1)
      {
  #ifndef NO_LOCKING
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/test-randr.c xscreensaver-5.06/driver/test-randr.c
---- xscreensaver-5.05/driver/test-randr.c	2005-01-22 19:16:29.000000000 -0800
-+++ xscreensaver-5.06/driver/test-randr.c	2008-07-05 05:08:32.000000000 -0700
+Index: xscreensaver/driver/test-randr.c
+===================================================================
+--- xscreensaver.orig/driver/test-randr.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/test-randr.c	2008-07-17 00:07:00.000000000 +0200
 @@ -1,5 +1,5 @@
  /* test-randr.c --- playing with the Resize And Rotate extension.
 - * xscreensaver, Copyright (c) 2004, 2005 Jamie Zawinski <jwz@jwz.org>
@@ -2175,9 +2576,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/test-randr.c xscreen
      }
  
    if (major > 0)
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/test-screens.c xscreensaver-5.06/driver/test-screens.c
---- xscreensaver-5.05/driver/test-screens.c	1969-12-31 16:00:00.000000000 -0800
-+++ xscreensaver-5.06/driver/test-screens.c	2008-07-02 21:04:07.000000000 -0700
+Index: xscreensaver/driver/test-screens.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ xscreensaver/driver/test-screens.c	2008-07-17 00:07:00.000000000 +0200
 @@ -0,0 +1,196 @@
 +/* test-screens.c --- some test cases for the "monitor sanity" checks.
 + * xscreensaver, Copyright (c) 2008 Jamie Zawinski <jwz@jwz.org>
@@ -2375,9 +2777,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/test-screens.c xscre
 +
 +  exit (0);
 +}
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/timers.c xscreensaver-5.06/driver/timers.c
---- xscreensaver-5.05/driver/timers.c	2008-01-26 14:22:54.000000000 -0800
-+++ xscreensaver-5.06/driver/timers.c	2008-07-02 19:44:07.000000000 -0700
+Index: xscreensaver/driver/timers.c
+===================================================================
+--- xscreensaver.orig/driver/timers.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/timers.c	2008-07-17 00:07:00.000000000 +0200
 @@ -264,14 +264,18 @@
      }
    else
@@ -2467,9 +2870,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/timers.c xscreensave
  	}
  
        /* Re-schedule this timer.  The watchdog timer defaults to a bit less
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/types.h xscreensaver-5.06/driver/types.h
---- xscreensaver-5.05/driver/types.h	2007-03-15 01:32:27.000000000 -0700
-+++ xscreensaver-5.06/driver/types.h	2008-07-02 20:58:58.000000000 -0700
+Index: xscreensaver/driver/types.h
+===================================================================
+--- xscreensaver.orig/driver/types.h	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/types.h	2008-07-17 00:07:00.000000000 +0200
 @@ -1,7 +1,4 @@
 -/* types.h
 - *
@@ -2562,9 +2966,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/types.h xscreensaver
  
 -#endif
 +#endif /* __XSCREENSAVER_TYPES_H__ */
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/windows.c xscreensaver-5.06/driver/windows.c
---- xscreensaver-5.05/driver/windows.c	2008-01-26 14:03:51.000000000 -0800
-+++ xscreensaver-5.06/driver/windows.c	2008-07-05 18:40:42.000000000 -0700
+Index: xscreensaver/driver/windows.c
+===================================================================
+--- xscreensaver.orig/driver/windows.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/windows.c	2008-07-17 00:07:00.000000000 +0200
 @@ -226,6 +226,14 @@
  }
  
@@ -3261,9 +3666,27 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/windows.c xscreensav
  
        if (p->verbose_p)
  	{
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/xscreensaver.c xscreensaver-5.06/driver/xscreensaver.c
---- xscreensaver-5.05/driver/xscreensaver.c	2008-02-29 20:05:12.000000000 -0800
-+++ xscreensaver-5.06/driver/xscreensaver.c	2008-07-05 05:48:31.000000000 -0700
+Index: xscreensaver/driver/xscreensaver-command.c
+===================================================================
+--- xscreensaver.orig/driver/xscreensaver-command.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/xscreensaver-command.c	2008-07-17 00:07:00.000000000 +0200
+@@ -108,9 +108,9 @@
+                 (Note that one must *never* kill xscreensaver with -9!)\n\
+ \n\
+   -restart      Causes the screensaver process to exit and then restart with\n\
+-                the same command line arguments as last time.  Do this after\n\
+-                you've changed your X resource settings, to cause\n\
+-                xscreensaver to notice the changes.\n\
++                the same command line arguments as last time.  You shouldn't\n\
++                really need to do this, since xscreensaver notices when the\n\
++                .xscreensaver file has changed and re-reads it as needed.\n\
+ \n\
+   -lock         Tells the running xscreensaver process to lock the screen\n\
+                 immediately.  This is like -activate, but forces locking as\n\
+Index: xscreensaver/driver/xscreensaver.c
+===================================================================
+--- xscreensaver.orig/driver/xscreensaver.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/xscreensaver.c	2008-07-17 00:07:00.000000000 +0200
 @@ -46,6 +46,8 @@
   *   via the $XSCREENSAVER_WINDOW environment variable -- this trick requires
   *   a recent (Aug 2003) revision of vroot.h.
@@ -3854,9 +4277,10 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/xscreensaver.c xscre
  Bool
  display_is_on_console_p (saver_info *si)
  {
-diff -ur --unidirectional-new-file xscreensaver-5.05/driver/xscreensaver.h xscreensaver-5.06/driver/xscreensaver.h
---- xscreensaver-5.05/driver/xscreensaver.h	2007-03-15 01:23:38.000000000 -0700
-+++ xscreensaver-5.06/driver/xscreensaver.h	2008-07-05 05:48:11.000000000 -0700
+Index: xscreensaver/driver/xscreensaver.h
+===================================================================
+--- xscreensaver.orig/driver/xscreensaver.h	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/driver/xscreensaver.h	2008-07-17 00:07:00.000000000 +0200
 @@ -1,4 +1,4 @@
 -/* xscreensaver, Copyright (c) 1993-2006 Jamie Zawinski <jwz@jwz.org>
 +/* xscreensaver, Copyright (c) 1993-2008 Jamie Zawinski <jwz@jwz.org>
@@ -3914,3 +4338,16 @@ diff -ur --unidirectional-new-file xscreensaver-5.05/driver/xscreensaver.h xscre
  
  extern Atom XA_VROOT, XA_XSETROOT_ID, XA_ESETROOT_PMAP_ID, XA_XROOTPMAP_ID;
  extern Atom XA_SCREENSAVER, XA_SCREENSAVER_VERSION, XA_SCREENSAVER_ID;
+Index: xscreensaver/hacks/screenhack.c
+===================================================================
+--- xscreensaver.orig/hacks/screenhack.c	2008-07-16 23:47:00.000000000 +0200
++++ xscreensaver/hacks/screenhack.c	2008-07-17 00:07:00.000000000 +0200
+@@ -882,6 +882,8 @@
+       window = VirtualRootWindowOfScreen (XtScreen (toplevel));
+       XtDestroyWidget (toplevel);
+       XGetWindowAttributes (dpy, window, &xgwa);
++      /* With RANDR, the root window can resize! */
++      XSelectInput (dpy, window, xgwa.your_event_mask | StructureNotifyMask);
+       visual_warning (xgwa.screen, window, xgwa.visual, xgwa.colormap, False);
+     }
+   else

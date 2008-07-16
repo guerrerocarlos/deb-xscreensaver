@@ -1,5 +1,7 @@
---- xscreensaver-5.05/driver/XScreenSaver.ad.in	2008-03-01 17:03:47.000000000 -0430
-+++ XScreenSaver.ad.in	2008-03-11 21:31:21.000000000 -0430
+Index: xscreensaver/driver/XScreenSaver.ad.in
+===================================================================
+--- xscreensaver.orig/driver/XScreenSaver.ad.in	2008-07-16 23:39:50.000000000 +0200
++++ xscreensaver/driver/XScreenSaver.ad.in	2008-07-16 23:39:50.000000000 +0200
 @@ -60,7 +60,7 @@
  *textLiteral:		XScreenSaver
  *textFile:		@DEFAULT_TEXT_FILE@
@@ -45,9 +47,9 @@
  @NOGNOME@		    -e /bin/sh -c 'man "%s" ; read foo'
  
  
-@@ -127,7 +131,8 @@
- ! This command is executed by the "New Login" button on the lock dialog.
- ! (That button does not appear if this program does not exist.)
+@@ -128,7 +132,8 @@
+ ! (That button does not appear on the dialog if this program does not exist.)
+ ! For Gnome: probably "gdmflexiserver -ls".  KDE, probably "kdmctl reserve".
  !
 -@NEW_LOGIN_COMMAND_P@*newLoginCommand:	@NEW_LOGIN_COMMAND@
 +! @NEW_LOGIN_COMMAND_P@*newLoginCommand:	@NEW_LOGIN_COMMAND@
@@ -55,7 +57,7 @@
  
  
  ! Turning on "installColormap" on 8-bit systems interacts erratically with
-@@ -464,10 +469,11 @@
+@@ -465,10 +470,11 @@
  *Dialog.shadowThickness:	2
  
  *passwd.heading.label:		XScreenSaver %s
