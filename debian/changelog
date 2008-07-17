@@ -26,19 +26,17 @@ xscreensaver (5.05-3) UNRELEASED; urgency=low
 
 xscreensaver (5.05-2) unstable; urgency=low
 
-  * debian/rules:
-   + Added `--with-proc-interrupts' to the configure command. (Closes:
-   #354559)
+  * (this version was not published)
+  * debian/rules: Add `--with-proc-interrupts' to the configure command.
+    (Closes: #354559)
   * debian/patches/61_DualHead-nVidia_bug471920.patch:
-   + Thanks to Vincent Crevot (Closes: #471920).
+    Thanks to Vincent Crevot (Closes: #471920)
   * debian/patches/67_XineRama-mode_bug473681.patch:
-   + Added, thanks to Lionel Elie Mamane (Closes: #473681).
-  * debian/watch:
-   + Created.
-  * debian/control:
-   + libpam0g fixed to >= 0.72 instead of >=0.72-1, no need of that.
+    Thanks to Lionel Elie Mamane (Closes: #473681)
+  * create debian/watch
+  * debian/control: fix libpam0g deps to use >= 0.72 instead of >=0.72-1
   * debian/xscreensaver.pam:
-   + Added common-account for handling account service type. (Closes: #475861)
+    Add common-account for handling account service type (Closes: #475861)
 
  -- Jose Luis Rivas <ghostbar38@gmail.com>  Fri, 11 Apr 2008 11:56:14 -0430
 
