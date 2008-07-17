@@ -19,7 +19,7 @@ xscreensaver (5.05-3) UNRELEASED; urgency=low
   * fix categories in xscreensaver.menu
   * change build-deps from xlibmesa-gl-dev to libgl1-mesa-dev,
     xutils to xutils-dev, x-dev to x11proto-core-dev.
-  * bump Standards-Version to 3.8.0.1
+  * bump Standards-Version to 3.8.0
   * add Vcs fields and Homepage to debian/control
 
  -- Jose Luis Rivas <ghostbar38@gmail.com>  Tue, 15 Jul 2008 14:48:48 -0430
