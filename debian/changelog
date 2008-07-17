@@ -15,6 +15,7 @@ xscreensaver (5.05-3) UNRELEASED; urgency=low
   * move flurry to xscreensaver-gl-extra (Closes: #484112)
   * add xscreensaver-demo desktop file, thanks to Daniel Dickinson
     (Closes: #480592)
+  * update package descriptions (thanks jwz)
   * fix categories in xscreensaver.menu
   * change build-deps from xlibmesa-gl-dev to libgl1-mesa-dev,
     xutils to xutils-dev, x-dev to x11proto-core-dev.
