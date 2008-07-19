@@ -1,4 +1,4 @@
-xscreensaver (5.05-3) UNRELEASED; urgency=low
+xscreensaver (5.05-3) unstable; urgency=low
 
   [ Tormod Volden ]
   * debian/patches/10_jwz-xscreensaver-randr-patch-3.patch:
@@ -12,7 +12,6 @@ xscreensaver (5.05-3) UNRELEASED; urgency=low
   * refresh (disabled) 60_add-ant-hack.patch
 
   [ Jose Luis Rivas ]
-  * move flurry to xscreensaver-gl-extra (Closes: #484112)
   * add xscreensaver-demo desktop file, thanks to Daniel Dickinson
     (Closes: #480592)
   * update package descriptions (thanks jwz)
@@ -21,6 +20,7 @@ xscreensaver (5.05-3) UNRELEASED; urgency=low
     xutils to xutils-dev, x-dev to x11proto-core-dev.
   * bump Standards-Version to 3.8.0
   * add Vcs fields and Homepage to debian/control
+  * Flurry is not installed until the bug get fixed (Closes: #484112)
 
  -- Jose Luis Rivas <ghostbar38@gmail.com>  Tue, 15 Jul 2008 14:48:48 -0430
 
