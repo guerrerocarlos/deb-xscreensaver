@@ -1,5 +1,5 @@
---- Makefile.in.orig	2008-07-22 22:50:04.000000000 -0430
-+++ Makefile.in	2008-07-22 23:28:03.000000000 -0430
+--- xscreensaver/hacks/Makefile.in.orig	2008-07-23 12:40:11.000000000 -0430
++++ xscreensaver/hacks/Makefile.in	2008-07-23 12:41:34.000000000 -0430
 @@ -151,7 +151,7 @@ OBJS		= attraction.o blitspin.o bouboule
  		  fuzzyflakes.o anemotaxis.o memscroller.o substrate.o \
  		  intermomentary.o fireworkx.o fiberlamp.o boxfit.o \
