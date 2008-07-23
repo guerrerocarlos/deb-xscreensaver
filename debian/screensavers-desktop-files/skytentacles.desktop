@@ -1,0 +1,10 @@
+
+[Desktop Entry]
+Name=SkyTentacles
+Comment=3D tentacles from the sky by Jamie Zawinski.
+TryExec=skytentacles
+Exec=skytentacles -root
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Screensaver

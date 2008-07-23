@@ -130,3 +130,7 @@ usr/lib/xscreensaver/hypnowheel
 usr/share/man/man6/hypnowheel.6x
 usr/share/xscreensaver/config/hypnowheel.xml
 usr/share/applications/screensavers/hypnowheel.desktop
+usr/lib/xscreensaver/skytentacles
+usr/share/man/man6/skytentacles.6x
+usr/share/xscreensaver/config/skytentacles.xml
+usr/share/applications/screensavers/skytentacles.desktop
