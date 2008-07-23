@@ -1,0 +1,11 @@
+--- Makefile.in.orig	2008-07-22 22:50:04.000000000 -0430
++++ Makefile.in	2008-07-22 23:28:03.000000000 -0430
+@@ -151,7 +151,7 @@ OBJS		= attraction.o blitspin.o bouboule
+ 		  fuzzyflakes.o anemotaxis.o memscroller.o substrate.o \
+ 		  intermomentary.o fireworkx.o fiberlamp.o boxfit.o \
+ 		  interaggregate.o celtic.o cwaves.o webcollage-cocoa.o \
+-		  webcollage-helper-cocoa.o m6502.0 asm6502.o abstractile.o \
++		  webcollage-helper-cocoa.o m6502.o asm6502.o abstractile.o \
+ 		  lcdscrub.o
+ 
+ NEXES		= attraction blitspin bouboule braid bubbles decayscreen deco \
