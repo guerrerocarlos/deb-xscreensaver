@@ -1,3 +1,12 @@
+xscreensaver (5.06-1) UNRELEASED; urgency=low
+
+  * New upstream release.
+  * debian/patches:
+   + Deleted patch for xinerama, now is merged upstream.
+   + Added patch for hacks/Makefile.in.
+
+ -- Jose Luis Rivas <ghostbar38@gmail.com>  Tue, 22 Jul 2008 23:33:51 -0430
+
 xscreensaver (5.05-3) unstable; urgency=low
 
   [ Tormod Volden ]
