@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Cubenetic
 Comment=Draws a pulsating set of overlapping boxes with ever-chaning blobby patterns undulating across their surfaces. It's sort of a cubist Lavalite. Written by Jamie Zawinski.
 TryExec=cubenetic
 Exec=cubenetic -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Coral
 Comment=Simulates coral growth, albeit somewhat slowly. Written by Frederick Roeber.
 TryExec=coral
 Exec=coral -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

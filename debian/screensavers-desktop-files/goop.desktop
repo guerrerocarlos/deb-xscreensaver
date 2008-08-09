@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Goop
 Comment=This draws set of animating, transparent, amoeba-like blobs. The blobs change shape as they wander around the screen, and they are translucent, so you can see the lower blobs through the higher ones, and when one passes over another, their colors merge. I got the idea for this from a cool mouse pad I have, which achieves the same kind of effect in real life by having several layers plastic with colored oil between them. Written by Jamie Zawinski.
 TryExec=goop
 Exec=goop -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

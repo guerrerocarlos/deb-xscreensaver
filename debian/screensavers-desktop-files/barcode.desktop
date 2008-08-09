@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Barcode
 Comment=This draws a random sequence of colorful barcodes scrolling across your screen. CONSUME! By Dan Bornstein.
 TryExec=barcode
 Exec=barcode -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

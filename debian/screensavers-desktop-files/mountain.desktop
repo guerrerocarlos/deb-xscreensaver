@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Mountain
 Comment=Generates random 3d plots that look vaguely mountainous. Written by Pascal Pensa.
 TryExec=mountain
 Exec=mountain -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

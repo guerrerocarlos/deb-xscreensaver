@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Halo
 Comment=This draws trippy psychedelic circular patterns that hurt to look at. It can also animate the control-points, but that takes a lot of CPU and bandwidth. Written by Jamie Zawinski.
 TryExec=halo
 Exec=halo -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

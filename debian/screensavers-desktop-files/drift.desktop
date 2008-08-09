@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Drift
 Comment=How could one possibly describe this except as ``drifting recursive fractal cosmic flames?'' Another fine hack from the Scott Draves collection of fine hacks.
 TryExec=drift
 Exec=drift -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

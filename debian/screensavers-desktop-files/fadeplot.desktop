@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=FadePlot
 Comment=Draws what looks like a waving ribbon following a sinusoidal path. Written by Bas van Gaalen and Charles Vidal.
 TryExec=fadeplot
 Exec=fadeplot -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

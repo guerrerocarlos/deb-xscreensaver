@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Petri
 Comment=This simulates colonies of mold growing in a petri dish. Growing colored circles overlap and leave spiral interference in their wake. Written by Dan Bornstein.
 TryExec=petri
 Exec=petri -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

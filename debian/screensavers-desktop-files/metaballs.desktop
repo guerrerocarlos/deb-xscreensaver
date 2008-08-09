@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=MetaBalls
 Comment=Draws two dimensional metaballs: overlapping and merging balls with fuzzy edges. By W.P. van Paassen.
 TryExec=metaballs
 Exec=metaballs -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Moire2
 Comment=Another example of the fun you can have with moire interference patterns; this hack generates fields of concentric circles or ovals, and combines the planes with various operations. The planes are moving independently of one another, causing the interference lines to ``spray.'' Written by Jamie Zawinski.
 TryExec=moire2
 Exec=moire2 -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

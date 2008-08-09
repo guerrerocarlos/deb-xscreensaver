@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=CubicGrid
 Comment=
 TryExec=cubicgrid
 Exec=cubicgrid -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

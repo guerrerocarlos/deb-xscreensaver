@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=XAnalogTV
 Comment=XAnalogTV shows a detailed simulation of an old TV set showing various test patterns, with various picture artifacts like snow, bloom, distortion, ghosting, and hash noise. It also simulates the TV warming up. It will cycle through 12 channels, some with images you give it, and some with color bars or nothing but static. By Trevor Blackwell.
 TryExec=xanalogtv
 Exec=xanalogtv -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

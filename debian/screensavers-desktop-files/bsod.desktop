@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=BSOD
 Comment=BSOD stands for ``Blue Screen of Death.'' The finest in personal computer emulation, this hack simulates popular screen savers from a number of less robust operating systems. Written by Jamie Zawinski.
 TryExec=bsod
 Exec=bsod -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

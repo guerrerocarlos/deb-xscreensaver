@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=AntInspect
 Comment=Draws a trio of ants moving their spheres around a circle. Written by Blair Tennessy.
 TryExec=antinspect
 Exec=antinspect -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

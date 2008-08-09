@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Pedal
 Comment=This is sort of a combination spirograph/string-art. It generates a large, complex polygon, and lets the X server do the bulk of the work by giving it an even/odd winding rule. Written by Dale Moore, based on some ancient PDP-11 code.
 TryExec=pedal
 Exec=pedal -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

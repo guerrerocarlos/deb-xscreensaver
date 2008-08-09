@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Regular 4D Polytopes
 Comment=This program shows one of the six regular 4D polytopes rotating in 4D. Written by Carsten Steger, inspired by H.S.M Coxeter's book "Regular Polytopes", 3rd Edition, Dover Publications, Inc., 1973, and Thomas Banchoff's book "Beyond the Third Dimension: Geometry, Computer Graphics, and Higher Dimensions", Scientific American Library, 1990.
 TryExec=polytopes
 Exec=polytopes -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

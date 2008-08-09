@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Rorschach
 Comment=This generates random inkblot patterns. The algorithm is deceptively simple for how well it works; it merely walks a dot around the screen randomly, and then reflects the image horizontally, vertically, or both. Any deep-seated neurotic tendencies which this program reveals are your own problem. Written by Jamie Zawinski.
 TryExec=rorschach
 Exec=rorschach -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

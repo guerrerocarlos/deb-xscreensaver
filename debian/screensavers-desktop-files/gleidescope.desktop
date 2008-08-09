@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Gleidescope
 Comment=An OpenGL kaleidescope that operates on your desktop image, or on image files loaded from disk. Written by andrew dean.
 TryExec=gleidescope
 Exec=gleidescope -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Stairs
 Comment=by Marcelo Vianna's third Escher GL hack, this one draws an ``infinite'' staircase.
 TryExec=stairs
 Exec=stairs -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Lockward
 Comment=A translucent spinning, blinking thing. Sort of a cross between the wards in an old combination lock and those old backlit information displays that animated and changed color via polarized light. Written by Leo L. Schwab; August, 2007.
 TryExec=lockward
 Exec=lockward -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

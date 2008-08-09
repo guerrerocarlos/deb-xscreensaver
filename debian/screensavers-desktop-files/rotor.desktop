@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Rotor
 Comment=Another ancient xlock demo, this one by Tom Lawrence. It draws a line segment moving along a complex spiraling curve.
 TryExec=rotor
 Exec=rotor -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

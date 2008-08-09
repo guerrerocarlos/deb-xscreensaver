@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=topBlock
 Comment=Creates a 3D world with dropping blocks that build up and up. Written by rednuht; 2006.
 TryExec=topblock
 Exec=topblock -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

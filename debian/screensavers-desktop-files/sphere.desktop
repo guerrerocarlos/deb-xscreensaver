@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Sphere
 Comment=Another of the classic screenhacks of the distant past, this one draws shaded spheres in multiple colors. This hack traces its lineage back to Tom Duff in 1982.
 TryExec=sphere
 Exec=sphere -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

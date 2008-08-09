@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Superquadrics
 Comment=Ed Mackey reports that he wrote the first version of this program in BASIC on a Commodore 64 in 1987, as a 320x200 black and white wireframe. Now it is GL and has specular reflections.
 TryExec=superquadrics
 Exec=superquadrics -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

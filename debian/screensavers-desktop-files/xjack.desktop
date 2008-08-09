@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Xjack
 Comment=This program behaves schizophrenically and makes a lot of typos. Written by Jamie Zawinski. If you haven't seen Stanley Kubrick's masterpiece, ``The Shining,'' you won't get it. Those who have describe this hack as ``inspired.''
 TryExec=xjack
 Exec=xjack -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

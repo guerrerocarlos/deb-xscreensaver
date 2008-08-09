@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Mismunch
 Comment=Munching errors! This is a creatively broken misimplementation of the classic munching squares graphics hack. Written by Steven Hazel.
 TryExec=mismunch
 Exec=mismunch -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

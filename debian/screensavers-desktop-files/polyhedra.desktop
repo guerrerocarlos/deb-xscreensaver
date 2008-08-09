@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Polyhedra
 Comment=Displays different 3D solids and some information about each. A new solid is chosen every few seconds. There are 75 uniform polyhedra, plus 5 infinite sets of prisms and antiprisms; including their duals brings the total to 160. Written by Dr. Zvi Har'El and Jamie Zawinski.
 TryExec=polyhedra
 Exec=polyhedra -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

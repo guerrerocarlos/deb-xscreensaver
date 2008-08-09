@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Timetunnel
 Comment=Draws an animation similar to the opening and closing effects on the Dr. Who television show. Written by Sean P. Brennan.
 TryExec=timetunnel
 Exec=timetunnel -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

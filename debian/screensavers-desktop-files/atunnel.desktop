@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Atunnel
 Comment=Draws an animation of a textured tunnel in GL. Requires OpenGL, and a machine with fast hardware support for texture maps. Written by Eric Lassauge and Roman Podobedov.
 TryExec=atunnel
 Exec=atunnel -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

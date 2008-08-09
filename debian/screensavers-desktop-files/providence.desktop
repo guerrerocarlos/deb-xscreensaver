@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Providence
 Comment=The providence code displays an eye, shrouded in glory, set upon the base of a pyramid. Written by Blair Tennessy.
 TryExec=providence
 Exec=providence -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

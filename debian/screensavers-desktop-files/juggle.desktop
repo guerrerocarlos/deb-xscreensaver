@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Juggle
 Comment=Draws a juggling stick-man. Written by Tim Auckland.
 TryExec=juggle
 Exec=juggle -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

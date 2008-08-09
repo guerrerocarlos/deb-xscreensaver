@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=MemScroller
 Comment=This draws a dump of its own process memory scrolling across the screen in three windows at three different rates. Written by Jamie Zawinski.
 TryExec=memscroller
 Exec=memscroller -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

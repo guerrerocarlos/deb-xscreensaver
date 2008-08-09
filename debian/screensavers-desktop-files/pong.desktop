@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Pong
 Comment=The pong program simulates an ancient Pong home video game, as well as various artifacts from displaying it on a color TV set. Written by Jeremy English and Trevor Blackwell.
 TryExec=pong
 Exec=pong -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

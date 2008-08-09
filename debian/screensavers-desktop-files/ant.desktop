@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Langton's Ant
 Comment=A cellular automation that is really a two-dimensional Turing machine. Written by David Bagley.
 TryExec=ant
 Exec=ant -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

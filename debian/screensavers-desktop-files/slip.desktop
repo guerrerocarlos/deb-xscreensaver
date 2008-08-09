@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Slip
 Comment=This program throws some random bits on the screen, then sucks them through a jet engine and spews them out the other side. To avoid turning the image completely to mush, every now and then it will and then it interjects some splashes of color into the scene, or go into a spin cycle, or stretch the image like taffy, or (this is my addition) grab an image of your current desktop to chew on. Originally written by Scott Draves; whacked on by Jamie Zawinski.
 TryExec=slip
 Exec=slip -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

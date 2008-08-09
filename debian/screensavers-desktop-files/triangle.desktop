@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Triangle
 Comment=Generates random mountain ranges using iterative subdivision of triangles. Written by Tobias Gloth.
 TryExec=triangle
 Exec=triangle -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

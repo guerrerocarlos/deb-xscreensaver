@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Eruption
 Comment=An exposive version of XFlame. By W.P. van Paassen.
 TryExec=eruption
 Exec=eruption -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

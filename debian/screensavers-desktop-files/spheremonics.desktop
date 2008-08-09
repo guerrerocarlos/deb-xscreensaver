@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Spheremonics
 Comment=These closed objects are commonly called spherical harmonics, although they are only remotely related to the mathematical definition found in the solution to certain wave functions, most notable the eigenfunctions of angular momentum operators. Written by Paul Bourke and Jamie Zawinski.
 TryExec=spheremonics
 Exec=spheremonics -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

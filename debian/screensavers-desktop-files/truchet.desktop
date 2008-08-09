@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Truchet
 Comment=This draws line- and arc-based Truchet patterns that tile the screen. Written by Adrian Likins.
 TryExec=truchet
 Exec=truchet -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

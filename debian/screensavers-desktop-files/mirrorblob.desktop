@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=MirrorBlob
 Comment=Draws a wobbly blob that distorts the image behind it. Requires OpenGL hardware acceleration for nice animation. Written by Jon Dowdall.
 TryExec=mirrorblob
 Exec=mirrorblob -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

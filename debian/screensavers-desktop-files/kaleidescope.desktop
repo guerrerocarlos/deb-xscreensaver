@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Kaleidescope
 Comment=Another clone of an ancient meme, consisting largely of frenetic rotational motion of colored lines. This one is by Ron Tapia. The motion is nice, but I think it needs more solids, or perhaps just brighter colors. More variations in the rotational speed might help, too.
 TryExec=kaleidescope
 Exec=kaleidescope -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

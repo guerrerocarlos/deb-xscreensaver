@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Euler2d
 Comment=Simulates two dimensional Incompressible Inviscid Fluid Flow. Written by Stephen Montgomery-Smith.
 TryExec=euler2d
 Exec=euler2d -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Pipes
 Comment=If you've ever been in the same room with a Windows NT machine, you've probably seen this GL hack. This version is by Marcelo Vianna.
 TryExec=pipes
 Exec=pipes -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

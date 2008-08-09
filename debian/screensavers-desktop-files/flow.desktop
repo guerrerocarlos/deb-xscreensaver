@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Flow
 Comment=Strange attractors formed of flows in a 3D differential equation phase space. Written by Tim Auckland.
 TryExec=flow
 Exec=flow -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

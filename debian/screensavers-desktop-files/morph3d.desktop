@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Morph3D
 Comment=Another 3d shape-changing GL hack, by Marcelo Vianna. It has the same shiny-plastic feel as Superquadrics, as many computer-generated objects do...
 TryExec=morph3d
 Exec=morph3d -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

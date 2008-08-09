@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=AntMaze
 Comment=Antmaze draws a few views of a few ants walking around in a simple maze. Written by Blair Tennessy.
 TryExec=antmaze
 Exec=antmaze -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

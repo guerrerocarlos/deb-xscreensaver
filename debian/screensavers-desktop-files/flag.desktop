@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Flag
 Comment=This draws a waving colored flag, that undulates its way around the screen. The trick is the flag can contain arbitrary text and images. By default, it displays either the current system name and OS type, or a picture of ``Bob,'' but you can replace the text or the image with a command-line option. Written by Charles Vidal and Jamie Zawinski.
 TryExec=flag
 Exec=flag -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

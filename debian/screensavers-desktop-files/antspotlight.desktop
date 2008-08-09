@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=AntSpotlight
 Comment=Antspotlight draws an ant (with a headlight) who walks on top of an image of your desktop or other image. Written by Blair Tennessy.
 TryExec=antspotlight
 Exec=antspotlight -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

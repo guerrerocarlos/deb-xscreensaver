@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Forest
 Comment=This draws fractal trees. Written by Peter Baumung. Everybody loves fractals, right?
 TryExec=forest
 Exec=forest -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

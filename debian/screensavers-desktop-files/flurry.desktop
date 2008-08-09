@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Flurry
 Comment=This port of the OSX screensaver of the same name draws a colourful star(fish)like flurry of particles. xscreensaver port by Tobias Sargeant <tobias.sargeant@bigpond.com> Original Mac version by Calum Robinson <calumr@mac.com> http://homepage.mac.com/calumr
 TryExec=flurry
 Exec=flurry -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Xlyap
 Comment=This generates pretty fractal pictures by doing funky math involving the ``Lyapunov exponent.'' It has a cool interactive mode, too. Written by Ron Record.
 TryExec=xlyap
 Exec=xlyap -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

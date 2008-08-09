@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=LCDScrub
 Comment=
 TryExec=lcdscrub
 Exec=lcdscrub -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

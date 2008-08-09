@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Zoom
 Comment=Zooms in on a part of the screen and then moves around. With the -lenses option the result is like looking through many overlapping lenses rather than just a simple zoom. Written by James Macnicol.
 TryExec=zoom
 Exec=zoom -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

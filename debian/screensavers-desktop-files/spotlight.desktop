@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Spotlight
 Comment=Draws a spotlight scanning across a black screen, illuminating the underlying desktop when it passes. Written by Rick Schultz.
 TryExec=spotlight
 Exec=spotlight -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

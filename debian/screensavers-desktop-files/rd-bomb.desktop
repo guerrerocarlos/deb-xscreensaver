@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=RD-Bomb
 Comment=Another variation of the `Bomb' program by Scott Draves. This draws a grid of growing square-like shapes that, once they overtake each other, react in unpredictable ways. ``RD'' stands for reaction-diffusion.
 TryExec=rd-bomb
 Exec=rd-bomb -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

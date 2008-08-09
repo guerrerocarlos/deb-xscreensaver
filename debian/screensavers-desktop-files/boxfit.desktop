@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=BoxFit
 Comment=Packs the screen with growing squares or circles, colored according to a horizontal or vertical gradient, or according to the colors of the desktop or a loaded image file. The objects grow until they touch, then stop. When the screen is full, they shrink away and the process restarts. Written by Jamie Zawinski.
 TryExec=boxfit
 Exec=boxfit -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

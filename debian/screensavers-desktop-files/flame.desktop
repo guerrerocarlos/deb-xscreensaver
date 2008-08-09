@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Flame
 Comment=Another iterative fractal generator. Written by Scott Draves.
 TryExec=flame
 Exec=flame -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

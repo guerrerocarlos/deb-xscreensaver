@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Klein
 Comment=This draws a visualization of a Klein bottle or some other interesting parametric surfaces. Written by Andrey Mirtchovski.
 TryExec=klein
 Exec=klein -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

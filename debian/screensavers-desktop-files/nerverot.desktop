@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=NerveRot
 Comment=Draws different shapes composed of nervously vibrating squiggles, as if seen through a camera operated by a monkey on crack. By Dan Bornstein.
 TryExec=nerverot
 Exec=nerverot -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

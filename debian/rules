@@ -99,13 +99,14 @@ binary-arch:	build
 	dh_installdirs -a
 	dh_installdocs -a
 	dh_installchangelogs -a
-	# install .desktop files used by gnome-screensaver
+	# install .desktop files used by gnome-screensaver etc
 	mkdir -p $(CURDIR)/debian/tmp/usr/share/applications/screensavers
 	cp $(CURDIR)/debian/screensavers-desktop-files/*.desktop \
 		$(CURDIR)/debian/tmp/usr/share/applications/screensavers/
+	for i in debian/tmp/usr/share/applications/screensavers/*; do \
+		cat debian/screensavers-desktop.stub >> $${i}; done
 	#
-	# Adding a `x` at the end of all manpages:
-	#for i in $$( ls debian/tmp/usr/share/man/man6/ ); do mv debian/tmp/usr/share/man/man6/$$i debian/tmp/usr/share/man/man6/$$( echo $$i )x; done 
+	# Adding an `x` at the end of all manpage file name extensions:
 	for i in debian/tmp/usr/share/man/man6/*; do mv $${i} $${i}x; done
 	mv debian/tmp/usr/share/man/man6/xscreensaver-gl-helper.6x debian/tmp/usr/share/man/man6/xscreensaver-gl-helper.6
 	dh_movefiles -a

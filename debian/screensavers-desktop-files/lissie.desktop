@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Lissie
 Comment=Another Lissajous figure. This one draws the progress of circular shapes along a path. Written by Alexander Jolk.
 TryExec=lissie
 Exec=lissie -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

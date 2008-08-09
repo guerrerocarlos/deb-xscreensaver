@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Apollonian
 Comment=Packs a large circle with smaller circles, demonstrating the Descartes Circle Theorem. Written by Allan R. Wilks and David Bagley.
 TryExec=apollonian
 Exec=apollonian -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

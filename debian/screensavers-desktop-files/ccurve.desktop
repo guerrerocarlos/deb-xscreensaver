@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=C Curve
 Comment=Generates self-similar linear fractals, including the classic ``C Curve.'' Written by Rick Campbell.
 TryExec=ccurve
 Exec=ccurve -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

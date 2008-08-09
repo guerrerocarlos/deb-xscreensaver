@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Menger
 Comment=This draws the three-dimensional variant of the recursive Menger Gasket, a cube-based fractal object analagous to the Sierpinski Tetrahedron. Written by Jamie Zawinski.
 TryExec=menger
 Exec=menger -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

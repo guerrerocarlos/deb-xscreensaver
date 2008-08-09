@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Helix
 Comment=This repeatedly generates spirally string-art-ish patterns. Written by Jamie Zawinski.
 TryExec=helix
 Exec=helix -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

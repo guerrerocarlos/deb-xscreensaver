@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=FlipFlop
 Comment=Flipflop draws a grid of 3D colored tiles that change positions with each other. Written by Kevin Ogden.
 TryExec=flipflop
 Exec=flipflop -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

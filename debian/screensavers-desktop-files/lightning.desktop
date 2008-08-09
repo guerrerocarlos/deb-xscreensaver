@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Lightning
 Comment=This one draws crackling fractal lightning bolts. It's simple, direct, and to the point. If only it had sound... Written by Keith Romberg.
 TryExec=lightning
 Exec=lightning -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

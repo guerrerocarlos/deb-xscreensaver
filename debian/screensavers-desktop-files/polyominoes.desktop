@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Polyominoes
 Comment=Repeatedly attempts to completely fill a rectangle with irregularly-shaped puzzle pieces. Written by Stephen Montgomery-Smith.
 TryExec=polyominoes
 Exec=polyominoes -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

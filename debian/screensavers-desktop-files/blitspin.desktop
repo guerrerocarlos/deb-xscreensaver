@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=BlitSpin
 Comment=The ``blitspin'' hack repeatedly rotates a bitmap by 90 degrees by using logical operations: the bitmap is divided into quadrants, and the quadrants are shifted clockwise. Then the same thing is done again with progressively smaller quadrants, except that all sub-quadrants of a given size are rotated in parallel. Written by Jamie Zawinski based on some cool SmallTalk code seen in in Byte Magazine in 1981. As you watch it, the image appears to dissolve into static and then reconstitute itself, but rotated. You can provide the image to use, as an XBM or XPM file, or tell it to grab a screen image and rotate that.
 TryExec=blitspin
 Exec=blitspin -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

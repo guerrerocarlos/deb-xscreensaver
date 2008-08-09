@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=DangerBall
 Comment=Draws a ball that periodically extrudes many random spikes. Ouch! Written by Jamie Zawinski.
 TryExec=dangerball
 Exec=dangerball -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Endgame
 Comment=Black slips out of three mating nets, but the fourth one holds him tight! A brilliant composition! Written by Blair Tennessy.
 TryExec=endgame
 Exec=endgame -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=WhirlyGig
 Comment=Draws zooming chains of sinusoidal spots. Written by Ashton Trey Belew.
 TryExec=whirlygig
 Exec=whirlygig -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

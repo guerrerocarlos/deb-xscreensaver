@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Flying Toasters
 Comment=A fleet of 3d space-age jet-powered flying toasters (and toast!) Inspired by the ancient Berkeley Systems After Dark flying toasters. By Jamie Zawinski and Baconmonkey.
 TryExec=flyingtoasters
 Exec=flyingtoasters -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

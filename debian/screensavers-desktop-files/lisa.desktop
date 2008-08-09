@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Lisa
 Comment=This draws Lisajous loops, by Caleb Cullen. Remember that device they had the Phantom Zone prisoners in during their trial in Superman? I think that was one of these.
 TryExec=lisa
 Exec=lisa -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Noseguy
 Comment=A little man with a big nose wanders around your screen saying things. The things which he says are the output of a program or the contents of a file or URL, as configured on the "Advanced" tab of the main Screensaver Preferences window. By Dan Heller and Jamie Zawinski.
 TryExec=noseguy
 Exec=noseguy -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

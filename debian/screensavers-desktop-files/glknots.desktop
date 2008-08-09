@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=GLKnots
 Comment=Generates some twisting 3d knot patterns. Spins 'em around. Written by Jamie Zawinski.
 TryExec=glknots
 Exec=glknots -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

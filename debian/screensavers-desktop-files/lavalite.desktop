@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=LavaLite
 Comment=Draws a 3D Simulation a Lava Lite(r): odd-shaped blobs of a mysterious substance are heated, slowly rise to the top of the bottle, and then drop back down as they cool. This program requires OpenGL and a fairly fast machine (both CPU and 3D performance.) Written by Jamie Zawinski. "LAVA LITE(r) and the configuration of the LAVA(r) brand motion lamp are registered trademarks of Haggerty Enterprises, Inc. The configuration of the globe and base of the motion lamp are registered trademarks of Haggerty Enterprises, Inc. in the U.S.A. and in other countries around the world."
 TryExec=lavalite
 Exec=lavalite -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

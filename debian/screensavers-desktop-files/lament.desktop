@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Lament
 Comment=Animates a simulation of Lemarchand's Box, repeatedly solving itself. Requires OpenGL, and a machine with fast hardware support for texture maps. Warning: occasionally opens doors. Written by Jamie Zawinski.
 TryExec=lament
 Exec=lament -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver

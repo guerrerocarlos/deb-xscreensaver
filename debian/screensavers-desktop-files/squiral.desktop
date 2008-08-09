@@ -1,11 +1,6 @@
 
 [Desktop Entry]
-Encoding=UTF-8
 Name=Squiral
 Comment=Draws a set of interacting, square-spiral-producing automata. The spirals grow outward until they hit something, then they go around it. Written by Jeff Epler.
 TryExec=squiral
 Exec=squiral -root
-StartupNotify=false
-Terminal=false
-Type=Application
-Categories=Screensaver
