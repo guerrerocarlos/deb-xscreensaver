@@ -105,10 +105,7 @@ binary-arch:	build
 		$(CURDIR)/debian/tmp/usr/share/applications/screensavers/
 	for i in debian/tmp/usr/share/applications/screensavers/*; do \
 		cat debian/screensavers-desktop.stub >> $${i}; done
-	#
-	# Adding an `x` at the end of all manpage file name extensions:
-	for i in debian/tmp/usr/share/man/man6/*; do mv $${i} $${i}x; done
-	mv debian/tmp/usr/share/man/man6/xscreensaver-gl-helper.6x debian/tmp/usr/share/man/man6/xscreensaver-gl-helper.6
+	mv debian/tmp/usr/share/man/man6/xscreensaver-gl-helper.6x debian/tmp/usr/share/man/man1/xscreensaver-gl-helper.1
 	dh_movefiles -a
 	dh_install -a
 	# make sure we got everything that was installed

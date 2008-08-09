@@ -1,8 +1,19 @@
-Index: xscreensaver-5.04/hacks/Makefile.in
+Index: xscreensaver/hacks/Makefile.in
 ===================================================================
---- xscreensaver-5.04.orig/hacks/Makefile.in	2007-11-13 09:39:36.000000000 +0100
-+++ xscreensaver-5.04/hacks/Makefile.in	2007-12-08 17:46:35.000000000 +0100
-@@ -617,7 +617,7 @@
+--- xscreensaver.orig/hacks/Makefile.in	2008-08-10 01:48:29.000000000 +0200
++++ xscreensaver/hacks/Makefile.in	2008-08-10 01:50:02.000000000 +0200
+@@ -18,8 +18,8 @@
+ datadir		= @datadir@
+ mandir		= @mandir@
+ libexecdir	= @libexecdir@
+-mansuffix	= 6
+-manNdir		= $(mandir)/man$(mansuffix)
++mansuffix	= 6x
++manNdir		= $(mandir)/man6
+ 
+ HACKDIR		= @HACKDIR@
+ HACK_CONF_DIR	= @HACK_CONF_DIR@
+@@ -621,7 +621,7 @@
  	$(CC_HACK) -o $@ $@.o	$(HACK_OBJS) $(HACK_LIBS)
  
  maze:		maze.o		$(HACK_OBJS) $(ERASE) $(LOGO)
