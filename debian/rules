@@ -95,7 +95,7 @@ binary-arch:	build
 	$(MAKE) install_prefix=$(CURDIR)/debian/tmp \
 		GTK_DATADIR=/usr/share KDEDIR=/usr install
 	# Adding `NoDisplay=True' in gnome-screensaver-properties.desktop
-	echo "NoDisplay=true" >> debian/tmp/usr/share/applications/gnome-screensaver-properties.desktop
+	# echo "NoDisplay=true" >> debian/tmp/usr/share/applications/screensaver-properties.desktop
 	dh_installdirs -a
 	dh_installdocs -a
 	dh_installchangelogs -a
