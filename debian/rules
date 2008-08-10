@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-# Debian rules file foor xscreensaver (1.26), adapted by Larry Daffner from
+# Debian rules file for xscreensaver, adapted by Larry Daffner from
 # Sample debian.rules file - for GNU Hello (1.3).
 # Copyright 1994,1995 by Ian Jackson.
 # I hereby give you perpetual unlimited permission to copy,
@@ -7,14 +7,7 @@
 # my name from the file itself.  (I assert my moral right of
 # paternity under the Copyright, Designs and Patents Act 1988.)
 # This file may have to be extensively modified
-
-# There used to be `source' and `diff' targets in this file, and many
-# packages also had `changes' and `dist' targets.  These functions
-# have been taken over by dpkg-source, dpkg-genchanges and
-# dpkg-buildpackage in a package-independent way, and so these targets
-# are obsolete.
-
-# Modified on July 2007 by Jose Luis Rivas.
+# Modified by Jose Luis Rivas and Tormod Volden and others
 
 # Including quilt.make
 include /usr/share/quilt/quilt.make
@@ -26,20 +19,25 @@ build: patch build-stamp
 build-stamp:
 	dh_testdir
 
-	cp debian/xscreensaver.svg utils/images/xscreensaver.svg
-
-	# generate POT file for translators
+	# Generate POT file for translators
 	cd po; intltool-update --verbose -p; cd ..
 
-	# these are for some reason in the upstream tarball, preserve them
-	[ -f driver/XScreenSaver_ad.h.upstream ] || [ ! -f driver/XScreenSaver_ad.h ] || \
-		mv driver/XScreenSaver_ad.h driver/XScreenSaver_ad.h.upstream
-	[ -f driver/XScreenSaver_Xm_ad.h.upstream ] || [ ! -f driver/XScreenSaver_Xm_ad.h ] || \
-		mv driver/XScreenSaver_Xm_ad.h driver/XScreenSaver_Xm_ad.h.upstream
+	# These are for some reason in the upstream tarball, preserve them
+	[ -f driver/XScreenSaver_ad.h.upstream ] || \
+	  [ ! -f driver/XScreenSaver_ad.h ] || \
+	    mv driver/XScreenSaver_ad.h driver/XScreenSaver_ad.h.upstream
+	[ -f driver/XScreenSaver_Xm_ad.h.upstream ] || \
+	  [ ! -f driver/XScreenSaver_Xm_ad.h ] || \
+	    mv driver/XScreenSaver_Xm_ad.h driver/XScreenSaver_Xm_ad.h.upstream
 
-	# configs files are outdated so we build with the updated ones
-	[ ! -f config.sub.upstream ] && mv config.sub config.sub.upstream && cp /usr/share/misc/config.sub config.sub
-	[ ! -f config.guess.upstream ] && mv config.guess config.guess.upstream && cp /usr/share/misc/config.guess config.guess
+	# Configs files will be updated, so preserve originals
+	[ ! -f config.sub.upstream ] && \
+	  mv config.sub config.sub.upstream && \
+	    cp /usr/share/misc/config.sub config.sub
+	[ ! -f config.guess.upstream ] && \
+	  mv config.guess config.guess.upstream && \
+	    cp /usr/share/misc/config.guess config.guess
+
 	# Configure for xscreensaver
 	./configure --build $(DEB_BUILD_GNU_TYPE) --host $(DEB_HOST_GNU_TYPE) \
 		--prefix=/usr \
@@ -76,9 +74,10 @@ clean-patched:
 	rm -f po/.intltool-merge-cache
 	[ ! -f config.sub.upstream ] || mv config.sub.upstream config.sub
 	[ ! -f config.guess.upstream ] || mv config.guess.upstream config.guess
-	[ ! -f driver/XScreenSaver_ad.h.upstream ] || mv driver/XScreenSaver_ad.h.upstream driver/XScreenSaver_ad.h
-	[ ! -f driver/XScreenSaver_Xm_ad.h.upstream ] || mv driver/XScreenSaver_Xm_ad.h.upstream driver/XScreenSaver_Xm_ad.h
-	rm -f utils/images/xscreensaver.svg
+	[ ! -f driver/XScreenSaver_ad.h.upstream ] || \
+	  mv driver/XScreenSaver_ad.h.upstream driver/XScreenSaver_ad.h
+	[ ! -f driver/XScreenSaver_Xm_ad.h.upstream ] || \
+	  mv driver/XScreenSaver_Xm_ad.h.upstream driver/XScreenSaver_Xm_ad.h
 	dh_clean
 
 binary-indep:	build
@@ -94,34 +93,28 @@ binary-arch:	build
 		debian/xscreensaver-gl-extra
 	$(MAKE) install_prefix=$(CURDIR)/debian/tmp \
 		GTK_DATADIR=/usr/share KDEDIR=/usr install
-	# Adding `NoDisplay=True' in gnome-screensaver-properties.desktop
-	# echo "NoDisplay=true" >> debian/tmp/usr/share/applications/screensaver-properties.desktop
 	dh_installdirs -a
 	dh_installdocs -a
 	dh_installchangelogs -a
-	# install .desktop files used by gnome-screensaver etc
-	mkdir -p $(CURDIR)/debian/tmp/usr/share/applications/screensavers
-	cp $(CURDIR)/debian/screensavers-desktop-files/*.desktop \
-		$(CURDIR)/debian/tmp/usr/share/applications/screensavers/
+	# Install .desktop files used by gnome-screensaver etc
+	mkdir -p debian/tmp/usr/share/applications/screensavers
+	cp debian/screensavers-desktop-files/*.desktop \
+		debian/tmp/usr/share/applications/screensavers/
 	for i in debian/tmp/usr/share/applications/screensavers/*; do \
 		cat debian/screensavers-desktop.stub >> $${i}; done
-	mv debian/tmp/usr/share/man/man6/xscreensaver-gl-helper.6x debian/tmp/usr/share/man/man1/xscreensaver-gl-helper.1
+	mv debian/tmp/usr/share/man/man6/xscreensaver-gl-helper.6x \
+		debian/tmp/usr/share/man/man1/xscreensaver-gl-helper.1
 	dh_movefiles -a
 	dh_install -a
-	# make sure we got everything that was installed
-	# test `find debian/tmp -type f -print | wc -l` -eq 0
+	# Lists anything that was installed but not packaged
 	find debian/tmp -type f -print
 	dh_installpam -a
 	dh_installmenu -a
-	# install app-defaults to proper places
+	# Install app-defaults to proper places
 	mv debian/xscreensaver-data/etc/X11/app-defaults/XScreenSaver \
 		debian/xscreensaver-gl/etc/X11/app-defaults/XScreenSaver-gl
 	install -m 644 -o root -g root driver/XScreenSaver.ad-nogl \
 		debian/xscreensaver-data/etc/X11/app-defaults/XScreenSaver-nogl
-	# Hopefully prevent nVidia brain damage
-	# This is supposed to prevent accidentially linking against the
-	# binary nvidia drivers. Deinstall or divert them before building!
-	#test ! `eval ldd debian/xscreensaver-gl/usr/lib/xscreensaver/* |grep -q libGLcore && echo $$?`
 	dh_link -a
 	dh_strip -a
 	dh_compress -a
