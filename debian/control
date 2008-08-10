@@ -31,6 +31,7 @@ Description: Automatic screensaver for X
 Package: xscreensaver-data
 Architecture: any
 Depends: ${shlibs:Depends}
+Enhances: xscreensaver, gnome-screensaver
 Conflicts: xscreensaver (<< 5.04-3), kscreensaver-xsavers (<< 4:3.5.9-1)
 Replaces: xscreensaver (<< 5.04-3), gnome-screensaver (<< 2.15.4-0ubuntu1)
 Description: data files to be shared among screensaver frontends
@@ -51,6 +52,7 @@ Description: data files to be shared among screensaver frontends
 Package: xscreensaver-data-extra
 Architecture: any
 Depends: ${shlibs:Depends}, xscreensaver-data (>= 5.04-3), dictionaries-common, libjpeg-progs, netpbm
+Enhances: xscreensaver, gnome-screensaver
 Conflicts: xscreensaver (<< 5.04-3), kscreensaver-xsavers (<< 4:3.5.9-1)
 Replaces: xscreensaver (<< 5.04-3)
 Description: data files to be shared among screensaver frontends
@@ -89,8 +91,8 @@ Description: data files to be shared among screensaver frontends
 Package: xscreensaver-gl
 Architecture: any
 Depends: ${shlibs:Depends}
+Enhances: xscreensaver, gnome-screensaver
 Conflicts: xscreensaver (<< 5.04-3)
-Recommends: xscreensaver
 Description: GL(Mesa) screen hacks for xscreensaver
  XScreenSaver is a modular screen saver and locker for X11,
  containing more than 200 screen savers.
@@ -115,9 +117,9 @@ Description: GL(Mesa) screen hacks for xscreensaver
 Package: xscreensaver-gl-extra
 Architecture: any
 Depends: ${shlibs:Depends}, xscreensaver-gl (>= 5.04-3)
+Enhances: xscreensaver, gnome-screensaver
 Conflicts: xscreensaver (<< 5.04-3)
 Replaces: xscreensaver-gl (<< 5.04-3)
-Recommends: xscreensaver
 Description: GL(Mesa) screen hacks for xscreensaver
  XScreenSaver is a modular screen saver and locker for X11,
  containing more than 200 screen savers.

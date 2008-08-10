@@ -7,6 +7,8 @@ xscreensaver (5.06-1) UNRELEASED; urgency=low
    + Added patch for hacks/Makefile.in.
 
   [ Tormod Volden ]
+  * debian/control: let the hacks packages "enhance" xscreensaver
+    and gnome-screensaver since they can be used independently
   * use upstream xscreensaver-properties.desktop instead of our own
   * move man pages to section 6x in a consistent way
   * ship the lcdscrub man page
