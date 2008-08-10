@@ -9,13 +9,15 @@ xscreensaver (5.06-1) UNRELEASED; urgency=low
   [ Tormod Volden ]
   * use upstream xscreensaver-properties.desktop instead of our own
   * move man pages to section 6x in a consistent way
+  * ship the lcdscrub man page
   * factor out common stuff from hacks desktop files into one stub
     file for easier mass modification
   * add OnlyShowIn=GNOME to desktop files (fixes lintian warnings)
   * add -randomize to truchet and xlyap desktop files
   * add desktop file for m6502, abstractile and cwaves
   * fixed up names in several desktop files
-  * display man pages correctly in Preferences dialog
+  * use yelp to display man pages in Preferences dialog if available,
+    and do the right thing in a terminal window if not
 
  -- Jose Luis Rivas <ghostbar38@gmail.com>  Tue, 22 Jul 2008 23:33:51 -0430
 

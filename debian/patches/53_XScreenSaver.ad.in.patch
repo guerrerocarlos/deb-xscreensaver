@@ -1,7 +1,7 @@
 Index: xscreensaver/driver/XScreenSaver.ad.in
 ===================================================================
---- xscreensaver.orig/driver/XScreenSaver.ad.in	2008-07-23 23:46:19.000000000 +0200
-+++ xscreensaver/driver/XScreenSaver.ad.in	2008-08-10 16:30:11.000000000 +0200
+--- xscreensaver.orig/driver/XScreenSaver.ad.in	2008-08-10 16:30:56.000000000 +0200
++++ xscreensaver/driver/XScreenSaver.ad.in	2008-08-10 17:42:21.000000000 +0200
 @@ -60,7 +60,7 @@
  *textLiteral:		XScreenSaver
  *textFile:		@DEFAULT_TEXT_FILE@
@@ -11,55 +11,51 @@ Index: xscreensaver/driver/XScreenSaver.ad.in
  
  *overlayTextForeground:	#FFFF00
  *overlayTextBackground:	#000000
-@@ -93,15 +93,17 @@
+@@ -93,9 +93,13 @@
  !
  !   Gnome 2.4, 2.6: (yelp can't display man pages, as of 2.6.3)
  !
 -@GNOME24@*loadURL: @WITH_BROWSER@ '%s'
 -@GNOME24@*manualCommand: gnome-terminal --title '%s manual' \
 -@GNOME24@		--command '/bin/sh -c "man %s; read foo"'
-+! On Debian, we build with GNOME so this one will always be used
-+! but the build packages should work on non-GNOME systems as well
++! Debian: We build with GNOME so this one will always be used,
++! but the build packages should work on non-GNOME systems as well.
++! Use yelp if installed, since it works fine in current GNOME.
 +@GNOME24@*loadURL: x-www-browser '%s'
-+@GNOME24@*manualCommand: x-terminal-emulator -title '%s manual' \
-+@GNOME24@		-e /bin/sh -c "man %s; read foo"
++@GNOME24@*manualCommand: yelp man:%s || \
++@GNOME24@			x-terminal-emulator -title '%s manual' \
++@GNOME24@			  -e /bin/sh -c "man %s"
  !
  !   Gnome 2.2:
  !
--@GNOME22@*loadURL: gnome-url-show '%s'
--@GNOME22@*manualCommand: gnome-terminal --title '%s manual' \
--@GNOME22@		--command '/bin/sh -c "man %s; read foo"'
-+@GNOME22@*loadURL: x-www-browser '%s'
-+@GNOME22@*manualCommand: x-terminal-emulator -title '%s manual' \
-+@GNOME22@		-e /bin/sh -c "man %s; read foo"
- !
- !   Gnome 1.4:
- !
-@@ -110,8 +112,10 @@
+@@ -110,9 +114,12 @@
  !
  !   non-Gnome systems:
  !
 -@NOGNOME@*loadURL: firefox '%s' || mozilla '%s' || netscape '%s'
 -@NOGNOME@*manualCommand: xterm -sb -fg black -bg gray75 -T '%s manual' \
-+! This will be used when _building_ without GNOME
+-@NOGNOME@		    -e /bin/sh -c 'man "%s" ; read foo'
++! Debian: This will be used when _building_ without GNOME
 +! Be prepared for the day we build it without GNOME on Debian
 +@NOGNOME@*loadURL: x-www-browser '%s'
-+@NOGNOME@*manualCommand: x-terminal-emulator -title '%s manual' \
- @NOGNOME@		    -e /bin/sh -c 'man "%s" ; read foo'
++@NOGNOME@*manualCommand: yelp man:%s || \
++@NOGNOME@			x-terminal-emulator -title '%s manual' \
++@NOGNOME@			  -e /bin/sh -c 'man "%s"'
  
  
-@@ -128,7 +132,9 @@
+ ! The format used for printing the date and time in the password dialog box
+@@ -128,7 +135,9 @@
  ! (That button does not appear on the dialog if this program does not exist.)
  ! For Gnome: probably "gdmflexiserver -ls".  KDE, probably "kdmctl reserve".
  !
 -@NEW_LOGIN_COMMAND_P@*newLoginCommand:	@NEW_LOGIN_COMMAND@
 +! @NEW_LOGIN_COMMAND_P@*newLoginCommand:	@NEW_LOGIN_COMMAND@
-+! Hard-wire the command in case the build machine does not have gdm
++! Debian: Hard-wire the command in case the build machine does not have gdm
 +*newLoginCommand:	gdmflexiserver -l -a -c FLEXI_XSERVER
  
  
  ! Turning on "installColormap" on 8-bit systems interacts erratically with
-@@ -466,10 +472,11 @@
+@@ -466,10 +475,11 @@
  *Dialog.shadowThickness:	2
  
  *passwd.heading.label:		XScreenSaver %s
