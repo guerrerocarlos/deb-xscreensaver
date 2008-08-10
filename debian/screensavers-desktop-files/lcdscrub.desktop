@@ -1,6 +1,6 @@
 
 [Desktop Entry]
-Name=LCDScrub
+Name=LCDscrub
 Comment=
 TryExec=lcdscrub
 Exec=lcdscrub -root

@@ -1,6 +1,6 @@
 
 [Desktop Entry]
-Name=hypnowheel
+Name=Hypnowheel
 Comment=
 TryExec=hypnowheel
 Exec=hypnowheel -root
