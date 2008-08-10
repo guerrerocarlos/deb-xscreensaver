@@ -56,6 +56,7 @@ usr/lib/xscreensaver/julia
 usr/lib/xscreensaver/kaleidescope
 usr/lib/xscreensaver/kumppa
 usr/lib/xscreensaver/laser
+usr/lib/xscreensaver/lcdscrub
 usr/lib/xscreensaver/lightning
 usr/lib/xscreensaver/lisa
 usr/lib/xscreensaver/lissie
@@ -177,6 +178,7 @@ usr/share/man/man6/julia.6x
 usr/share/man/man6/kaleidescope.6x
 usr/share/man/man6/kumppa.6x
 usr/share/man/man6/laser.6x
+usr/share/man/man6/lcdscrub.6x
 usr/share/man/man6/lightning.6x
 usr/share/man/man6/lisa.6x
 usr/share/man/man6/lissie.6x
@@ -298,6 +300,7 @@ usr/share/xscreensaver/config/julia.xml
 usr/share/xscreensaver/config/kaleidescope.xml
 usr/share/xscreensaver/config/kumppa.xml
 usr/share/xscreensaver/config/laser.xml
+usr/share/xscreensaver/config/lcdscrub.xml
 usr/share/xscreensaver/config/lightning.xml
 usr/share/xscreensaver/config/lisa.xml
 usr/share/xscreensaver/config/lissie.xml
@@ -416,6 +419,7 @@ usr/share/applications/screensavers/julia.desktop
 usr/share/applications/screensavers/kaleidescope.desktop
 usr/share/applications/screensavers/kumppa.desktop
 usr/share/applications/screensavers/laser.desktop
+usr/share/applications/screensavers/lcdscrub.desktop
 usr/share/applications/screensavers/lightning.desktop
 usr/share/applications/screensavers/lisa.desktop
 usr/share/applications/screensavers/lissie.desktop
@@ -476,6 +480,3 @@ usr/share/applications/screensavers/xmatrix.desktop
 usr/share/applications/screensavers/xrayswarm.desktop
 usr/share/applications/screensavers/xspirograph.desktop
 usr/share/applications/screensavers/zoom.desktop
-usr/lib/xscreensaver/lcdscrub
-usr/share/xscreensaver/config/lcdscrub.xml
-usr/share/applications/screensavers/lcdscrub.desktop
