@@ -1,7 +1,7 @@
 usr/bin/xscreensaver
 usr/bin/xscreensaver-command
 usr/bin/xscreensaver-demo
-usr/share/applications/screensaver-properties.desktop
+usr/share/applications/xscreensaver-properties.desktop
 usr/share/locale/ca/LC_MESSAGES/xscreensaver.mo
 usr/share/locale/da/LC_MESSAGES/xscreensaver.mo
 usr/share/locale/de/LC_MESSAGES/xscreensaver.mo

@@ -42,7 +42,7 @@ usr/lib/xscreensaver/stonerview
 usr/lib/xscreensaver/superquadrics
 usr/lib/xscreensaver/topblock
 usr/lib/xscreensaver/voronoi
-usr/share/man/man6/xscreensaver-gl-helper.6
+usr/share/man/man1/xscreensaver-gl-helper.1
 usr/share/man/man6/antinspect.6x
 usr/share/man/man6/antspotlight.6x
 usr/share/man/man6/atunnel.6x
