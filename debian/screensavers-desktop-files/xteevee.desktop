@@ -1,6 +1,0 @@
-
-[Desktop Entry]
-Name=XTeeVee
-Comment=XTeeVee simulates various television problems, including static, loss of vertical hold, and a test pattern. By Greg Knauss.
-TryExec=xteevee
-Exec=xteevee -root
