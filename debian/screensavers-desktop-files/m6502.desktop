@@ -1,0 +1,6 @@
+
+[Desktop Entry]
+Name=M6502
+Comment=The m6502 screensaver emulates a 6502 microprocessor
+TryExec=m6502
+Exec=m6502 -root
