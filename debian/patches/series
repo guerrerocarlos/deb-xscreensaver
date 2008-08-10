@@ -15,7 +15,7 @@
 50_driver_screensaver-properties-desktop.patch
 
 # Needs clean-up before it will apply
-#52_driver_XScreenSaver.ad.in
+#52_driver_XScreenSaver.ad.in.patch
 53_XScreenSaver.ad.in.patch
 
 # overrule upstream 4.23 removal
