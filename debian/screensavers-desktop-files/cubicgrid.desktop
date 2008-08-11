@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=CubicGrid
-Comment=
+Comment=Draws the view of an observer located inside a rotating 3D lattice of colored points. Written by Vasek Potocek.
 TryExec=cubicgrid
 Exec=cubicgrid -root
