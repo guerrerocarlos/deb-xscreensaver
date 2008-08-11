@@ -1,9 +1,10 @@
 xscreensaver (5.07-1) UNRELEASED; urgency=low
 
   * New Upstream Version
-  * XScreensaver.ad.in:
+  * driver/XScreensaver.ad.in:
     + Use ISO time/date format in password dialog
     + Use url as default text method
+  * remove xsublim hack since upstream no more installs it
   * debian/patches: renamed, commented, refreshed patches and series
 
  -- Tormod Volden <debian.tormod@gmail.com>  Mon, 11 Aug 2008 20:39:21 +0200
@@ -11,10 +12,10 @@ xscreensaver (5.07-1) UNRELEASED; urgency=low
 xscreensaver (5.06-1) UNRELEASED; urgency=low
 
   [ Jose Luis Rivas ]
-  * New upstream release.
+  * New upstream release
   * debian/patches:
-   + Deleted patch for xinerama, now is merged upstream.
-   + Added patch for hacks/Makefile.in.
+   + delete patch for xinerama, is now merged upstream
+   + add patch for hacks/Makefile.in
 
   [ Tormod Volden ]
   * debian/control: let the hacks packages "enhance" xscreensaver
