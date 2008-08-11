@@ -42,7 +42,7 @@ extract_entries () {
   XML=$1
 
   XMLNAME=`get_xml_option $XML screensaver name`
-  XMLARG=`get_xml_option $XML command arg | sed 'N; s/\n/ /'` 
+  XMLARG=`get_xml_option $XML command arg | sed ':a; N; s/\n/ /; ta'` 
   XMLEXE="$XMLNAME $XMLARG"
 
   XMLLABEL=`get_xml_option $XML screensaver _label`
