@@ -4,6 +4,7 @@ xscreensaver (5.07-1) UNRELEASED; urgency=low
   * XScreensaver.ad.in:
     + Use ISO time/date format in password dialog
     + Use url as default text method
+  * debian/patches: renamed, commented, refreshed patches and series
 
  -- Tormod Volden <debian.tormod@gmail.com>  Mon, 11 Aug 2008 20:39:21 +0200
 

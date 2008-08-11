@@ -1,3 +1,5 @@
+# This patch was sent upstream 2008-08-11
+
 --- xscreensaver/hacks/Makefile.in.orig	2008-07-23 12:40:11.000000000 -0430
 +++ xscreensaver/hacks/Makefile.in	2008-07-23 12:41:34.000000000 -0430
 @@ -151,7 +151,7 @@ OBJS		= attraction.o blitspin.o bouboule

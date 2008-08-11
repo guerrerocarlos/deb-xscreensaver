@@ -1,4 +1,4 @@
-12_Makefile.in-typo.patch
+12_hacks_Makefile.in-typo.patch
 20_hacks_Makefile.patch
 21_driver_xscreensaver-getimage-video
 22_hacks_barcode.patch
@@ -8,14 +8,9 @@
 30_hacks_xanalogtv.patch
 31_utils_images_logo-50-bad-xpm.patch
 
-# Cosmetic, more modern style
-#40_utils_images_logo-50-xpm.patch
-#41_utils_images_logo-180-xpm.patch
-
 50_driver_screensaver-properties-desktop.patch
 
-# Needs clean-up before it will apply
-#52_driver_XScreenSaver.ad.in.patch
+# the old 52 file is left for reference
 53_XScreenSaver.ad.in.patch
 
 # overrule upstream 4.23 removal

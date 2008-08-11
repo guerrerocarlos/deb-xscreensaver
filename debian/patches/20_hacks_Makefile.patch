@@ -1,3 +1,6 @@
+# We use section 6x (games!) for the hacks, but put them in the
+# man6 directory anyway
+
 Index: xscreensaver/hacks/Makefile.in
 ===================================================================
 --- xscreensaver.orig/hacks/Makefile.in	2008-08-11 21:01:05.000000000 +0200
