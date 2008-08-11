@@ -1,6 +1,9 @@
 xscreensaver (5.07-1) UNRELEASED; urgency=low
 
   * New Upstream Version
+  * XScreensaver.ad.in:
+    + Use ISO time/date format in password dialog
+    + Use url as default text method
 
  -- Tormod Volden <debian.tormod@gmail.com>  Mon, 11 Aug 2008 20:39:21 +0200
 

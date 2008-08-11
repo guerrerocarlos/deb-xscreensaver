@@ -1,7 +1,7 @@
 Index: xscreensaver/hacks/Makefile.in
 ===================================================================
---- xscreensaver.orig/hacks/Makefile.in	2008-08-10 02:20:57.000000000 +0200
-+++ xscreensaver/hacks/Makefile.in	2008-08-10 02:20:59.000000000 +0200
+--- xscreensaver.orig/hacks/Makefile.in	2008-08-11 21:01:05.000000000 +0200
++++ xscreensaver/hacks/Makefile.in	2008-08-11 21:01:08.000000000 +0200
 @@ -18,8 +18,8 @@
  datadir		= @datadir@
  mandir		= @mandir@
@@ -13,7 +13,7 @@ Index: xscreensaver/hacks/Makefile.in
  
  HACKDIR		= @HACKDIR@
  HACK_CONF_DIR	= @HACK_CONF_DIR@
-@@ -621,7 +621,7 @@
+@@ -608,7 +608,7 @@
  	$(CC_HACK) -o $@ $@.o	$(HACK_OBJS) $(HACK_LIBS)
  
  maze:		maze.o		$(HACK_OBJS) $(ERASE) $(LOGO)
@@ -24,8 +24,8 @@ Index: xscreensaver/hacks/Makefile.in
  	$(CC_HACK) -o $@ $@.o	$(HACK_OBJS) $(COL) $(SHM) $(HACK_LIBS)
 Index: xscreensaver/hacks/glx/Makefile.in
 ===================================================================
---- xscreensaver.orig/hacks/glx/Makefile.in	2008-08-10 02:21:19.000000000 +0200
-+++ xscreensaver/hacks/glx/Makefile.in	2008-08-10 02:21:38.000000000 +0200
+--- xscreensaver.orig/hacks/glx/Makefile.in	2008-08-11 20:39:15.000000000 +0200
++++ xscreensaver/hacks/glx/Makefile.in	2008-08-11 21:01:08.000000000 +0200
 @@ -19,8 +19,8 @@
  datadir		= @datadir@
  mandir		= @mandir@

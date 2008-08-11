@@ -1,8 +1,13 @@
 Index: xscreensaver/driver/XScreenSaver.ad.in
 ===================================================================
---- xscreensaver.orig/driver/XScreenSaver.ad.in	2008-08-10 16:30:56.000000000 +0200
-+++ xscreensaver/driver/XScreenSaver.ad.in	2008-08-10 17:42:21.000000000 +0200
-@@ -60,7 +60,7 @@
+--- xscreensaver.orig/driver/XScreenSaver.ad.in	2008-08-11 20:39:15.000000000 +0200
++++ xscreensaver/driver/XScreenSaver.ad.in	2008-08-11 21:26:54.000000000 +0200
+@@ -56,11 +56,11 @@
+ *captureStderr: 	True
+ *ignoreUninstalledPrograms: False
+ 
+-*textMode:		file
++*textMode:		url
  *textLiteral:		XScreenSaver
  *textFile:		@DEFAULT_TEXT_FILE@
  *textProgram:		fortune
@@ -28,7 +33,7 @@ Index: xscreensaver/driver/XScreenSaver.ad.in
  !
  !   Gnome 2.2:
  !
-@@ -110,9 +114,12 @@
+@@ -110,14 +114,19 @@
  !
  !   non-Gnome systems:
  !
@@ -44,7 +49,15 @@ Index: xscreensaver/driver/XScreenSaver.ad.in
  
  
  ! The format used for printing the date and time in the password dialog box
-@@ -128,7 +135,9 @@
+ ! (see the strftime(3) manual page for details.)
+-*dateFormat:		%d-%b-%y (%a); %I:%M %p
++*dateFormat:		%Y-%m-%d %H:%M:%S
++! Original upstream format
++! *dateFormat:		%d-%b-%y (%a); %I:%M %p
+ ! To show the time only:
+ ! *dateFormat:		%I:%M %p
+ ! For 24 hour time:
+@@ -128,7 +137,9 @@
  ! (That button does not appear on the dialog if this program does not exist.)
  ! For Gnome: probably "gdmflexiserver -ls".  KDE, probably "kdmctl reserve".
  !
@@ -55,7 +68,7 @@ Index: xscreensaver/driver/XScreenSaver.ad.in
  
  
  ! Turning on "installColormap" on 8-bit systems interacts erratically with
-@@ -466,10 +475,11 @@
+@@ -414,10 +425,11 @@
  *Dialog.shadowThickness:	2
  
  *passwd.heading.label:		XScreenSaver %s
