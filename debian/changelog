@@ -8,6 +8,8 @@ xscreensaver (5.07-1) UNRELEASED; urgency=low
   * remove xsublim hack since upstream no more installs it
   * add desktop file comment to cubicgrid, hypnowheel and lcdscrub
   * debian/patches: renamed, commented, refreshed patches and series
+  * debian/control: use Suggests xscreensaver instead of Enhances
+    for -data and -gl packages
 
  -- Tormod Volden <debian.tormod@gmail.com>  Tue, 12 Aug 2008 01:03:22 +0200
 
