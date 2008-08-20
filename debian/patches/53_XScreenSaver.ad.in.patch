@@ -6,8 +6,8 @@
 
 Index: xscreensaver/driver/XScreenSaver.ad.in
 ===================================================================
---- xscreensaver.orig/driver/XScreenSaver.ad.in	2008-08-11 22:47:02.000000000 +0200
-+++ xscreensaver/driver/XScreenSaver.ad.in	2008-08-12 00:55:31.000000000 +0200
+--- xscreensaver.orig/driver/XScreenSaver.ad.in	2008-08-20 18:31:19.000000000 +0200
++++ xscreensaver/driver/XScreenSaver.ad.in	2008-08-20 18:34:04.000000000 +0200
 @@ -56,11 +56,11 @@
  *captureStderr: 	True
  *ignoreUninstalledPrograms: False
@@ -74,25 +74,23 @@ Index: xscreensaver/driver/XScreenSaver.ad.in
  
  
  ! Turning on "installColormap" on 8-bit systems interacts erratically with
-@@ -262,7 +273,7 @@
+@@ -262,7 +273,6 @@
  				xspirograph -root			    \n\
  @GL_KLUDGE@ GL: 				circuit -root				    \n\
  @GL_KLUDGE@ GL: 				dangerball -root			    \n\
 -- GL: 				dnalogo -root				    \n\
-+! - GL: 				dnalogo -root				    \n\
  @GL_KLUDGE@ GL: 				engine -root				    \n\
  @GL_KLUDGE@ GL: 				flipscreen3d -root			    \n\
  @GL_KLUDGE@ GL: 				gltext -root				    \n\
-@@ -283,7 +294,7 @@
+@@ -283,7 +293,6 @@
  @GL_KLUDGE@ GL: 				endgame -root				    \n\
  				euler2d -root				    \n\
  				fluidballs -root			    \n\
 -@GL_KLUDGE@ GL: 				flurry -root				    \n\
-+! @GL_KLUDGE@ GL: 				flurry -root				    \n\
  - GL: 				glblur -root				    \n\
  - GL: 				glforestfire -root			    \n\
  @GL_KLUDGE@ GL: 				glsnake -root				    \n\
-@@ -414,10 +425,11 @@
+@@ -414,10 +423,11 @@
  *Dialog.shadowThickness:	2
  
  *passwd.heading.label:		XScreenSaver %s
