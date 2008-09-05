@@ -1,5 +1,6 @@
-xscreensaver (5.07-1) UNRELEASED; urgency=low
+xscreensaver (5.07-1) unstable; urgency=low
 
+  [ Tormod Volden ]
   * New Upstream Version
   * driver/XScreensaver.ad.in:
     + Use ISO time/date format in password dialog
@@ -11,9 +12,9 @@ xscreensaver (5.07-1) UNRELEASED; urgency=low
   * debian/control: use Suggests xscreensaver instead of Enhances
     for -data and -gl packages
 
- -- Tormod Volden <debian.tormod@gmail.com>  Tue, 12 Aug 2008 01:03:22 +0200
+ -- Jose Luis Rivas <ghostbar38@gmail.com>  Thu, 04 Sep 2008 22:17:46 -0430
 
-xscreensaver (5.06-1) UNRELEASED; urgency=low
+xscreensaver (5.06-1) unstable; urgency=low
 
   [ Jose Luis Rivas ]
   * New upstream release
