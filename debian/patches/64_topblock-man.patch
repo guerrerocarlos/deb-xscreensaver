@@ -1,0 +1,11 @@
+--- hacks/glx/topblock.man.orig	2008-09-13 14:31:04.000000000 -0430
++++ hacks/glx/topblock.man	2008-09-13 14:31:16.000000000 -0430
+@@ -117,7 +117,7 @@ Increases viewing Z coordinate.
+ .TP 8
+ .B c
+ Decreases viewing Z coordinate.
+-..UR <address>
++.B UR <address>
+ .UE
+ TP 8
+ .B f

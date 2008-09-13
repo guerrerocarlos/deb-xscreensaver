@@ -1,0 +1,10 @@
+--- hacks/metaballs.man.orig	2008-09-13 14:38:45.000000000 -0430
++++ hacks/metaballs.man	2008-09-13 14:39:15.000000000 -0430
+@@ -1,6 +1,6 @@
+ .TH XScreenSaver 1 "" "X Version 11"
+ .SH NAME
+-MetaBalls.
++MetaBalls \- draws of 2D metaballs
+ .SH SYNOPSIS
+ .B MetaBalls
+ [\-display \fIhost:display.screen\fP]

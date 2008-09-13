@@ -15,3 +15,7 @@
 
 # overrule upstream 4.23 removal
 #60_add-ant-hack.patch
+63_blinkbox-man.patch
+64_topblock-man.patch
+65_eruption-man.patch
+66_truchet-man.patch

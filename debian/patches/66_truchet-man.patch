@@ -1,0 +1,11 @@
+--- hacks/truchet.man.orig	2008-09-13 14:37:08.000000000 -0430
++++ hacks/truchet.man	2008-09-13 14:37:22.000000000 -0430
+@@ -15,7 +15,7 @@ truchet - draws curved or angular Truche
+ .SH DESCRIPTION
+ The \fItruchet\fP program draws arc and line based Truchet patterns.
+ .SH OPTIONS
+-.l truchet
++.I truchet
+ accepts the following options:
+ .TP 8
+ .B  \-window
