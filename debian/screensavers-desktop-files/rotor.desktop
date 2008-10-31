@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Rotor
-Exec=rotor -root
+Exec=/usr/lib/xscreensaver/rotor -root
 TryExec=/usr/lib/xscreensaver/rotor
 Comment=Draws a line segment moving along a complex spiraling curve. Written by Tom Lawrence.

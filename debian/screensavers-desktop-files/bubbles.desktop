@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Bubbles
-Exec=bubbles -root
+Exec=/usr/lib/xscreensaver/bubbles -root
 TryExec=/usr/lib/xscreensaver/bubbles
 Comment=This simulates the kind of bubble formation that happens when water boils:small bubbles appear, and as they get closer to each other, they combine to form larger bubbles, which eventually pop. Written by James Macnicol.

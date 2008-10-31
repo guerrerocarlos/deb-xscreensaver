@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Atlantis
-Exec=atlantis -root
+Exec=/usr/lib/xscreensaver/atlantis -root
 TryExec=/usr/lib/xscreensaver/atlantis
 Comment=A 3D animation of a number of sharks, dolphins, and whales. Written by Mark Kilgard.

@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Whirlygig
-Exec=whirlygig -root
+Exec=/usr/lib/xscreensaver/whirlygig -root
 TryExec=/usr/lib/xscreensaver/whirlygig
 Comment=Draws zooming chains of sinusoidal spots. Written by Ashton Trey Belew.

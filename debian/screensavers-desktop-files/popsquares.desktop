@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=PopSquares
-Exec=popsquares -root
+Exec=/usr/lib/xscreensaver/popsquares -root
 TryExec=/usr/lib/xscreensaver/popsquares
 Comment=This draws a pop-art-ish looking grid of pulsing colors. Written by Levi Burton.

@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Pipes
-Exec=pipes -root
+Exec=/usr/lib/xscreensaver/pipes -root
 TryExec=/usr/lib/xscreensaver/pipes
 Comment=A growing plumbing system, with bolts and valves. Written by Marcelo Vianna.

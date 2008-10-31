@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Critical
-Exec=critical -root
+Exec=/usr/lib/xscreensaver/critical -root
 TryExec=/usr/lib/xscreensaver/critical
 Comment=Draws a system of self-organizing lines. It starts out as random squiggles, but after a few iterations, order begins to appear. Written by Martin Pool.

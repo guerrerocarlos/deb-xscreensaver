@@ -64,7 +64,7 @@ if [ -n "$1" ]; then
 
 		[Desktop Entry]
 		Name=$XMLLABEL
-		Exec=$XMLEXE
+		Exec=/usr/lib/xscreensaver/$XMLEXE
 		TryExec=/usr/lib/xscreensaver/$XMLNAME
 		Comment=$XMLDES
 	EODESKTOP

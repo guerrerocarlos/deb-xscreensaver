@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Sphere
-Exec=sphere -root
+Exec=/usr/lib/xscreensaver/sphere -root
 TryExec=/usr/lib/xscreensaver/sphere
 Comment=Draws shaded spheres in multiple colors. Written by Tom Duff and Jamie Zawinski.

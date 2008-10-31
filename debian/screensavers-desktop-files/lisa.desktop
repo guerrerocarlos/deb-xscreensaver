@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Lisa
-Exec=lisa -root
+Exec=/usr/lib/xscreensaver/lisa -root
 TryExec=/usr/lib/xscreensaver/lisa
 Comment=Lissajous loops. http://en.wikipedia.org/wiki/Lissajous_curve Written by Caleb Cullen.

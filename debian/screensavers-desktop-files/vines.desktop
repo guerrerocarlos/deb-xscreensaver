@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Vines
-Exec=vines -root
+Exec=/usr/lib/xscreensaver/vines -root
 TryExec=/usr/lib/xscreensaver/vines
 Comment=Generates a continuous sequence of small, curvy geometric patterns. Written by Tracy Camp and David Hansen.

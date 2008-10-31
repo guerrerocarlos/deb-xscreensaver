@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Flag
-Exec=flag -root
+Exec=/usr/lib/xscreensaver/flag -root
 TryExec=/usr/lib/xscreensaver/flag
 Comment=This draws a waving colored flag, that undulates its way around the screen. The flag can contain arbitrary text and images. By default, it displays either the current system name and OS type, or a picture of "Bob". Written by Charles Vidal and Jamie Zawinski.

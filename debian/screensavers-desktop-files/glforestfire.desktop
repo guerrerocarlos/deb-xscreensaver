@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=GLForestFire
-Exec=glforestfire -root
+Exec=/usr/lib/xscreensaver/glforestfire -root
 TryExec=/usr/lib/xscreensaver/glforestfire
 Comment=Draws an animation of sprinkling fire-like 3D triangles in a landscape filled with trees. Written by Eric Lassauge.

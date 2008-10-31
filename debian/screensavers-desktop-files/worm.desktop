@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Worm
-Exec=worm -root
+Exec=/usr/lib/xscreensaver/worm -root
 TryExec=/usr/lib/xscreensaver/worm
 Comment=Draws multicolored worms that crawl around the screen. Written by Brad Taylor, Dave Lemke, Boris Putanec, and Henrik Theiling.

@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=T3D
-Exec=t3d -root
+Exec=/usr/lib/xscreensaver/t3d -root
 TryExec=/usr/lib/xscreensaver/t3d
 Comment=Draws a working analog clock composed of floating, throbbing bubbles. Written by Bernd Paysan.

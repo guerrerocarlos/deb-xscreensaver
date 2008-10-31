@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Bouboule
-Exec=bouboule -root
+Exec=/usr/lib/xscreensaver/bouboule -root
 TryExec=/usr/lib/xscreensaver/bouboule
 Comment=This draws what looks like a spinning, deforming balloon with varying-sized spots painted on its invisible surface. Written by Jeremie Petit.
