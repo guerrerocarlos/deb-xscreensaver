@@ -13,6 +13,7 @@ xscreensaver (5.07-1) unstable; urgency=low
     for -data and -gl packages
   * Fixed Exec and TryExec entries in desktop files.
   * Fixed manpages warnings and bad-formatting.
+  * Fixed Vcs-Browser URI.
 
  -- Jose Luis Rivas <ghostbar38@gmail.com>  Thu, 04 Sep 2008 22:17:46 -0430
 
