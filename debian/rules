@@ -104,6 +104,8 @@ binary-arch:	build
 		cat debian/screensavers-desktop.stub >> $${i}; done
 	mv debian/tmp/usr/share/man/man6/xscreensaver-gl-helper.6x \
 		debian/tmp/usr/share/man/man1/xscreensaver-gl-helper.1
+	#Fixing header from 6 to 1
+	sed '1s/6/1/1' debian/tmp/usr/share/man/man1/xscreensaver-gl-helper.1 > man.tmp; mv man.tmp debian/tmp/usr/share/man/man1/xscreensaver-gl-helper.1
 	dh_movefiles -a
 	dh_install -a
 	# Lists anything that was installed but not packaged
