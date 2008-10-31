@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Apollonian
-Comment=Packs a large circle with smaller circles, demonstrating the Descartes Circle Theorem. Written by Allan R. Wilks and David Bagley.
-TryExec=apollonian
 Exec=apollonian -root
+TryExec=/usr/lib/xscreensaver/apollonian
+Comment=Draws an Apollonian gasket: a fractal packing of circles with smaller circles, demonstrating Descartes's theorem. http://en.wikipedia.org/wiki/Apollonian_gasket http://en.wikipedia.org/wiki/Descartes%27_theorem Written by Allan R. Wilks and David Bagley.

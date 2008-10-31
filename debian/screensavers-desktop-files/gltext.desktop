@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=GLText
-Comment=Displays a few lines of text spinning around in a solid 3D font. Written by Jamie Zawinski.
-TryExec=gltext
 Exec=gltext -root
+TryExec=/usr/lib/xscreensaver/gltext
+Comment=Displays a few lines of text spinning around in a solid 3D font. The text can use strftime() escape codes to display the current date and time. Written by Jamie Zawinski.

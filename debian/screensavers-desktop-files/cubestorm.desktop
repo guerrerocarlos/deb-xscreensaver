@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=CubeStorm
-Comment=Draws a series of rotating 3D boxes that intersect each other and eventually fill space. Written by Jamie Zawinski.
-TryExec=cubestorm
 Exec=cubestorm -root
+TryExec=/usr/lib/xscreensaver/cubestorm
+Comment=Draws a series of rotating 3D boxes that intersect each other and eventually fill space. Written by Jamie Zawinski.

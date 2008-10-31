@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Twang
-Comment=Divides the screen into a grid, and plucks them. Written by Dan Bornstein.
-TryExec=twang
 Exec=twang -root
+TryExec=/usr/lib/xscreensaver/twang
+Comment=Divides the screen into a grid, and plucks them. Written by Dan Bornstein.

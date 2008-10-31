@@ -1,6 +1,6 @@
 
 [Desktop Entry]
-Name=GlSnake
-Comment=Draws a simulation of the Rubik's Snake puzzle. Written by Jamie Wilkinson, Andrew Bennetts, and Peter Aylett.
-TryExec=glsnake
+Name=GLSnake
 Exec=glsnake -root
+TryExec=/usr/lib/xscreensaver/glsnake
+Comment=Draws a simulation of the Rubik's Snake puzzle. See also the "Rubik" and "Cube21" screen savers. http://en.wikipedia.org/wiki/Rubik%27s_Snake Written by Jamie Wilkinson, Andrew Bennetts, and Peter Aylett.

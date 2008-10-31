@@ -1,6 +1,6 @@
 
 [Desktop Entry]
-Name=Sballs
-Comment=Draws an animation of textured balls spinning like crazy in GL. Requires OpenGL, and a machine with fast hardware support for texture maps. Written by Eric Lassauge <lassauge@users.sourceforge.net>.
-TryExec=sballs
+Name=SBalls
 Exec=sballs -root
+TryExec=/usr/lib/xscreensaver/sballs
+Comment=Draws an animation of textured balls spinning like crazy. Written by Eric Lassauge.

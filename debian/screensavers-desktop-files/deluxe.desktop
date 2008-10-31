@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Deluxe
-Comment=This draws a pulsing sequence of stars, circles, and lines. It would look better if it was faster, but as far as I can tell, there is no way to make this be both: fast, and flicker-free. Yet another reason X sucks. Written by Jamie Zawinski.
-TryExec=deluxe
 Exec=deluxe -root
+TryExec=/usr/lib/xscreensaver/deluxe
+Comment=Draws a pulsing sequence of transparent stars, circles, and lines. Written by Jamie Zawinski.

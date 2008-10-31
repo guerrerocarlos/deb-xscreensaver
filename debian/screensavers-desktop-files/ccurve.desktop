@@ -1,6 +1,6 @@
 
 [Desktop Entry]
-Name=C Curve
-Comment=Generates self-similar linear fractals, including the classic ``C Curve.'' Written by Rick Campbell.
-TryExec=ccurve
+Name=CCurve
 Exec=ccurve -root
+TryExec=/usr/lib/xscreensaver/ccurve
+Comment=Generates self-similar linear fractals, including the classic "C Curve". http://en.wikipedia.org/wiki/Levy_C_curve Written by Rick Campbell.

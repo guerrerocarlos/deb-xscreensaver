@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=FuzzyFlakes
-Comment=Falling colored snowflake/flower shapes. Written by Barry Dmytro.
-TryExec=fuzzyflakes
 Exec=fuzzyflakes -root
+TryExec=/usr/lib/xscreensaver/fuzzyflakes
+Comment=Falling colored snowflake/flower shapes. Written by Barry Dmytro.

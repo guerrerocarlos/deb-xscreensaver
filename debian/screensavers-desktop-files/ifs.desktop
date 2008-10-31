@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=IFS
-Comment=This one draws spinning, colliding iterated-function-system images. Note that the "quality" parameter is exponential. Number of points drawn is functions^detail. The number of colours is only used in Blend mode to provide a palette to create the base colours. These are then blended together in a non-colourmap friendly fashion. Written by Chris Le Sueur.
-TryExec=ifs
 Exec=ifs -root
+TryExec=/usr/lib/xscreensaver/ifs
+Comment=This one draws spinning, colliding iterated-function-system images. Note that the "Detail" parameter is exponential. Number of points drawn is functions^detail. http://en.wikipedia.org/wiki/Iterated_function_system Written by Chris Le Sueur and Robby Griffin.

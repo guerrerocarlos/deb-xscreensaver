@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Drift
-Comment=How could one possibly describe this except as ``drifting recursive fractal cosmic flames?'' Another fine hack from the Scott Draves collection of fine hacks.
-TryExec=drift
 Exec=drift -root
+TryExec=/usr/lib/xscreensaver/drift
+Comment=Drifting recursive fractal cosmic flames. Written by Scott Draves.

@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=GLCells
-Comment=Cells growing, dividing and dying on your screen. Written by Matthias Toussaint; 2007.
-TryExec=glcells
 Exec=glcells -root
+TryExec=/usr/lib/xscreensaver/glcells
+Comment=Cells growing, dividing and dying on your screen. Written by Matthias Toussaint.

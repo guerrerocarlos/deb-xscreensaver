@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=AntMaze
-Comment=Antmaze draws a few views of a few ants walking around in a simple maze. Written by Blair Tennessy.
-TryExec=antmaze
 Exec=antmaze -root
+TryExec=/usr/lib/xscreensaver/antmaze
+Comment=Draws a few views of a few ants walking around in a simple maze. Written by Blair Tennessy.

@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Flame
-Comment=Another iterative fractal generator. Written by Scott Draves.
-TryExec=flame
 Exec=flame -root
+TryExec=/usr/lib/xscreensaver/flame
+Comment=Iterative fractals. Written by Scott Draves.

@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Sproingies
-Comment=Q-Bert meets Marble Madness! Written by Ed Mackey.
-TryExec=sproingies
 Exec=sproingies -root
+TryExec=/usr/lib/xscreensaver/sproingies
+Comment=Slinky-like creatures walk down an infinite staircase and occasionally explode! http://en.wikipedia.org/wiki/Slinky http://en.wikipedia.org/wiki/Q%2Abert http://en.wikipedia.org/wiki/Marble_Madness Written by Ed Mackey.

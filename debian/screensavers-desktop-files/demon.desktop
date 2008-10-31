@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Demon
-Comment=A cellular automaton that starts with a random field, and organizes it into stripes and spirals. Written by David Bagley.
-TryExec=demon
 Exec=demon -root
+TryExec=/usr/lib/xscreensaver/demon
+Comment=A cellular automaton that starts with a random field, and organizes it into stripes and spirals. http://en.wikipedia.org/wiki/Maxwell%27s_demon Written by David Bagley.

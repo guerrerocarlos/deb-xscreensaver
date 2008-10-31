@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Deco
-Comment=This one subdivides and colors rectangles randomly. It looks kind of like Brady-Bunch-era rec-room wall paneling. (Raven says: ``this screensaver is ugly enough to peel paint.'') Written by Jamie Zawinski, inspired by Java code by Michael Bayne.
-TryExec=deco
 Exec=deco -root
+TryExec=/usr/lib/xscreensaver/deco
+Comment=Subdivides and colors rectangles randomly. It looks kind of like Brady-Bunch-era rec-room wall paneling. http://en.wikipedia.org/wiki/Piet_Mondrian#Paris_1919.E2.80.931938 Written by Jamie Zawinski and Michael Bayne.

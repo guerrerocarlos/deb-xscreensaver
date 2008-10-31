@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Laser
-Comment=Moving radiating lines, that look vaguely like scanning laser beams. Written by Pascal Pensa. (Frankie say: relax.)
-TryExec=laser
 Exec=laser -root
+TryExec=/usr/lib/xscreensaver/laser
+Comment=Moving radiating lines, that look vaguely like scanning laser beams. (Frankie say relax.) Written by Pascal Pensa.

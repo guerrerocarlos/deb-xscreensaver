@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Morph3D
-Comment=Another 3d shape-changing GL hack, by Marcelo Vianna. It has the same shiny-plastic feel as Superquadrics, as many computer-generated objects do...
-TryExec=morph3d
 Exec=morph3d -root
+TryExec=/usr/lib/xscreensaver/morph3d
+Comment=Platonic solids that turn inside out and get spikey. http://en.wikipedia.org/wiki/Platonic_solid Written by Marcelo Vianna.

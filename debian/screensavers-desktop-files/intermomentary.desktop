@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Intermomentary
-Comment=The Intersection Momentary is a fun visualization defining the relationships between objects with Casey Reas, William Ngan, and Robert Hodgin. Commissioned for display at the Whitney Museum of American Art. A surface filled with 100 medium to small sized circles. Each circle has a different size and direction, but moves at the same slow rate. Display: A. The instantaneous intersections of the circles. B. The aggregate intersections of the circles. Ported to XScreensaver from the art project "InterMomentary" at http://www.complexification.net
-TryExec=intermomentary
 Exec=intermomentary -root
+TryExec=/usr/lib/xscreensaver/intermomentary
+Comment=A surface is filled with a hundred medium to small sized circles. Each circle has a different size and direction, but moves at the same slow rate. Displays the instantaneous intersections of the circles as well as the aggregate intersections of the circles. The circles begin with a radius of 1 pixel and slowly increase to some arbitrary size. Circles are drawn with small moving points along the perimeter. The intersections are rendered as glowing orbs. Glowing orbs are rendered only when a perimeter point moves past the intersection point. Written by Casey Reas, William Ngan, Robert Hodgin, and Jamie Zawinski.

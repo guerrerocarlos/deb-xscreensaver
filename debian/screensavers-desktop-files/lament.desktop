@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Lament
-Comment=Animates a simulation of Lemarchand's Box, repeatedly solving itself. Requires OpenGL, and a machine with fast hardware support for texture maps. Warning: occasionally opens doors. Written by Jamie Zawinski.
-TryExec=lament
 Exec=lament -root
+TryExec=/usr/lib/xscreensaver/lament
+Comment=Animates a simulation of Lemarchand's Box, the Lament Configuration, repeatedly solving itself. Warning: occasionally opens doors. http://en.wikipedia.org/wiki/Lemarchand%27s_box Written by Jamie Zawinski.

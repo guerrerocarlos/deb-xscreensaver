@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Wormhole
-Comment=Wormhole simulates flying through a colored wormhole in space. Written by Jon Rafkind.
-TryExec=wormhole
 Exec=wormhole -root
+TryExec=/usr/lib/xscreensaver/wormhole
+Comment=Flying through a colored wormhole in space. Written by Jon Rafkind.

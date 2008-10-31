@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Helix
-Comment=This repeatedly generates spirally string-art-ish patterns. Written by Jamie Zawinski.
-TryExec=helix
 Exec=helix -root
+TryExec=/usr/lib/xscreensaver/helix
+Comment=Spirally string-art-ish patterns. Written by Jamie Zawinski.

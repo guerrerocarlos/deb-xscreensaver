@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=GFlux
-Comment=Draws a rippling waves on a rotating wireframe grid, using GL. Written by Josiah Pease.
-TryExec=gflux
 Exec=gflux -root
+TryExec=/usr/lib/xscreensaver/gflux
+Comment=Draws a rippling waves on a rotating wireframe grid. Written by Josiah Pease.

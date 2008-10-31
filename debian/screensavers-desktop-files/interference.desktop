@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Interference
-Comment=Another color-field hack, this one works by computing decaying sinusoidal waves, and allowing them to interfere with each other as their origins move. Written by Hannu Mallat.
-TryExec=interference
 Exec=interference -root
+TryExec=/usr/lib/xscreensaver/interference
+Comment=Color field based on computing decaying sinusoidal waves. Written by Hannu Mallat.

@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=BlockTube
-Comment=This hack draws a swirling, falling tunnel of reflective slabs. They fade from hue to hue. Written by Lars R. Damerow.
-TryExec=blocktube
 Exec=blocktube -root
+TryExec=/usr/lib/xscreensaver/blocktube
+Comment=Draws a swirling, falling tunnel of reflective slabs. They fade from hue to hue. Written by Lars R. Damerow.

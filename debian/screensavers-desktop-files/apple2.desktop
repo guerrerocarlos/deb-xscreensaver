@@ -1,6 +1,6 @@
 
 [Desktop Entry]
-Name=Apple ][
-Comment=Simulates an original Apple ][ Plus computer in all its 1979 glory. It also reproduces the appearance of display on a color television set of the period. In "Text Mode", it displays the output of a program, or the contents of a file or URL, as configured on the "Advanced" tab of the main Screensaver Preferences window. In "Slideshow Mode", it chooses a number of images from the image source you configured into XScreenSaver and displays them within the limitations of the Apple ][ display hardware. (Six available colors in hi-res mode!) In "Basic Programming Mode", a simulated user types in a BASIC program and runs it. By Trevor Blackwell.
-TryExec=apple2
+Name=Apple2
 Exec=apple2 -root
+TryExec=/usr/lib/xscreensaver/apple2
+Comment=Simulates an original Apple ][ Plus computer in all its 1979 glory. It also reproduces the appearance of display on a color television set of the period. In "Basic Programming Mode", a simulated user types in a BASIC program and runs it. In "Text Mode", it displays the output of a program, or the contents of a file or URL. In "Slideshow Mode", it chooses random images and displays them within the limitations of the Apple ][ display hardware. (Six available colors in hi-res mode!) On X11 systems, This program is also a fully-functional VT100 emulator. http://en.wikipedia.org/wiki/Apple_II_series Written by Trevor Blackwell.

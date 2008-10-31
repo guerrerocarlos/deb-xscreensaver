@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Crystal
-Comment=Moving polygons, similar to a kaleidescope (more like a kaleidescope than the hack called `kaleid,' actually.) This one by Jouk Jansen.
-TryExec=crystal
 Exec=crystal -root
+TryExec=/usr/lib/xscreensaver/crystal
+Comment=Moving polygons, similar to a kaleidoscope. See also the "Kaleidescope" and "GLeidescope" screen savers. http://en.wikipedia.org/wiki/Kaleidoscope Written by Jouk Jansen.

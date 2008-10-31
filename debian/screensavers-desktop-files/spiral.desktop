@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Spiral
-Comment=Moving circular patterns, by Peter Schmitzberger. Moving circular patterns means moire; interference patterns, of course.
-TryExec=spiral
 Exec=spiral -root
+TryExec=/usr/lib/xscreensaver/spiral
+Comment=Moving circular moire patterns. Written by Peter Schmitzberger.

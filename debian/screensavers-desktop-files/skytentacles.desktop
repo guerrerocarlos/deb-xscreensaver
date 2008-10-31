@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=SkyTentacles
-Comment=3D tentacles from the sky by Jamie Zawinski.
-TryExec=skytentacles
 Exec=skytentacles -root
+TryExec=/usr/lib/xscreensaver/skytentacles
+Comment=There is a tentacled abomination in the sky. From above you it devours. Written by Jamie Zawinski.

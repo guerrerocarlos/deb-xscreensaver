@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Stairs
-Comment=by Marcelo Vianna's third Escher GL hack, this one draws an ``infinite'' staircase.
-TryExec=stairs
 Exec=stairs -root
+TryExec=/usr/lib/xscreensaver/stairs
+Comment=Escher's infinite staircase. http://en.wikipedia.org/wiki/Maurits_Cornelis_Escher Written by Marcelo Vianna.

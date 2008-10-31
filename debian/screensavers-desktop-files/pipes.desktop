@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Pipes
-Comment=If you've ever been in the same room with a Windows NT machine, you've probably seen this GL hack. This version is by Marcelo Vianna.
-TryExec=pipes
 Exec=pipes -root
+TryExec=/usr/lib/xscreensaver/pipes
+Comment=A growing plumbing system, with bolts and valves. Written by Marcelo Vianna.

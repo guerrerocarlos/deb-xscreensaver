@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Forest
-Comment=This draws fractal trees. Written by Peter Baumung. Everybody loves fractals, right?
-TryExec=forest
 Exec=forest -root
+TryExec=/usr/lib/xscreensaver/forest
+Comment=Fractal trees. Written by Peter Baumung.

@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Sphere
-Comment=Another of the classic screenhacks of the distant past, this one draws shaded spheres in multiple colors. This hack traces its lineage back to Tom Duff in 1982.
-TryExec=sphere
 Exec=sphere -root
+TryExec=/usr/lib/xscreensaver/sphere
+Comment=Draws shaded spheres in multiple colors. Written by Tom Duff and Jamie Zawinski.

@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Crackberg
-Comment=Flies through height maps, optionally animating the creation and destruction of generated tiles; tiles `grow' into place.
-TryExec=crackberg
 Exec=crackberg -root
+TryExec=/usr/lib/xscreensaver/crackberg
+Comment=Flies through height maps, optionally animating the creation and destruction of generated tiles; tiles `grow' into place. Written by Matus Telgarsky.

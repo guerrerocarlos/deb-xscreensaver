@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Endgame
-Comment=Black slips out of three mating nets, but the fourth one holds him tight! A brilliant composition! Written by Blair Tennessy.
-TryExec=endgame
 Exec=endgame -root
+TryExec=/usr/lib/xscreensaver/endgame
+Comment=Black slips out of three mating nets, but the fourth one holds him tight! A brilliant composition! See also the "Queens" screen saver. http://en.wikipedia.org/wiki/Chess_endgame Written by Blair Tennessy.

@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Halo
-Comment=This draws trippy psychedelic circular patterns that hurt to look at. It can also animate the control-points, but that takes a lot of CPU and bandwidth. Written by Jamie Zawinski.
-TryExec=halo
 Exec=halo -root
+TryExec=/usr/lib/xscreensaver/halo
+Comment=Draws trippy psychedelic circular patterns that hurt to look at. http://en.wikipedia.org/wiki/Moire_pattern Written by Jamie Zawinski.

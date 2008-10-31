@@ -1,6 +1,6 @@
 
 [Desktop Entry]
-Name=Timetunnel
-Comment=Draws an animation similar to the opening and closing effects on the Dr. Who television show. Written by Sean P. Brennan.
-TryExec=timetunnel
+Name=TimeTunnel
 Exec=timetunnel -root
+TryExec=/usr/lib/xscreensaver/timetunnel
+Comment=Draws an animation similar to the opening and closing effects on the Dr. Who TV show. Written by Sean P. Brennan.

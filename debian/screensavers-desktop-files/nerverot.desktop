@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=NerveRot
-Comment=Draws different shapes composed of nervously vibrating squiggles, as if seen through a camera operated by a monkey on crack. By Dan Bornstein.
-TryExec=nerverot
 Exec=nerverot -root
+TryExec=/usr/lib/xscreensaver/nerverot
+Comment=Draws different shapes composed of nervously vibrating squiggles, as if seen through a camera operated by a monkey on crack. Written by Dan Bornstein.

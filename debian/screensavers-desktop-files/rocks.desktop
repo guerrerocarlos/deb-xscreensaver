@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Rocks
-Comment=This draws an animation of flight through an asteroid field, with changes in rotation and direction. It can also display 3D separations for red/blue glasses! Mostly written by Jamie Zawinski.
-TryExec=rocks
 Exec=rocks -root
+TryExec=/usr/lib/xscreensaver/rocks
+Comment=This draws an animation of flight through an asteroid field, with changes in rotation and direction. Written by Jamie Zawinski.

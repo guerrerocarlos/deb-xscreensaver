@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Lisa
-Comment=This draws Lisajous loops, by Caleb Cullen. Remember that device they had the Phantom Zone prisoners in during their trial in Superman? I think that was one of these.
-TryExec=lisa
 Exec=lisa -root
+TryExec=/usr/lib/xscreensaver/lisa
+Comment=Lissajous loops. http://en.wikipedia.org/wiki/Lissajous_curve Written by Caleb Cullen.

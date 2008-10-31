@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Atlantis
-Comment=This is xfishtank writ large: a GL animation of a number of sharks, dolphins, and whales. The swimming motions are great. Originally written by Mark Kilgard.
-TryExec=atlantis
 Exec=atlantis -root
+TryExec=/usr/lib/xscreensaver/atlantis
+Comment=A 3D animation of a number of sharks, dolphins, and whales. Written by Mark Kilgard.

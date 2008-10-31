@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Swirl
-Comment=More flowing, swirly patterns. This version is by M. Dobie and R. Taylor, but you might have seen a Mac program similar to this called FlowFazer. There is also a cool Java applet of a similar concept.
-TryExec=swirl
 Exec=swirl -root
+TryExec=/usr/lib/xscreensaver/swirl
+Comment=Flowing, swirly patterns. Written by M. Dobie and R. Taylor.

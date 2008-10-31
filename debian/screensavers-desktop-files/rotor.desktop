@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Rotor
-Comment=Another ancient xlock demo, this one by Tom Lawrence. It draws a line segment moving along a complex spiraling curve.
-TryExec=rotor
 Exec=rotor -root
+TryExec=/usr/lib/xscreensaver/rotor
+Comment=Draws a line segment moving along a complex spiraling curve. Written by Tom Lawrence.

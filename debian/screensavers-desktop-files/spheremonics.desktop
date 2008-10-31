@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Spheremonics
-Comment=These closed objects are commonly called spherical harmonics, although they are only remotely related to the mathematical definition found in the solution to certain wave functions, most notable the eigenfunctions of angular momentum operators. Written by Paul Bourke and Jamie Zawinski.
-TryExec=spheremonics
 Exec=spheremonics -root
+TryExec=/usr/lib/xscreensaver/spheremonics
+Comment=These closed objects are commonly called spherical harmonics, although they are only remotely related to the mathematical definition found in the solution to certain wave functions, most notably the eigenfunctions of angular momentum operators. http://en.wikipedia.org/wiki/Spherical_harmonics#Visualization_of_the_spherical_harmonics Written by Paul Bourke and Jamie Zawinski.

@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Gleidescope
-Comment=An OpenGL kaleidescope that operates on your desktop image, or on image files loaded from disk. Written by andrew dean.
-TryExec=gleidescope
 Exec=gleidescope -root
+TryExec=/usr/lib/xscreensaver/gleidescope
+Comment=A kaleidoscope that operates on your desktop image, or on image files loaded from disk. http://en.wikipedia.org/wiki/Kaleidoscope Written by Andrew Dean.

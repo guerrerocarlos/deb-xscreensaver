@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Fireworkx
-Comment=Pyrotechnics simulation eye-candy, MMX optimized. Turn off Light for speed. Clicks on the preview window Explodes..! Written by Rony B Chandran. http://www.ronybc.8k.com
-TryExec=fireworkx
 Exec=fireworkx -root
+TryExec=/usr/lib/xscreensaver/fireworkx
+Comment=Exploding fireworks. See also the "Eruption", "XFlame" and "Pyro" screen savers. Written by Rony B Chandran.

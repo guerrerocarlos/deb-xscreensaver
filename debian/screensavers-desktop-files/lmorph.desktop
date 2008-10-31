@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=LMorph
-Comment=This generates random spline-ish line drawings and morphs between them. Written by Sverre H. Huseby and Glenn T. Lines.
-TryExec=lmorph
 Exec=lmorph -root
+TryExec=/usr/lib/xscreensaver/lmorph
+Comment=This generates random spline-ish line drawings and morphs between them. Written by Sverre H. Huseby and Glenn T. Lines.

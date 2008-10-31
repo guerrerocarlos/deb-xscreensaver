@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Celtic
-Comment=Celtic
-TryExec=celtic
 Exec=celtic -root
+TryExec=/usr/lib/xscreensaver/celtic
+Comment=Repeatedly draws random Celtic cross-stitch patterns. http://en.wikipedia.org/wiki/Celtic_knot Written by Max Froumentin.

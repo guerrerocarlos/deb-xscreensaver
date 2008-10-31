@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Atunnel
-Comment=Draws an animation of a textured tunnel in GL. Requires OpenGL, and a machine with fast hardware support for texture maps. Written by Eric Lassauge and Roman Podobedov.
-TryExec=atunnel
 Exec=atunnel -root
+TryExec=/usr/lib/xscreensaver/atunnel
+Comment=Draws an animation of a textured tunnel in GL. Written by Eric Lassauge and Roman Podobedov.

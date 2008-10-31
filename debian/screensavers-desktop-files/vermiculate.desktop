@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Vermiculate
-Comment=Draws squiggly worm-like paths. Written by Tyler Pierce.
-TryExec=vermiculate
 Exec=vermiculate -root
+TryExec=/usr/lib/xscreensaver/vermiculate
+Comment=Draws squiggly worm-like paths. Written by Tyler Pierce.

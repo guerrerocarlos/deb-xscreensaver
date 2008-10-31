@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Rorschach
-Comment=This generates random inkblot patterns. The algorithm is deceptively simple for how well it works; it merely walks a dot around the screen randomly, and then reflects the image horizontally, vertically, or both. Any deep-seated neurotic tendencies which this program reveals are your own problem. Written by Jamie Zawinski.
-TryExec=rorschach
 Exec=rorschach -root
+TryExec=/usr/lib/xscreensaver/rorschach
+Comment=This generates random inkblot patterns via a reflected random walk. Any deep-seated neurotic tendencies which this program reveals are your own problem. http://en.wikipedia.org/wiki/Rorschach_inkblot_test http://en.wikipedia.org/wiki/Random_walk Written by Jamie Zawinski.

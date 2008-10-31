@@ -1,6 +1,6 @@
 
 [Desktop Entry]
 Name=Lightning
-Comment=This one draws crackling fractal lightning bolts. It's simple, direct, and to the point. If only it had sound... Written by Keith Romberg.
-TryExec=lightning
 Exec=lightning -root
+TryExec=/usr/lib/xscreensaver/lightning
+Comment=Crackling fractal lightning bolts. Written by Keith Romberg.
