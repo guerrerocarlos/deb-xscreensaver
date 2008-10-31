@@ -1,11 +1,20 @@
---- xscreensaver/hacks/glx/topblock.man.orig	2008-09-13 14:31:04.000000000 -0430
-+++ xscreensaver/hacks/glx/topblock.man	2008-09-13 14:31:16.000000000 -0430
-@@ -117,7 +117,7 @@ Increases viewing Z coordinate.
+--- hacks/glx/topblock.man.orig	2008-10-31 17:32:52.000000000 -0430
++++ hacks/glx/topblock.man	2008-10-31 17:36:22.000000000 -0430
+@@ -117,9 +117,7 @@
  .TP 8
  .B c
  Decreases viewing Z coordinate.
 -..UR <address>
-+.B UR <address>
- .UE
- TP 8
+-.UE
+-TP 8
++.TP 8
  .B f
+ Increases camera location X coordinate.
+ .TP 8
+@@ -169,4 +167,4 @@
+ express or implied warranty.
+ .SH AUTHOR
+ rednuht <topblock.xscreensaver@jumpstation.co.uk> 
+-<http://www.jumpstation.co.uk/xscreensaver/topblock/>
+\ No newline at end of file
++<http://www.jumpstation.co.uk/xscreensaver/topblock/>
