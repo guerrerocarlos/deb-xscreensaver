@@ -1,5 +1,5 @@
---- hacks/glx/topblock.man.orig	2008-10-31 17:32:52.000000000 -0430
-+++ hacks/glx/topblock.man	2008-10-31 17:36:22.000000000 -0430
+--- xscreensaver/hacks/glx/topblock.man.orig	2008-10-31 17:32:52.000000000 -0430
++++ xscreensaver/hacks/glx/topblock.man	2008-10-31 17:36:22.000000000 -0430
 @@ -117,9 +117,7 @@
  .TP 8
  .B c
