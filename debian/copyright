@@ -345,6 +345,18 @@ License: GPL-2+
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+Files: hacks/glx/tangram.{man,c}
+Copyright: © 2005 Jeremy English <jhe@jeremyenglish.org>
+License: same as hacks/xanalogtv.{c,man}
+
+Files: hacks/glx/moebius.{c,man}
+Copyright: © 1997-2002 Marcelo F. Vianna <mfvianna@centroin.com.br>
+License: same as hacks/lissie.{c,man}
+
+Files: hacks/glx/timetunnel.{c,man}
+Copyright: © 2005 Sean Brennan <zettix@yahoo.com>
+License: same as hacks/xanalogtv.{c,man}
+
 
 
 Files: debian/*
