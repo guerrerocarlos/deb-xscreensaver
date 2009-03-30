@@ -357,6 +357,25 @@ Files: hacks/glx/timetunnel.{c,man}
 Copyright: © 2005 Sean Brennan <zettix@yahoo.com>
 License: same as hacks/xanalogtv.{c,man}
 
+Files: hacks/glx/glcells.{c,man}
+Copyright: © 2007 Matthias Toussaint
+License: same as hacks/lissie.{c,man}
+
+Files: hacks/glx/{glut_roman,glut_stroke,glutstroke,glut_swidth}.c
+Copyright: © 1989-1995 Mark J. Kilgard
+License: Other
+ This program is freely distributable without licensing fees 
+ and is provided without guarantee or warrantee expressed or 
+ implied. This program is -not- in the public domain.
+ 
+Files: hacks/glx/stonerview*
+Copyright: © 1998-2001 Andrew Plotkin <erkyrath@eblong.com>
+License: same as hacks/xanalogtv.{c,man}
+
+Files: hacks/glx/tunnel_draw.{c,h}
+Copyright: © 2002-2004 E. Lassauge
+License: same as hacks/lissie.{c,man}
+
 
 
 Files: debian/*
